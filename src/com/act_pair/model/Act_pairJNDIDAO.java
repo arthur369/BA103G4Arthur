@@ -19,7 +19,7 @@ private static DataSource ds=null;
 		Context ctx;
 		try {
 			ctx = new InitialContext();
-			ds=(DataSource) ctx.lookup("java:comp/env/jdbc/TestDB3");
+			ds=(DataSource) ctx.lookup("java:comp/env/jdbc/BA103G4DB");
 		} catch (NamingException e) {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
@@ -32,6 +32,9 @@ private static DataSource ds=null;
 	private static final String GET_ONE_STMT="select * from act_pair where ACT_NO=? AND MEM_AC=?";
 	private static final String DELETE = "delete from act_pair where ACT_NO=? AND MEM_AC=?";
 	private static final String UPDATE ="update act_pair set APPLY_DATE=?,PAY_STATE=?,CHK_STATE=? where ACT_NO=? AND MEM_AC=?";
+	
+	
+	
 	@Override
 	public void insert(Act_pairVO act_pair_VO) {
 		// TODO Auto-generated method stub

@@ -12,8 +12,8 @@ public class Act_commJDBCDAO implements Act_commDAO_interface{
 
 	String driver="oracle.jdbc.driver.OracleDriver";
 	String url="jdbc:oracle:thin:@localhost:1521:xe";
-	String userid="b0402015";
-	String password="02015";
+	String userid="ba103g4";
+	String password="123456";
 	
 	
 	private static final String INSERT_STMT ="insert into act_comm values('C' ||  comm_no_seq.nextval,?,?,?,?,?,?)";

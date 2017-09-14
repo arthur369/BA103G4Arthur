@@ -33,6 +33,7 @@ public class Act_vo implements Serializable{
 		super();
 	}
 	public String getAct_no() {
+		
 		return act_no;
 	}
 	public void setAct_no(String aCT_NO) {

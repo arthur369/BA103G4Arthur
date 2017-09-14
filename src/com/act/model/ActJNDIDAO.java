@@ -6,15 +6,20 @@ import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.util.ArrayList;
+import java.util.LinkedHashSet;
 import java.util.List;
+import java.util.Set;
 
 import javax.naming.Context;
 import javax.naming.InitialContext;
 import javax.naming.NamingException;
 import javax.sql.DataSource;
 
+import com.act_comm.model.Act_commVO;
+import com.act_pair.model.Act_pairVO;
 import com.ad.model.AdDAO_interface;
 import com.ad.model.AdVO;
+import com.fo_act.model.Fo_actVO;
 
 public class ActJNDIDAO implements ActDAO_interface{
 	private static DataSource ds=null;
@@ -22,7 +27,7 @@ public class ActJNDIDAO implements ActDAO_interface{
 		Context ctx;
 		try {
 			ctx = new InitialContext();
-			ds=(DataSource) ctx.lookup("java:comp/env/jdbc/TestDB3");
+			ds=(DataSource) ctx.lookup("java:comp/env/jdbc/BA103G4DB");
 		} catch (NamingException e) {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
@@ -34,8 +39,16 @@ public class ActJNDIDAO implements ActDAO_interface{
 	private static final String INSERT_STMT ="insert into act values('A' || act_no_seq.nextval,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?)";
 	private static final String GET_ALL_STMT ="select * from act";
 	private static final String GET_ONE_STMT="select * from act where ACT_NO=?";
-	private static final String DELETE = "delete from act where act_no=?";
+	private static final String DELETE_ACT= "delete from act where act_no=?";
 	private static final String UPDATE ="update act set MEM_AC=?,ORG_CONT=?,ACT_NAME=?,MIN_MEM=?,MAX_MEM=?,MEM_COUNT=?,ACT_OP_DATE=?,ACT_ED_DATE=?,DL_DATE=?,FD_DATE=?,ACT_ADD=?, ACT_ADD_LAT=?,ACT_ADD_LON=?,ACT_CONT=?,ACT_TAG=?,ACT_FEE=?,PAY_WAY=?,ACT_PIC1=?,ACT_PIC2=?,ACT_PIC3=?,ACT_STAT=?,RE_CONT=?,REVIEW_ED_DATE=?where act_no=?";
+	
+	private static final String DELETE_ACT_COMM="delete from act_comm where act_no=?";
+	private static final String DELETE_ACT_PAIR="delete from act_pair where act_no=?";
+	private static final String DELETE_FO_ACT="delete from fo_act where act_no=?";
+	private static final String GET_ACT_COMM_ByAct_no_STMT="SELECT * FROM ACT_COMM WHERE ACT_NO=? ORDER BY ACT_NO";
+	private static final String GET_ACT_PAIR_ByAct_no_STMT="SELECT * FROM ACT_PAIR WHERE ACT_NO=? ORDER BY ACT_NO";
+	private static final String GET_FO_ACT_ByAct_no_STMT="SELECT * FROM FO_ACT WHERE ACT_NO=? ORDER BY ACT_NO";
+	
 	@Override
 	public void insert(Act_vo act_VO) {
 		// TODO Auto-generated method stub
@@ -182,15 +195,40 @@ public class ActJNDIDAO implements ActDAO_interface{
 		
 		try {
 			con = ds.getConnection();
-			pstmt=con.prepareStatement(DELETE);
+			con.setAutoCommit(false);
+			pstmt=con.prepareStatement(DELETE_ACT_COMM);
 			pstmt.setString(1, ACT_NO);
 			pstmt.executeUpdate();
+			
+			pstmt=con.prepareStatement(DELETE_ACT_PAIR);
+			pstmt.setString(1, ACT_NO);
+			pstmt.executeUpdate();
+			
+			pstmt=con.prepareStatement(DELETE_FO_ACT);
+			pstmt.setString(1, ACT_NO);
+			pstmt.executeUpdate();
+			pstmt=con.prepareStatement(DELETE_ACT);
+			pstmt.setString(1, ACT_NO);
+			pstmt.executeUpdate();
+			con.commit();
+			con.setAutoCommit(true);
 			
 			
 			
 		} catch (SQLException e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
+			
+			if (con != null) {
+				try {
+					
+					// 3●設定於當有exception發生時之catch區塊內
+					con.rollback();
+				} catch (SQLException excep) {
+					throw new RuntimeException("rollback error occured. "
+							+ excep.getMessage());
+				}
+			}
+			throw new RuntimeException("A database error occured. "
+					+ e.getMessage());
 		}finally{
 			
 			if(pstmt!=null){
@@ -358,6 +396,164 @@ public class ActJNDIDAO implements ActDAO_interface{
 			}
 		}
 		return list;
+		
+		
+	}
+	@Override
+	public Set<Act_commVO> getAct_commByAct_no(String ACT_NO) {
+		Set<Act_commVO> set=new LinkedHashSet<Act_commVO>();
+		Act_commVO act_commVO=null;
+		Connection con=null;
+		PreparedStatement pstmt=null;
+		ResultSet rs=null;
+		
+		try {
+			con = ds.getConnection();
+			pstmt=con.prepareStatement(GET_ACT_COMM_ByAct_no_STMT);
+			pstmt.setString(1, ACT_NO);
+			rs=pstmt.executeQuery();
+			while(rs.next()){
+				act_commVO=new Act_commVO();
+				act_commVO.setComm_no(rs.getString("COMM_NO"));
+				act_commVO.setAct_no(rs.getString("ACT_NO"));
+				act_commVO.setMem_ac(rs.getString("MEM_AC"));
+				act_commVO.setComm_cont(rs.getString("COMM_CONT"));
+				act_commVO.setComm_date(rs.getDate("COMM_DATE"));
+				act_commVO.setComm_reply_cont(rs.getString("COMM_REPLY_CONT"));
+				act_commVO.setComm_reply_date(rs.getDate("COMM_REPLY_DATE"));
+				set.add(act_commVO);
+				
+			}
+			
+		} catch (SQLException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}finally{
+
+			if (rs != null) {
+				try {
+					rs.close();
+				} catch (SQLException se) {
+					se.printStackTrace(System.err);
+				}
+			}
+			if (pstmt != null) {
+				try {
+					pstmt.close();
+				} catch (SQLException se) {
+					se.printStackTrace(System.err);
+				}
+			}
+			if (con != null) {
+				try {
+					con.close();
+				} catch (Exception e) {
+					e.printStackTrace(System.err);
+				}
+			}
+		
+		}
+		return set;
+		
+	}
+	@Override
+	public Set<Act_pairVO> getAct_pairByAct_no(String ACT_NO) {
+		 Set<Act_pairVO> set=new  LinkedHashSet<Act_pairVO>();
+		 Act_pairVO act_pair_vo;
+			Connection con=null;
+			PreparedStatement pstmt=null;
+			ResultSet rs=null;
+			try {
+				con = ds.getConnection();
+				pstmt=con.prepareStatement(GET_ACT_PAIR_ByAct_no_STMT);
+				pstmt.setString(1, ACT_NO);
+				rs=pstmt.executeQuery();
+				while(rs.next()){
+					 act_pair_vo=new Act_pairVO();
+					 act_pair_vo.setAct_no(rs.getString("ACT_NO"));
+					 act_pair_vo.setMem_ac(rs.getString("MEM_AC"));
+					 act_pair_vo.setApply_date(rs.getDate("APPLY_DATE"));
+					 act_pair_vo.setPay_state(rs.getString("PAY_STATE"));
+					 act_pair_vo.setChk_state(rs.getString("CHK_STATE"));
+					set.add(act_pair_vo);
+					
+				}
+			} catch (SQLException e) {
+				// TODO Auto-generated catch block
+				e.printStackTrace();
+			}finally {
+				if (rs != null) {
+					try {
+						rs.close();
+					} catch (SQLException se) {
+						se.printStackTrace(System.err);
+					}
+				}
+				if (pstmt != null) {
+					try {
+						pstmt.close();
+					} catch (SQLException se) {
+						se.printStackTrace(System.err);
+					}
+				}
+				if (con != null) {
+					try {
+						con.close();
+					} catch (Exception e) {
+						e.printStackTrace(System.err);
+					}
+				}
+			}
+			return set;
+		
+	}
+	@Override
+	public Set<Fo_actVO> getFo_actByAct_no(String ACT_NO) {
+		Set<Fo_actVO> set=new  LinkedHashSet<Fo_actVO>();
+		Fo_actVO fo_act_vo;
+		Connection con=null;
+		PreparedStatement pstmt=null;
+		ResultSet rs=null;
+		try {
+			con = ds.getConnection();
+			pstmt=con.prepareStatement(GET_FO_ACT_ByAct_no_STMT);
+			pstmt.setString(1, ACT_NO);
+			rs=pstmt.executeQuery();
+			
+			while(rs.next()){
+				fo_act_vo=new Fo_actVO();
+				fo_act_vo.setMem_ac(rs.getString("MEM_AC"));
+				fo_act_vo.setAct_no(rs.getString("ACT_NO"));
+				fo_act_vo.setFo_act_date(rs.getDate("FO_ACT_DATE"));
+				set.add(fo_act_vo);
+			}
+		} catch (SQLException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}finally {
+			if (rs != null) {
+				try {
+					rs.close();
+				} catch (SQLException se) {
+					se.printStackTrace(System.err);
+				}
+			}
+			if (pstmt != null) {
+				try {
+					pstmt.close();
+				} catch (SQLException se) {
+					se.printStackTrace(System.err);
+				}
+			}
+			if (con != null) {
+				try {
+					con.close();
+				} catch (Exception e) {
+					e.printStackTrace(System.err);
+				}
+			}
+		}
+		return set;
 		
 		
 	}

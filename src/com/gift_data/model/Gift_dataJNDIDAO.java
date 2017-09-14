@@ -6,6 +6,7 @@ import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.util.ArrayList;
+import java.util.LinkedHashSet;
 import java.util.List;
 import java.util.Set;
 
@@ -13,6 +14,8 @@ import javax.naming.Context;
 import javax.naming.InitialContext;
 import javax.naming.NamingException;
 import javax.sql.DataSource;
+
+import com.convert_gift.model.Convert_giftVO;
 
 public class Gift_dataJNDIDAO implements Gift_dataDAO_interface{
 
@@ -22,7 +25,7 @@ public class Gift_dataJNDIDAO implements Gift_dataDAO_interface{
 		Context ctx;
 		try {
 			ctx = new InitialContext();
-			ds=(DataSource) ctx.lookup("java:comp/env/jdbc/TestDB3");
+			ds=(DataSource) ctx.lookup("java:comp/env/jdbc/BA103G4DB");
 		} catch (NamingException e) {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
@@ -33,8 +36,11 @@ public class Gift_dataJNDIDAO implements Gift_dataDAO_interface{
 	private static final String INSERT_STMT ="insert into gift_data values('G' || gift_no_seq.nextval,?,?,?,?,?,?)";
 	private static final String GET_ALL_STMT ="select * from gift_data";
 	private static final String GET_ONE_STMT="select * from gift_data where GIFT_NO=?";
-	private static final String DELETE = "delete from gift_data where gift_no=?";
+	private static final String DELETE_GIFT_DATA = "delete from gift_data where gift_no=?";
 	private static final String UPDATE ="update gift_data set GIFT_NAME=?,GIFT_REMAIN=?,GIFT_CONT=?,GIFT_IMG=?,GIFT_PT=?,GIFT_LAUNCH_DATE=? where gift_no=?";
+	
+	private static final String DELETE_CONVERT_GIFT= "delete from convert_gift where gift_no=?";
+	private static final String GET_CONVERT_GIFT_ByGift_no_STMT="SELECT * FROM convert_gift where GIFT_NO = ? order by GIFT_NO";
 	
 	
 	@Override
@@ -142,16 +148,31 @@ public class Gift_dataJNDIDAO implements Gift_dataDAO_interface{
 		
 		try {
 			con = ds.getConnection();
-			pstmt=con.prepareStatement(DELETE);
+			con.setAutoCommit(false);
+			pstmt=con.prepareStatement(DELETE_CONVERT_GIFT);
+			pstmt.setString(1,GIFT_NO);
+			pstmt.executeUpdate();
+			pstmt=con.prepareStatement(DELETE_GIFT_DATA);
 			pstmt.setString(1,GIFT_NO);
 			
 			
 			pstmt.executeUpdate();
-			
+			con.commit();
+			con.setAutoCommit(true);
 			
 		} catch (SQLException e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
+			
+			if (con != null) {
+				try {
+					
+					// 3●設定於當有exception發生時之catch區塊內
+					con.rollback();
+				} catch (SQLException excep) {
+					throw new RuntimeException("rollback error occured. "
+							+ excep.getMessage());
+				}
+			}
+		
 		}finally{
 			
 			if(pstmt!=null){
@@ -297,8 +318,79 @@ public class Gift_dataJNDIDAO implements Gift_dataDAO_interface{
 		
 	}
 
+	@Override
+	public Set<Convert_giftVO> getConvert_giftByGift_no(String GIFT_NO) {
+		Set<Convert_giftVO> set=new LinkedHashSet<Convert_giftVO>();
+		Convert_giftVO convert_giftVO=null;
+		Connection con=null;
+		PreparedStatement pstmt=null;
+		ResultSet rs=null;
+		
+		try {
+			con = ds.getConnection();
+			pstmt = con.prepareStatement(GET_CONVERT_GIFT_ByGift_no_STMT);
+			pstmt.setString(1, GIFT_NO);
+			rs=pstmt.executeQuery();
+			
+			while (rs.next()) {
+			
+				convert_giftVO=new Convert_giftVO();
+				convert_giftVO.setApply_no(rs.getString("APPLY_NO"));
+				convert_giftVO.setMem_ac(rs.getString("MEM_AC"));
+				convert_giftVO.setApply_name(rs.getString("APPLY_NAME"));
+				convert_giftVO.setApply_phone(rs.getString("APPLY_PHONE"));
+				convert_giftVO.setGift_no(rs.getString("GIFT_NO"));
+				convert_giftVO.setApply_date(rs.getDate("APPLY_DATE"));
+				convert_giftVO.setApply_stat(rs.getString("APPLY_STAT"));
+				convert_giftVO.setApply_add(rs.getString("APPLY_ADD"));
+				convert_giftVO.setSend_date(rs.getDate("SEND_DATE"));
+				convert_giftVO.setSend_no(rs.getString("SEND_NO"));
+				set.add(convert_giftVO);
+				
+			}
+			
+			
+			
+		} catch (SQLException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}finally {
+			if (rs != null) {
+				try {
+					rs.close();
+				} catch (SQLException se) {
+					se.printStackTrace(System.err);
+				}
+			}
+			if (pstmt != null) {
+				try {
+					pstmt.close();
+				} catch (SQLException se) {
+					se.printStackTrace(System.err);
+				}
+			}
+			if (con != null) {
+				try {
+					con.close();
+				} catch (Exception e) {
+					e.printStackTrace(System.err);
+				}
+			}
+		}
+		return set;
+		
+		
+	}
 
 
+
+	
+	
+	
+	
+	
+	
+	
 
 	
 	

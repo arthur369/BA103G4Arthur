@@ -18,8 +18,8 @@ import com.gift_data.model.Gift_dataJDBCDAO;
 public class AdJDBCDAO implements AdDAO_interface{
 	String driver="oracle.jdbc.driver.OracleDriver";
 	String url="jdbc:oracle:thin:@localhost:1521:xe";
-	String userid="b0402015";
-	String password="02015";
+	String userid="ba103g4";
+	String password="123456";
 	
 	private static final String INSERT_STMT ="insert into ad values('D' || ad_no_seq.nextval,?,?,?,?,?)";
 	private static final String GET_ALL_STMT ="select * from ad";

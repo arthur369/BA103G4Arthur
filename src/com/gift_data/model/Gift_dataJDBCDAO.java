@@ -1,6 +1,9 @@
 package com.gift_data.model;
 
 import java.util.*;
+
+import com.convert_gift.model.Convert_giftVO;
+
 import java.io.ByteArrayOutputStream;
 import java.io.File;
 import java.io.FileInputStream;
@@ -11,15 +14,17 @@ import java.sql.*;
 public class Gift_dataJDBCDAO implements Gift_dataDAO_interface{
 	String driver="oracle.jdbc.driver.OracleDriver";
 	String url="jdbc:oracle:thin:@localhost:1521:xe";
-	String userid="b0402015";
-	String password="02015";
+	String userid="ba103g4";
+	String password="123456";
 	
 	private static final String INSERT_STMT ="insert into gift_data values('G' || gift_no_seq.nextval,?,?,?,?,?,?)";
 	private static final String GET_ALL_STMT ="select * from gift_data";
 	private static final String GET_ONE_STMT="select * from gift_data where GIFT_NO=?";
-	private static final String DELETE = "delete from gift_data where gift_no=?";
+	private static final String DELETE_GIFT_DATA = "delete from gift_data where gift_no=?";
 	private static final String UPDATE ="update gift_data set GIFT_NAME=?,GIFT_REMAIN=?,GIFT_CONT=?,GIFT_IMG=?,GIFT_PT=?,GIFT_LAUNCH_DATE=? where gift_no=?";
 	
+	private static final String DELETE_CONVERT_GIFT= "delete from convert_gift where gift_no=?";
+	private static final String GET_CONVERT_GIFT_ByGift_no_STMT="SELECT * FROM convert_gift where GIFT_NO = ? order by GIFT_NO";
 
 	@Override
 	public void insert(Gift_dataVO gift_data_VO) {
@@ -144,13 +149,17 @@ public class Gift_dataJDBCDAO implements Gift_dataDAO_interface{
 		try {
 			Class.forName(driver);
 			con = DriverManager.getConnection(url, userid, password);
-
-			pstmt=con.prepareStatement(DELETE);
+			con.setAutoCommit(false);
+			pstmt=con.prepareStatement(DELETE_CONVERT_GIFT);
+			pstmt.setString(1,GIFT_NO);
+			pstmt.executeUpdate();
+			pstmt=con.prepareStatement(DELETE_GIFT_DATA);
 			pstmt.setString(1,GIFT_NO);
 			
 			
 			pstmt.executeUpdate();
-		
+			con.commit();
+			con.setAutoCommit(true);
 
 			} catch (SQLException se) {
 				
@@ -332,7 +341,73 @@ public class Gift_dataJDBCDAO implements Gift_dataDAO_interface{
 	
 	}
 
-
+	@Override
+	public Set<Convert_giftVO> getConvert_giftByGift_no(String GIFT_NO) {
+		Set<Convert_giftVO> set=new LinkedHashSet<Convert_giftVO>();
+		Convert_giftVO convert_giftVO=null;
+		Connection con = null;
+		PreparedStatement pstmt = null;
+		ResultSet rs = null;
+		
+		try {
+			Class.forName(driver);
+			con = DriverManager.getConnection(url, userid, password);
+				pstmt = con.prepareStatement(GET_CONVERT_GIFT_ByGift_no_STMT);
+				pstmt.setString(1, GIFT_NO);
+				rs=pstmt.executeQuery();
+				
+				while (rs.next()) {
+				
+					convert_giftVO=new Convert_giftVO();
+					convert_giftVO.setApply_no(rs.getString("APPLY_NO"));
+					convert_giftVO.setMem_ac(rs.getString("MEM_AC"));
+					convert_giftVO.setApply_name(rs.getString("APPLY_NAME"));
+					convert_giftVO.setApply_phone(rs.getString("APPLY_PHONE"));
+					convert_giftVO.setGift_no(rs.getString("GIFT_NO"));
+					convert_giftVO.setApply_date(rs.getDate("APPLY_DATE"));
+					convert_giftVO.setApply_stat(rs.getString("APPLY_STAT"));
+					convert_giftVO.setApply_add(rs.getString("APPLY_ADD"));
+					convert_giftVO.setSend_date(rs.getDate("SEND_DATE"));
+					convert_giftVO.setSend_no(rs.getString("SEND_NO"));
+					set.add(convert_giftVO);
+					
+				}
+				
+				
+				
+			} catch (SQLException e) {
+				// TODO Auto-generated catch block
+				e.printStackTrace();
+			
+		} catch (ClassNotFoundException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}finally {
+			if (rs != null) {
+				try {
+					rs.close();
+				} catch (SQLException se) {
+					se.printStackTrace(System.err);
+				}
+			}
+			if (pstmt != null) {
+				try {
+					pstmt.close();
+				} catch (SQLException se) {
+					se.printStackTrace(System.err);
+				}
+			}
+			if (con != null) {
+				try {
+					con.close();
+				} catch (Exception e) {
+					e.printStackTrace(System.err);
+				}
+			}
+		}
+		return set;
+		
+	}
 
 	
 	public static void main(String[] args) throws IOException {
@@ -340,51 +415,71 @@ public class Gift_dataJDBCDAO implements Gift_dataDAO_interface{
 	
 		Gift_dataJDBCDAO dao=new Gift_dataJDBCDAO();
 		
-		Gift_dataVO gift_data_vo1=new Gift_dataVO();
-		gift_data_vo1.setGift_name("鋼杯");
-		gift_data_vo1.setGift_remain(100);
-		gift_data_vo1.setGift_cont("當兵喝咖啡的好幫手");
-		byte[ ]pic1=getByteArray("C:\\Users\\Java\\Desktop\\專題照片\\forcoffee.jpg");
-		gift_data_vo1.setGift_img(pic1);
-		gift_data_vo1.setGift_pt(5);
-		gift_data_vo1.setGift_launch_date(java.sql.Date.valueOf("2017-09-07"));
-		dao.insert(gift_data_vo1);
-		System.out.println("ee");
+//		Gift_dataVO gift_data_vo1=new Gift_dataVO();
+//		gift_data_vo1.setGift_name("鋼杯");
+//		gift_data_vo1.setGift_remain(100);
+//		gift_data_vo1.setGift_cont("當兵喝咖啡的好幫手");
+//		byte[ ]pic1=getByteArray("C:\\Users\\Java\\Desktop\\專題照片\\forcoffee.jpg");
+//		gift_data_vo1.setGift_img(pic1);
+//		gift_data_vo1.setGift_pt(5);
+//		gift_data_vo1.setGift_launch_date(java.sql.Date.valueOf("2017-09-07"));
+//		dao.insert(gift_data_vo1);
+//		System.out.println("ee");
 		
-		Gift_dataVO gift_data_vo2=new Gift_dataVO();
-		gift_data_vo2.setGift_name("小小鋼杯");
-		gift_data_vo2.setGift_remain(77);
-		gift_data_vo2.setGift_cont("小鋼杯 大享受");
-		byte[]pic2=getByteArray("C:\\Users\\Java\\Desktop\\專題照片\\a101.jpg");
-		gift_data_vo2.setGift_img(pic2);
-		gift_data_vo2.setGift_pt(5);
-		gift_data_vo2.setGift_launch_date(java.sql.Date.valueOf("2017-04-01"));
-		gift_data_vo2.setGift_no("G1000000006");
-		dao.update(gift_data_vo2);
+//		Gift_dataVO gift_data_vo2=new Gift_dataVO();
+//		gift_data_vo2.setGift_name("小小鋼杯");
+//		gift_data_vo2.setGift_remain(77);
+//		gift_data_vo2.setGift_cont("小鋼杯 大享受");
+//		byte[]pic2=getByteArray("C:\\Users\\Java\\Desktop\\專題照片\\a101.jpg");
+//		gift_data_vo2.setGift_img(pic2);
+//		gift_data_vo2.setGift_pt(5);
+//		gift_data_vo2.setGift_launch_date(java.sql.Date.valueOf("2017-04-01"));
+//		gift_data_vo2.setGift_no("G1000000006");
+//		dao.update(gift_data_vo2);
 		
-		dao.delete("G1000000007");
+//		dao.delete("G1000000001");
 		
 		
-		Gift_dataVO gift_data_vo3=dao.findByPrimaryKey("G1000000005");
-		System.out.println(gift_data_vo3.getGift_no());
-		System.out.println(gift_data_vo3.getGift_name());
-		System.out.println(gift_data_vo3.getGift_remain());
-		System.out.println(gift_data_vo3.getGift_cont());
-		System.out.println(gift_data_vo3.getGift_img());
-		System.out.println(gift_data_vo3.getGift_pt());
-		System.out.println(gift_data_vo3.getGift_launch_date());
+//		Gift_dataVO gift_data_vo3=dao.findByPrimaryKey("G1000000005");
+//		System.out.println(gift_data_vo3.getGift_no());
+//		System.out.println(gift_data_vo3.getGift_name());
+//		System.out.println(gift_data_vo3.getGift_remain());
+//		System.out.println(gift_data_vo3.getGift_cont());
+//		System.out.println(gift_data_vo3.getGift_img());
+//		System.out.println(gift_data_vo3.getGift_pt());
+//		System.out.println(gift_data_vo3.getGift_launch_date());
 		
-		List<Gift_dataVO> list=dao.getAll();
-		for(Gift_dataVO gift:list){
-			System.out.print(gift.getGift_no()+",");
-			System.out.print(gift.getGift_name()+",");
-			System.out.print(gift.getGift_remain()+",");
-			System.out.print(gift.getGift_cont()+",");
-			System.out.print(gift.getGift_img()+",");
-			System.out.print(gift.getGift_pt()+",");
-			System.out.print(gift.getGift_launch_date()+",");
+//		List<Gift_dataVO> list=dao.getAll();
+//		for(Gift_dataVO gift:list){
+//			System.out.print(gift.getGift_no()+",");
+//			System.out.print(gift.getGift_name()+",");
+//			System.out.print(gift.getGift_remain()+",");
+//			System.out.print(gift.getGift_cont()+",");
+//			System.out.print(gift.getGift_img()+",");
+//			System.out.print(gift.getGift_pt()+",");
+//			System.out.print(gift.getGift_launch_date()+",");
+//			System.out.println();
+//		}
+//		
+		Set<Convert_giftVO> set=dao.getConvert_giftByGift_no("G1000000002");
+		for(Convert_giftVO convert:set){
+			System.out.print(convert.getApply_no());
+			System.out.print(convert.getMem_ac());
+			System.out.print(convert.getApply_name());
+			System.out.print(convert.getApply_phone());
+			System.out.print(convert.getGift_no());
+			System.out.print(convert.getApply_date());
+			System.out.print(convert.getApply_stat());
+			System.out.print(convert.getApply_add());
+			System.out.print(convert.getSend_date());
+			System.out.print(convert.getSend_no());
 			System.out.println();
+			
+			
+			
 		}
+		
+		
 		
 		
 		
@@ -400,5 +495,7 @@ public class Gift_dataJDBCDAO implements Gift_dataDAO_interface{
 		}
 		return baos.toByteArray();
 	}
+
+	
 	
 }

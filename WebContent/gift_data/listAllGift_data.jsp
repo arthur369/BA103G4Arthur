@@ -16,6 +16,15 @@ List<Gift_dataVO> list=gift_dataSvc.getAll();
 <head>
 <title>所有員工資料 - listAllGift_data.jsp</title>
 </head>
+<style>
+ .showImg{
+ width: 150px;
+ height: 100px;
+ }
+
+</style>
+
+
 <body bgcolor='white'>
 <b><font color=red>此頁練習採用 EL 的寫法取值:</font></b>
 <table border='1' cellpadding='5' cellspacing='0' width='800'>
@@ -63,7 +72,7 @@ List<Gift_dataVO> list=gift_dataSvc.getAll();
 	 <td><%=list.get(i).getGift_name() %></td>
 	 <td><%=list.get(i).getGift_remain() %></td>
 	 <td><%=list.get(i).getGift_cont() %></td>
-	 <td><img src="<%=gift_img %>"></td>
+	 <td><img class="showImg" src="<%=gift_img %>"></td>
 	 <td><%=list.get(i).getGift_pt() %></td>
 	 <td><%=list.get(i).getGift_launch_date() %></td>
 	 <td>
@@ -116,5 +125,11 @@ List<Gift_dataVO> list=gift_dataSvc.getAll();
  --%>
 <%@ include file="page2.file" %>
 
+<script>
+
+
+</script>
+
+<script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.1.1/jquery.min.js"></script>
 </body>
 </html>

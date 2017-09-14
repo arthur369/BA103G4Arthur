@@ -2,6 +2,9 @@ package com.gift_data.model;
 
 import java.sql.Date;
 import java.util.List;
+import java.util.Set;
+
+import com.convert_gift.model.Convert_giftVO;
 
 public class Gift_dataService {
  private Gift_dataDAO_interface dao;
@@ -45,6 +48,11 @@ public class Gift_dataService {
  public List<Gift_dataVO>getAll(){
 	 return dao.getAll();
  }
+ 
+ public Set<Convert_giftVO> getConvert_giftByGift_no(String GIFT_NO) {
+	 return dao.getConvert_giftByGift_no(GIFT_NO);
+ }
+ 
  
  
 }

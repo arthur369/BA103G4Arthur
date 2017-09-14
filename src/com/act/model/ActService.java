@@ -2,8 +2,11 @@ package com.act.model;
 
 import java.sql.Date;
 import java.util.List;
+import java.util.Set;
 
 import com.act_comm.model.Act_commVO;
+import com.act_pair.model.Act_pairVO;
+import com.fo_act.model.Fo_actVO;
 
 public class ActService {
 
@@ -88,6 +91,18 @@ public Act_vo getOneAct(String act_no) {
 
 public List<Act_vo> getAll() {
 	return dao.getAll();
+}
+
+public Set<Act_commVO> getAct_commByAct_no(String ACT_NO){
+	return dao.getAct_commByAct_no(ACT_NO);
+}
+public Set<Act_pairVO> getAct_pairByAct_no1(String ACT_NO){
+	
+	return dao.getAct_pairByAct_no(ACT_NO);
+}
+public Set<Fo_actVO> getFo_actByAct_no(String ACT_NO){
+	
+	return dao.getFo_actByAct_no(ACT_NO);
 }
 
 

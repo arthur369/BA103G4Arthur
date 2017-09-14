@@ -11,7 +11,10 @@ Gift_dataVO gift_dataVO = (Gift_dataVO) request.getAttribute("gift_dataVO"); //E
 <link rel="stylesheet" type="text/css" href="js/calendar.css">
 <script language="JavaScript" src="js/calendarcode.js"></script>
 <div id="popupcalendar" class="text"></div>
-
+#list{
+ width: 150px;
+ height: 100px;
+ }
 <body bgcolor='white'>
 
 
@@ -69,8 +72,12 @@ Gift_dataVO gift_dataVO = (Gift_dataVO) request.getAttribute("gift_dataVO"); //E
 	
 	
 		<td>贈品圖片:<img src="<%=gift_img%>"></td>
-		<td><input type="file" name="gift_img" size="45"
-			value="<%= (gift_dataVO==null)? "hextoraw('b0102')" : gift_dataVO.getGift_img()%>" /></td>
+		<td><input type="file" name="gift_img" size="45" id="files"
+	<%-- 		 value="<%= (gift_dataVO==null)? "hextoraw('b0102')" : gift_dataVO.getGift_img()%>"--%>
+	value="<%= gift_dataVO.getGift_img()%>"
+	 />
+			<output id="list"></output>
+			</td>
 	</tr>
 	<tr>
 		<td>兌換所需積分:</td>
@@ -97,6 +104,52 @@ Gift_dataVO gift_dataVO = (Gift_dataVO) request.getAttribute("gift_dataVO"); //E
 <input type="hidden" name="action" value="update">
 <input type="hidden" name="gift_no" value="<%=gift_dataVO.getGift_no()%>">
 <input type="submit" value="送出修改"></FORM>
+
+
+<script>
+  
+	function handleFileSelect(evt) {
+		$("#list").empty();
+		
+		
+		
+	    var files = evt.target.files; // FileList object
+
+	    // Loop through the FileList and render image files as thumbnails.
+	    for (var i = 0, f; f = files[i]; i++) {
+
+	      // Only process image files.
+	      if (!f.type.match('image.*')) {
+	        continue;
+	      }
+
+	      var reader = new FileReader();
+
+	      // Closure to capture the file information.
+	      reader.onload = (function(theFile) {
+	        return function(e) {
+	          // Render thumbnail.
+	          var span = document.createElement('span');
+	          span.innerHTML = ['<img class="thumb" src="', e.target.result,
+	                            '" title="', escape(theFile.name), '"/>'].join('');
+	          document.getElementById('list').insertBefore(span, null);
+	          $(".thumb").width(150).height(100);
+	                        
+	        };
+	      })(f);
+
+	      // Read in the image file as a data URL.
+	      reader.readAsDataURL(f);
+	    }
+	  }
+
+	  document.getElementById('files').addEventListener('change', handleFileSelect, false);
+	
+	
+	
+	
+	</script>	
+	<script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.1.1/jquery.min.js"></script>
 
 </body>
 </html>

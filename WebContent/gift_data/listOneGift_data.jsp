@@ -7,6 +7,14 @@ Gift_dataVO gift_dataVO = (Gift_dataVO) request.getAttribute("gift_data_vo"); //
 <head>
 <title>ÃØ«~¸ê®Æ - listOneEmp.jsp</title>
 </head>
+<style>
+.showImg{
+ width: 150px;
+ height: 100px;
+ }
+</style>
+
+
 <body bgcolor='white'>
 
 
@@ -44,7 +52,7 @@ Gift_dataVO gift_dataVO = (Gift_dataVO) request.getAttribute("gift_data_vo"); //
 		<td><%=gift_dataVO.getGift_remain()%></td>
 		<td><%=gift_dataVO.getGift_cont()%></td>
 		<td>
-		<img src="<%=gift_img%>"   >
+		<img class="showImg" src="<%=gift_img%>"   >
 		
 		
 		</td>

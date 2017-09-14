@@ -11,8 +11,8 @@ import java.util.List;
 public class ACT_PAIRJDBCDAO implements Act_pairDAO_interface{
 	String driver="oracle.jdbc.driver.OracleDriver";
 	String url="jdbc:oracle:thin:@localhost:1521:xe";
-	String userid="b0402015";
-	String password="02015";
+	String userid="ba103g4";
+	String password="123456";
 	
 	private static final String INSERT_STMT ="insert into act_pair values(?,?,?,?,?)";
 	private static final String GET_ALL_STMT ="select * from act_pair";
@@ -297,35 +297,35 @@ public class ACT_PAIRJDBCDAO implements Act_pairDAO_interface{
 		act_pair_vo1.setChk_state("未報到");
 		dao.insert(act_pair_vo1);
 		
-		Act_pairVO act_pair_vo2=new Act_pairVO();
-		act_pair_vo2.setAct_no("A1000000001");
-		act_pair_vo2.setMem_ac("tony141");
-		act_pair_vo2.setApply_date(java.sql.Date.valueOf("2017-09-08"));
-		act_pair_vo2.setPay_state("不爽繳費");
-		act_pair_vo2.setChk_state("未報到");
-		dao.update(act_pair_vo2);
-		
-		dao.delete("A1000000002", "tony141");
-		
-		Act_pairVO act_pair_vo3=dao.findByPrimaryKey("A1000000001","tony141");
-		System.out.print(act_pair_vo3.getAct_no()+",");
-		System.out.print(act_pair_vo3.getMem_ac()+",");
-		System.out.print(act_pair_vo3.getApply_date()+",");
-		System.out.print(act_pair_vo3.getPay_state()+",");
-		System.out.print(act_pair_vo3.getChk_state()+",");
-		
-		 List<Act_pairVO> list=dao.getAll();
-		 for(Act_pairVO act_pair_vo4:list){
-			 System.out.print(act_pair_vo4.getAct_no()+",");
-				System.out.print(act_pair_vo4.getMem_ac()+",");
-				System.out.print(act_pair_vo4.getApply_date()+",");
-				System.out.print(act_pair_vo4.getPay_state()+",");
-				System.out.print(act_pair_vo4.getChk_state()+",");
-				System.out.println();
-			 
-			 
-			 
-		 }
+//		Act_pairVO act_pair_vo2=new Act_pairVO();
+//		act_pair_vo2.setAct_no("A1000000001");
+//		act_pair_vo2.setMem_ac("tony141");
+//		act_pair_vo2.setApply_date(java.sql.Date.valueOf("2017-09-08"));
+//		act_pair_vo2.setPay_state("不爽繳費");
+//		act_pair_vo2.setChk_state("未報到");
+//		dao.update(act_pair_vo2);
+//		
+//		dao.delete("A1000000002", "tony141");
+//		
+//		Act_pairVO act_pair_vo3=dao.findByPrimaryKey("A1000000001","tony141");
+//		System.out.print(act_pair_vo3.getAct_no()+",");
+//		System.out.print(act_pair_vo3.getMem_ac()+",");
+//		System.out.print(act_pair_vo3.getApply_date()+",");
+//		System.out.print(act_pair_vo3.getPay_state()+",");
+//		System.out.print(act_pair_vo3.getChk_state()+",");
+//		
+//		 List<Act_pairVO> list=dao.getAll();
+//		 for(Act_pairVO act_pair_vo4:list){
+//			 System.out.print(act_pair_vo4.getAct_no()+",");
+//				System.out.print(act_pair_vo4.getMem_ac()+",");
+//				System.out.print(act_pair_vo4.getApply_date()+",");
+//				System.out.print(act_pair_vo4.getPay_state()+",");
+//				System.out.print(act_pair_vo4.getChk_state()+",");
+//				System.out.println();
+//			 
+//			 
+//			 
+//		 }
 		
 		
 		

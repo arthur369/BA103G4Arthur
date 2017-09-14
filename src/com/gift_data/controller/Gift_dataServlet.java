@@ -195,19 +195,19 @@ public class Gift_dataServlet extends HttpServlet{
 		  if ("getOne_For_Update".equals(action)) { 
 			  List<String> errorMsgs = new LinkedList<String>();
 			  req.setAttribute("errorMsgs", errorMsgs);
-			  System.out.println("check1");
+			 
 			  try{
 				  String gift_no=req.getParameter("GIFT_NO");
-				  System.out.println("check2");
-				  System.out.println("gift_no="+gift_no);
+				 
+				 
 				  Gift_dataService gift_dataSvc=new Gift_dataService();
-				  System.out.println("check3");
+				
 				  Gift_dataVO gift_dataVO=gift_dataSvc.getOneGift_data(gift_no);
-				  System.out.println("check4");
+				 
 				  
-				  System.out.println(gift_dataVO.getGift_name());
+				 
 				  req.setAttribute("gift_dataVO",gift_dataVO);
-				  System.out.println("check5");
+				
 				  String url="/gift_data/update_gift_data_input.jsp";
 				  RequestDispatcher successView=req.getRequestDispatcher(url);
 				  successView.forward(req, res);
@@ -258,6 +258,17 @@ public class Gift_dataServlet extends HttpServlet{
 //					 buffer.flush();
 					
 					  InputStream  is= req.getPart("gift_img").getInputStream(); 
+					  System.out.println(is.toString());
+					  if(req.getPart("gift_img")==null){
+						  errorMsgs.add("請上傳更新圖片");
+						  RequestDispatcher failureView = req
+									.getRequestDispatcher("/gift_data/update_gift_data_input.jsp");
+							failureView.forward(req, res);
+					  }
+					  
+					  
+					  
+					  
 						 ByteArrayOutputStream buffer = new ByteArrayOutputStream();
 
 						 int nRead;
@@ -313,7 +324,7 @@ public class Gift_dataServlet extends HttpServlet{
 				
 					RequestDispatcher failureView = req
 							.getRequestDispatcher("/gift_data/update_gift_data_input.jsp");
-					System.out.println("fuck2");
+				
 					failureView.forward(req, res);
 				}
 			  

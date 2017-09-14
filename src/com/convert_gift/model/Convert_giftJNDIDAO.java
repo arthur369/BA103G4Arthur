@@ -23,7 +23,7 @@ public class Convert_giftJNDIDAO implements Convert_giftDAO_interface{
 		Context ctx;
 		try {
 			ctx = new InitialContext();
-			ds=(DataSource) ctx.lookup("java:comp/env/jdbc/TestDB3");
+			ds=(DataSource) ctx.lookup("java:comp/env/jdbc/BA103G4DB");
 		} catch (NamingException e) {
 			// TODO Auto-generated catch block
 			e.printStackTrace();

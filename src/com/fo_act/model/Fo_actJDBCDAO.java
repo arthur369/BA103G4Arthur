@@ -14,8 +14,8 @@ import java.util.List;
 public class Fo_actJDBCDAO implements Fo_actDAO_interface{
 	String driver="oracle.jdbc.driver.OracleDriver";
 	String url="jdbc:oracle:thin:@localhost:1521:xe";
-	String userid="b0402015";
-	String password="02015";
+	String userid="ba103g4";
+	String password="123456";
 	
 	private static final String INSERT_STMT ="insert into fo_act values(?,?,?)";
 	private static final String GET_ALL_STMT ="select * from fo_act";
