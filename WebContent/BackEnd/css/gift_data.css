@@ -12,13 +12,14 @@
         color: #393E46;
         display: inline-block;
         font-weight: 500; }
-      .card .right .right_middle .middle button {
+      .card .right .right_middle .middle .btn {
         float: right;
         margin-top: 10px;
         padding: 10px 20px; }
   .card .right .right_bottom {
     background-color: #eee; }
     .card .right .right_bottom .giftcard {
+
       padding: 0px;
       border-radius: 30px;
       overflow: hidden;
@@ -37,7 +38,10 @@
         -webkit-transform: translate(-50%, 0);
         -ms-transform: translate(-50%, 0);
         transform: translate(-50%, 0);
-        width: 100%; }
+        width: 100%; 
+     
+
+      }
       .card .right .right_bottom .giftcard .info {
         display: -webkit-box;
         display: -webkit-flex;
@@ -53,8 +57,8 @@
         -ms-flex-align: center;
         align-items: center;
         padding: 30px;
-        color: #F2F2F2; }
-        .card .right .right_bottom .giftcard .info p {
+        color: #F2F2F2 ;}
+        .card .right .right_bottom .giftcard .info h3 ,.card .right .right_bottom .giftcard .info  p {
           color: #F2F2F2; }
       .card .right .right_bottom .giftcard .getitem {
         display: -webkit-box;

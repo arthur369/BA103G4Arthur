@@ -258,7 +258,7 @@ public class Gift_dataServlet extends HttpServlet{
 //					 buffer.flush();
 					
 					  InputStream  is= req.getPart("gift_img").getInputStream(); 
-					  System.out.println(is.toString());
+					
 					  if(req.getPart("gift_img")==null){
 						  errorMsgs.add("請上傳更新圖片");
 						  RequestDispatcher failureView = req

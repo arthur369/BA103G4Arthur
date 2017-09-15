@@ -50,7 +50,7 @@ public class ActJNDIDAO implements ActDAO_interface{
 	private static final String GET_FO_ACT_ByAct_no_STMT="SELECT * FROM FO_ACT WHERE ACT_NO=? ORDER BY ACT_NO";
 	
 	@Override
-	public void insert(Act_vo act_VO) {
+	public void insert(ActVO act_VO) {
 		// TODO Auto-generated method stub
 		Connection con=null;
 		PreparedStatement pstmt=null;
@@ -121,7 +121,7 @@ public class ActJNDIDAO implements ActDAO_interface{
 		
 	}
 	@Override
-	public void update(Act_vo act_VO) {
+	public void update(ActVO act_VO) {
 		// TODO Auto-generated method stub
 		Connection con = null;
 		PreparedStatement pstmt = null;
@@ -254,9 +254,9 @@ public class ActJNDIDAO implements ActDAO_interface{
 		
 	}
 	@Override
-	public Act_vo findByPrimaryKey(String ACT_NO) {
+	public ActVO findByPrimaryKey(String ACT_NO) {
 		// TODO Auto-generated method stub
-		Act_vo act_vo=null;
+		ActVO act_vo=null;
 		Connection con = null;
 		PreparedStatement pstmt = null;
 		ResultSet rs = null;
@@ -267,7 +267,7 @@ public class ActJNDIDAO implements ActDAO_interface{
 			pstmt.setString(1, ACT_NO);
 			rs=pstmt.executeQuery();
 		while(rs.next()){
-			act_vo=new Act_vo();
+			act_vo=new ActVO();
 			act_vo.setAct_no(rs.getString("ACT_NO"));
 			act_vo.setMem_ac(rs.getString("MEM_AC"));
 			act_vo.setOrg_cont(rs.getString("ORG_CONT"));
@@ -328,10 +328,10 @@ public class ActJNDIDAO implements ActDAO_interface{
 		
 	}
 	@Override
-	public List<Act_vo> getAll() {
+	public List<ActVO> getAll() {
 		// TODO Auto-generated method stub
-		List<Act_vo> list=new ArrayList<Act_vo>();
-		Act_vo act_vo=null;
+		List<ActVO> list=new ArrayList<ActVO>();
+		ActVO act_vo=null;
 		Connection con=null;
 		PreparedStatement pstmt=null;
 		ResultSet rs=null;
@@ -340,7 +340,7 @@ public class ActJNDIDAO implements ActDAO_interface{
 			pstmt = con.prepareStatement(GET_ALL_STMT);
 			rs=pstmt.executeQuery();
 			while(rs.next()){
-				act_vo=new Act_vo();
+				act_vo=new ActVO();
 				act_vo.setAct_no(rs.getString("ACT_NO"));
 				act_vo.setMem_ac(rs.getString("MEM_AC"));
 				act_vo.setOrg_cont(rs.getString("ORG_CONT"));

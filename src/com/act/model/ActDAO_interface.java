@@ -10,11 +10,11 @@ import com.fo_act.model.Fo_actVO;
 
 
 public interface ActDAO_interface {
-	 public void insert(Act_vo act_VO);
-     public void update(Act_vo act_VO);
+	 public void insert(ActVO act_VO);
+     public void update(ActVO act_VO);
      public void delete(String ACT_NO);
-     public Act_vo findByPrimaryKey(String ACT_NO);
-     public List<Act_vo> getAll();
+     public ActVO findByPrimaryKey(String ACT_NO);
+     public List<ActVO> getAll();
      
      public Set<Act_commVO> getAct_commByAct_no(String ACT_NO);
      public Set<Act_pairVO> getAct_pairByAct_no(String ACT_NO);

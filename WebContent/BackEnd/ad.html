@@ -6,9 +6,29 @@
     <link rel="stylesheet prefetch" href="https://cdnjs.cloudflare.com/ajax/libs/twitter-bootstrap/3.3.7/css/bootstrap.min.css">
     <link rel="stylesheet" href="font-awesome-4.7.0/css/font-awesome.css">
     <link rel="stylesheet" href="font-awesome-4.7.0/css/font-awesome.min.css">
-    <link rel="styleshee" type="text/css" href="css/jquery.timepicker.css" />
-    <link rel="stylesheet" type="text/css" href="css/bootstrap-datepicker.css" />
-    <link rel="stylesheet" href="css/style.css">
+  <link rel="stylesheet" href="css/style.css">
+
+ <link rel="stylesheet" href="./css/bootstrap-material-datetimepicker.css" />
+<link href="https://fonts.googleapis.com/icon?family=Material+Icons" rel="stylesheet">
+
+<style>
+  .btn-sm{
+    margin-right: 10px;
+  }
+  .right_bottom{
+    margin-bottom: 10px;
+    padding: 20px ;
+  }
+  .right_bottom input{
+    margin: 20px 0px;
+  }
+ 
+
+
+</style>
+
+
+
   </head>
   <body>
     <div class="container_fluid titlebar"><a class="form-inline titlebarForm" href="main.html"><img class="icon" src="images/BeanLifeLogo2.png">
@@ -47,29 +67,29 @@
             
        <form>
   <div class="form-group">
-    <label for="exampleInputEmail1">商品編號</label>
-    <input type="text" class="form-control" id="exampleInputEmail1" placeholder="Email">
+    <label for="prod_no">商品編號</label>
+    <input type="text" class="form-control" id="prod_no" placeholder="ex:D1000000001">
   </div>
   <div class="form-group">
-    <label for="exampleInputEmail1">廣告標題</label>
-    <input type="text" class="form-control" id="exampleInputEmail1" placeholder="Email">
+    <label for="ad_title">廣告標題</label>
+    <input type="text" class="form-control" id="ad_title" placeholder="請輸入標題">
   </div>
   
   <p id="datepairExample">
-    <input type="text" class="date start" />
-    <input type="text" class="time start" /> to
-    <input type="text" class="time end" />
-    <input type="text" class="date end" />
+   廣告時間 
+            <input type="text" id="date-fr" class="form-control floating-label date-fr" value="" placeholder="請輸入開始時間">
+           至
+     <input type="text" id="date-fr" class="form-control floating-label date-fr" value="" placeholder="請輸入結束時間">
 </p>
  
 
    <div class="form-group">
     <label for="exampleInputFile">廣告圖片</label>
-    <input type="file" id="exampleInputFile">
+    <input type="file" id="exampleInputFile" >
     <p class="help-block">Example block-level help text here.</p>
   </div>
 
-   <button type="submit" class="btn btn-default">Submit</button>
+   <button type="submit" class="btn btn-info">Submit</button>
 </form>
 
 
@@ -82,28 +102,29 @@
     <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.1.1/jquery.min.js"></script>
     <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/js/bootstrap.min.js"></script>
     <script src="js/index.js"></script>
-<script type="text/javascript" src="js/bootstrap-datepicker.js"></script>
-<script type="text/javascript" src="js/jquery.timepicker.js"></script>
 
-<script type="text/javascript" src="js/datepair.js"></script>
 
-<script>
-    // initialize input widgets first
-    $('#basicExample .time').timepicker({
-        'showDuration': true,
-        'timeFormat': 'g:ia'
+<script src="https://code.jquery.com/jquery-1.12.3.min.js" integrity="sha256-aaODHAgvwQW1bFOGXMeX+pC4PZIPsvn2h1sArYOhgXQ=" crossorigin="anonymous"></script>
+  <script type="text/javascript" src="http://momentjs.com/downloads/moment-with-locales.min.js"></script>
+   <script type="text/javascript" src="./js/bootstrap-material-datetimepicker.js"></script> 
+    <script>
+// 
+
+$(document).ready(function()
+    {
+      
+      $('.date-fr').bootstrapMaterialDatePicker
+      ({
+        format: 'DD/MM/YYYY HH:mm',
+        lang: 'fr',
+        weekStart: 1, 
+        cancelText : 'cancel',
+        nowButton : true,
+        switchOnClick : true
+      });
+
+      
     });
-
-    $('#basicExample .date').datepicker({
-        'format': 'm/d/yyyy',
-        'autoclose': true
-    });
-
-    // initialize datepair
-    var basicExampleEl = document.getElementById('basicExample');
-    var datepair = new Datepair(basicExampleEl);
 </script>
-            
-
   </body>
 </html>

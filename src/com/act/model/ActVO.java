@@ -3,7 +3,7 @@ package com.act.model;
 import java.io.Serializable;
 import java.sql.Date;
 
-public class Act_vo implements Serializable{
+public class ActVO implements Serializable{
 	private String act_no;
 	private String mem_ac;
 	private String org_cont;
@@ -28,7 +28,7 @@ public class Act_vo implements Serializable{
 	private String act_stat;
 	private String re_cont;
 	private Date review_ed_date;
-	public Act_vo() {
+	public ActVO() {
 		
 		super();
 	}

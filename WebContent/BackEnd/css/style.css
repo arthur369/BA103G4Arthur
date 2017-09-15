@@ -114,6 +114,10 @@ html, body {
       .card .right .right_middle .matter {
         color: #222831; }
     .card .right .right_bottom {
+      color: black;
       background-color: white; }
       .card .right .right_bottom .left_info {
         background-color: white; }
+    .card .right .right_bottom *{
+      color: #333;
+    }

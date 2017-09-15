@@ -58,7 +58,7 @@ List<Gift_dataVO> list=gift_dataSvc.getAll();
 	
 	<%@ include file="page1.file" %> 
 		<% 
-		for(int i=pageIndex;(i<list.size()) && (i<pageIndex+rowsPerPage-1);i++){
+		for(int i=pageIndex;(i<list.size()) && (i<pageIndex+rowsPerPage);i++){
 		%>
 		<tr align='center' valign='middle'>
 			<% 

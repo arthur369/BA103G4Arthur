@@ -41,7 +41,7 @@ public class ActJDBCDAO implements ActDAO_interface{
 	
 	
 	@Override
-	public void insert(Act_vo act_VO) {
+	public void insert(ActVO act_VO) {
 		Connection con = null;
 		PreparedStatement pstmt = null;
 		try {
@@ -114,7 +114,7 @@ public class ActJDBCDAO implements ActDAO_interface{
 	}
 
 	@Override
-	public void update(Act_vo act_VO) {
+	public void update(ActVO act_VO) {
 		// TODO Auto-generated method stub
 		Connection con = null;
 		PreparedStatement pstmt = null;
@@ -262,8 +262,8 @@ public class ActJDBCDAO implements ActDAO_interface{
 	}
 
 	@Override
-	public Act_vo findByPrimaryKey(String ACT_NO) {
-		Act_vo act_vo=null;
+	public ActVO findByPrimaryKey(String ACT_NO) {
+		ActVO act_vo=null;
 		Connection con = null;
 		PreparedStatement pstmt = null;
 		ResultSet rs = null;
@@ -276,7 +276,7 @@ public class ActJDBCDAO implements ActDAO_interface{
 				pstmt.setString(1, ACT_NO);
 				rs=pstmt.executeQuery();
 			while(rs.next()){
-				act_vo=new Act_vo();
+				act_vo=new ActVO();
 				act_vo.setAct_no(rs.getString("ACT_NO"));
 				act_vo.setMem_ac(rs.getString("MEM_AC"));
 				act_vo.setOrg_cont(rs.getString("ORG_CONT"));
@@ -345,9 +345,9 @@ public class ActJDBCDAO implements ActDAO_interface{
 	}
 
 	@Override
-	public List<Act_vo> getAll() {
-		List<Act_vo> list=new ArrayList<Act_vo>();
-		Act_vo act_vo=null;
+	public List<ActVO> getAll() {
+		List<ActVO> list=new ArrayList<ActVO>();
+		ActVO act_vo=null;
 		
 		Connection con=null;
 		PreparedStatement pstmt=null;
@@ -360,7 +360,7 @@ public class ActJDBCDAO implements ActDAO_interface{
 				pstmt = con.prepareStatement(GET_ALL_STMT);
 				rs=pstmt.executeQuery();
 				while(rs.next()){
-					act_vo=new Act_vo();
+					act_vo=new ActVO();
 					act_vo.setAct_no(rs.getString("ACT_NO"));
 					act_vo.setMem_ac(rs.getString("MEM_AC"));
 					act_vo.setOrg_cont(rs.getString("ORG_CONT"));
@@ -620,7 +620,7 @@ public class ActJDBCDAO implements ActDAO_interface{
 		// TODO Auto-generated method stub
 ActJDBCDAO dao=new ActJDBCDAO();
 
-Act_vo act_vo1=new Act_vo();
+ActVO act_vo1=new ActVO();
 	act_vo1.setMem_ac("camacoffee");
 	act_vo1.setOrg_cont("我是主辦人");
 	act_vo1.setAct_name("我是活動");
