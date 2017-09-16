@@ -1,6 +1,7 @@
 package com.gift_data.model;
 
 import java.util.*;
+import java.util.Date;
 
 import com.convert_gift.model.Convert_giftVO;
 
@@ -26,6 +27,7 @@ public class Gift_dataJDBCDAO implements Gift_dataDAO_interface{
 	private static final String DELETE_CONVERT_GIFT= "delete from convert_gift where gift_no=?";
 	private static final String GET_CONVERT_GIFT_ByGift_no_STMT="SELECT * FROM convert_gift where GIFT_NO = ? order by GIFT_NO";
 
+	private static final String GET_PRIMARY_KEY_ByOthers="SELECT GIFT_NO FROM gift_data where GIFT_NAME=? AND GIFT_CONT=? AND GIFT_PT=? GIFT_REMAIN=?";
 	@Override
 	public void insert(Gift_dataVO gift_data_VO) {
 		// TODO Auto-generated method stub
@@ -410,6 +412,69 @@ public class Gift_dataJDBCDAO implements Gift_dataDAO_interface{
 	}
 
 	
+// test	
+//	public String getPrimaryKeyByOthers(String gift_name, String gift_cont, int gift_pt, int gift_remain
+//			) {
+//		Connection con = null;
+//		PreparedStatement pstmt = null;
+//		ResultSet rs = null;
+//		String GIFT_NO=null;
+//		try {
+//			Class.forName(driver);
+//		
+//				con = DriverManager.getConnection(url, userid, password);
+//				pstmt = con.prepareStatement(GET_PRIMARY_KEY_ByOthers);
+//				pstmt.setString(1, gift_name);
+//				pstmt.setString(2, gift_cont);
+//				pstmt.setInt(3, gift_pt);
+//				pstmt.setInt(4, gift_remain);
+//				
+//				
+//				
+//				
+//				rs=pstmt.executeQuery();
+//				while(rs.next()){
+//				 GIFT_NO=rs.getString("GIFT_NO");
+//					
+//					
+//				}
+//			} catch (SQLException e) {
+//				// TODO Auto-generated catch block
+//				e.printStackTrace();
+//			
+//		} catch (ClassNotFoundException e) {
+//			// TODO Auto-generated catch block
+//			e.printStackTrace();
+//		}finally {
+//			if (rs != null) {
+//				try {
+//					rs.close();
+//				} catch (SQLException se) {
+//					se.printStackTrace(System.err);
+//				}
+//			}
+//			if (pstmt != null) {
+//				try {
+//					pstmt.close();
+//				} catch (SQLException se) {
+//					se.printStackTrace(System.err);
+//				}
+//			}
+//			if (con != null) {
+//				try {
+//					con.close();
+//				} catch (Exception e) {
+//					e.printStackTrace(System.err);
+//				}
+//			}
+//		}	
+//		return GIFT_NO;
+//	}
+//	
+//	
+	
+	
+	
 	public static void main(String[] args) throws IOException {
 		// TODO Auto-generated method stub
 	
@@ -461,27 +526,29 @@ public class Gift_dataJDBCDAO implements Gift_dataDAO_interface{
 //			System.out.println();
 //		}
 //		
-		Set<Convert_giftVO> set=dao.getConvert_giftByGift_no("G1000000002");
-		for(Convert_giftVO convert:set){
-			System.out.print(convert.getApply_no());
-			System.out.print(convert.getMem_ac());
-			System.out.print(convert.getApply_name());
-			System.out.print(convert.getApply_phone());
-			System.out.print(convert.getGift_no());
-			System.out.print(convert.getApply_date());
-			System.out.print(convert.getApply_stat());
-			System.out.print(convert.getApply_add());
-			System.out.print(convert.getSend_date());
-			System.out.print(convert.getSend_no());
-			System.out.println();
-			
-			
-			
-		}
+//		Set<Convert_giftVO> set=dao.getConvert_giftByGift_no("G1000000002");
+//		for(Convert_giftVO convert:set){
+//			System.out.print(convert.getApply_no());
+//			System.out.print(convert.getMem_ac());
+//			System.out.print(convert.getApply_name());
+//			System.out.print(convert.getApply_phone());
+//			System.out.print(convert.getGift_no());
+//			System.out.print(convert.getApply_date());
+//			System.out.print(convert.getApply_stat());
+//			System.out.print(convert.getApply_add());
+//			System.out.print(convert.getSend_date());
+//			System.out.print(convert.getSend_no());
+//			System.out.println();
+//			
+//			
+//			
+//		}
 		
-		
-		
-		
+		//test
+//		System.out.println("11");
+//		String gift_no=dao.getPrimaryKeyByOthers("陶杯", "質感渾厚，適合深度烘焙且口感濃郁的咖啡。",30,30);
+//		
+//		System.out.println(gift_no);
 		
 		
 	}
@@ -495,6 +562,9 @@ public class Gift_dataJDBCDAO implements Gift_dataDAO_interface{
 		}
 		return baos.toByteArray();
 	}
+
+
+	
 
 	
 	

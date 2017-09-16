@@ -8,10 +8,10 @@
     <meta charset="UTF-8">
     <title>後端贈品上下架</title>
     <link rel="stylesheet prefetch" href="https://cdnjs.cloudflare.com/ajax/libs/twitter-bootstrap/3.3.7/css/bootstrap.min.css">
-    <link rel="stylesheet" href="font-awesome-4.7.0/css/font-awesome.css">
-    <link rel="stylesheet" href="font-awesome-4.7.0/css/font-awesome.min.css">
-    <link rel="stylesheet" href="css/style.css">
-    <link rel="stylesheet" href="css/gift_data.css">
+    <link rel="stylesheet" href="<%=request.getContextPath()%>/BackEnd/font-awesome-4.7.0/css/font-awesome.css">
+    <link rel="stylesheet" href="<%=request.getContextPath()%>/BackEnd/font-awesome-4.7.0/css/font-awesome.min.css">
+    <link rel="stylesheet" href="<%=request.getContextPath()%>/BackEnd/css/style.css">
+    <link rel="stylesheet" href="<%=request.getContextPath()%>/BackEnd/css/gift_data.css">
     
     <style>
     *{
@@ -26,12 +26,12 @@
      vertical-align: top;
     }
     .abovegiftcard{
-  margin-top:100px;
+  margin-top:50px;
      vertical-align: top;
  
     }
     .giftcard{
-    height: 700px;
+    height: 800px;
     }
     .cardrow{
     vertical-align: top;
@@ -70,9 +70,15 @@
         }
 .card .right .right_bottom   .btn-danger  {
         color: #eee;
-  
+   padding: 15px 20px;
+   font-size: 15px ;
         }
-        
+     #modal-update *{
+        color: #333;
+        }
+       #modal-update    .btn-primary{
+        color: #eee;
+        }
     </style>
     <%
     Gift_dataService gift_dataSvc = new Gift_dataService();
@@ -83,7 +89,7 @@ List<Gift_dataVO> list=gift_dataSvc.getAll();
     
   </head>
   <body>
-    <div class="container_fluid titlebar"><a class="form-inline titlebarForm" href="main.html"><img class="icon" src="images/BeanLifeLogo2.png" alt="">
+    <div class="container_fluid titlebar"><a class="form-inline titlebarForm" href="main.html"><img class="icon" src="<%=request.getContextPath()%>/BackEnd/images/BeanLifeLogo2.png" alt="">
         <h1>Bean-Life</h1></a></div>
     <div class="container card">
       <div class="row composing">
@@ -98,7 +104,7 @@ List<Gift_dataVO> list=gift_dataSvc.getAll();
             <div class="fa fa-gift"> </div><span class="h3">平台業務管理</span>
             <ul class="collapse" id="gift"><a>廣告管理</a><a>兌換贈品管理</a><a href="gift_data.html">兌換贈品業務管理</a></ul></a></div>
         <div class="right col-xs-10">
-          <div class="col-xs-12 right_top"><img src="images/bear.jpg" alt="">
+          <div class="col-xs-12 right_top"><img src="<%=request.getContextPath()%>/BackEnd/images/bear.jpg" alt="">
             <h2>你好</h2><a class="fa fa-bell dropdown-toggle" href="#" data-toggle="dropdown"></a>
             <ul class="dropdown-menu">
               <li><a>10項檢舉未處理</a></li>
@@ -118,6 +124,7 @@ List<Gift_dataVO> list=gift_dataSvc.getAll();
            <div class="row  cardrow">
          
            <c:forEach var="gift_data_vo"  items="${list}" begin="<%=pageIndex %>" end="<%=pageIndex+rowsPerPage-1%>">
+           <FORM METHOD="post" ACTION="<%=request.getContextPath() %>/gift_management/gift_managementServlet" name="form1" >
               <div class="col-xs-4 col-sm-4  abovegiftcard">
                 <div class="giftcard"><img class="giftImg"src="<%=request.getContextPath()%>/GiftImg.do?gift_no=${gift_data_vo.gift_no }" >
                   <div class="info">
@@ -125,16 +132,19 @@ List<Gift_dataVO> list=gift_dataSvc.getAll();
                     <p>${gift_data_vo.gift_cont}</p>
                     <h3>所需積分${gift_data_vo.gift_pt}</h3>
                     <div class="getitem">
-                      <button class="btn-danger">下架</button>
+                       <button type="submit" class="btn btn-danger">修改/下架</button>
                       <h3>剩下${gift_data_vo.gift_remain}個</h3>
                     </div>
                     <div class="upTime">
                       <h4>上架時間</h4>
                       <h4>${gift_data_vo.gift_launch_date}</h4>
                     </div>
+                    <input type="hidden"  class="gift_no" name="GIFT_NO"  value=${gift_data_vo.gift_no }>
+                    <input type="hidden"   name="action"  value="getOne_For_Display">
                   </div>
                 </div>
               </div>
+              </FORM>
               </c:forEach>
               
               
@@ -189,6 +199,10 @@ List<Gift_dataVO> list=gift_dataSvc.getAll();
         
       </div>
     </div>
+    
+ <%--         贈品上架的modal                        --%>
+ 
+ <% Gift_dataVO gift_data_VO=(Gift_dataVO) request.getAttribute("gift_data_VO");  %>
     <div class="modal fade" id="modal-id">
 			<div class="modal-dialog">
 				<div class="modal-content">
@@ -207,7 +221,7 @@ List<Gift_dataVO> list=gift_dataSvc.getAll();
 	</ul>
 	</font>
 </c:if>
-<FORM METHOD="post" ACTION="<%=request.getContextPath() %>/gift_data/gift_dataServlet" name="form1" enctype="multipart/form-data">
+<FORM METHOD="post" ACTION="<%=request.getContextPath() %>/gift_management/gift_managementServlet" name="form1" enctype="multipart/form-data">
 						 <div class="form-group">
     <label for="ad_title" class="h3">贈品名稱</label>
     <input type="text" class="form-control" id="ad_title"  name="GIFT_NAME" placeholder="請輸入標題">
@@ -239,7 +253,7 @@ List<Gift_dataVO> list=gift_dataSvc.getAll();
 
 				<div class="form-group">
   				  <label for="exampleInputFile">贈品圖片</label>
-  					  <input type="file" id="myfiles"  name="GIFT_IMG">
+  					  <input type="file" id="myfiles"  name="GIFT_IMG"  value="">
  					 	<output id="mylist"></output>
   						</div>
 					<h3>贈品描述</h3>
@@ -249,6 +263,82 @@ List<Gift_dataVO> list=gift_dataSvc.getAll();
 					<div class="modal-footer">
 						<button type="button" class="btn btn-default" data-dismiss="modal">關閉</button>
 						<input type="hidden" name="action" value="insert">
+						<input type="hidden" name="GIFT_LAUNCH_DATE" value="" class="nowTime">
+						<button type="submit" class="btn btn-primary">Save changes</button>
+					</div>
+					</FORM>
+				</div>
+				
+			</div>
+				
+		</div>
+	</div>
+	
+	
+	<%--         贈品修改及取消的modal                        --%>
+	
+    <div class="modal fade" id="modal-update">
+			<div class="modal-dialog">
+				<div class="modal-content">
+					<div class="modal-header">
+						<button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button>
+						<h3 class="modal-title">贈品修改</h3>
+					</div>
+					<div class="modal-body">
+					<%-- 錯誤表列 --%>
+<c:if test="${not empty errorMsgs}">
+	<font color='red'>請修正以下錯誤:
+	<ul>
+		<c:forEach var="message" items="${errorMsgs}">
+			<li>${message}</li>
+		</c:forEach>
+	</ul>
+	</font>
+</c:if>
+<FORM METHOD="post" ACTION="<%=request.getContextPath() %>/gift_management/gift_managementServlet" name="form1" enctype="multipart/form-data">
+						 <div class="form-group">
+    <label for="ad_title" class="h3">贈品名稱</label>
+    <input type="text" class="form-control" id="ad_title"  name="gift_name" placeholder="請輸入標題" value="${gift_data_vo.gift_name }">
+  					</div>
+						<div class="modal-body">
+				<h3> 剩餘數量</h3>
+				<div class="input-group number-spinner">
+
+				<span class="input-group-btn">
+					<button type="button" class="btn btn-default" data-dir="dwn"><span class="glyphicon glyphicon-minus"></span></button>
+				</span>
+				<input type="text"   name="gift_remain"  class="form-control text-center" value="${gift_data_vo.gift_remain }">
+				<span class="input-group-btn">
+					<button   type="button" class="btn btn-default" data-dir="up"><span class="glyphicon glyphicon-plus"></span></button>
+				</span>
+			</div>
+
+				<h3> 所需積分</h3>
+				<div class="input-group number-spinner">
+
+				<span class="input-group-btn">
+					<button  type="button" class="btn btn-default" data-dir="dwn"><span class="glyphicon glyphicon-minus"></span></button>
+				</span>
+				<input type="text"  name="gift_pt" class="form-control text-center" value="${gift_data_vo.gift_pt }">
+				<span class="input-group-btn">
+					<button type="button" class="btn btn-default" data-dir="up"><span class="glyphicon glyphicon-plus"></span></button>
+				</span>
+			</div>
+
+				<div class="form-group">
+  				  <label for="exampleInputFile">贈品圖片</label>
+  					  <input type="file" id="myfiles2"  name="gift_img"  value="">
+ 					 	<output id="mylist2"><img src="<%=request.getContextPath()%>/GiftImg.do?gift_no=${gift_data_vo.gift_no }" ></output>
+  						</div>
+					<h3>贈品描述</h3>
+					<textarea class="form-control"  name="gift_cont" rows="3"  >${gift_data_vo.gift_cont }</textarea>
+
+					</div>
+					<div class="modal-footer">
+						<button type="button" class="btn btn-default" data-dismiss="modal">關閉</button>
+						<input type="hidden" name="action" value="update">
+						<input type="hidden" name="gift_no" value="${gift_data_vo.gift_no }">
+						<input type="hidden" name="gift_launch_date" value="" class="nowTime">
 						<button type="submit" class="btn btn-primary">Save changes</button>
 					</div>
 					</FORM>
@@ -258,9 +348,19 @@ List<Gift_dataVO> list=gift_dataSvc.getAll();
 				
 		</div>
 	
+	</div>
+	
+	
+	
+	
+	
+	
+	
     <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.1.1/jquery.min.js"></script>
     <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/js/bootstrap.min.js"></script>
     <script type="text/javascript">
+    
+    // 數字的+、-按鈕控制
 			$(document).on('click', '.number-spinner button', function () {    
 	var btn = $(this),
 		oldValue = btn.closest('.number-spinner').find('input').val().trim(),
@@ -278,7 +378,7 @@ List<Gift_dataVO> list=gift_dataSvc.getAll();
 	btn.closest('.number-spinner').find('input').val(newVal);
 });
 		
-  
+  // 上傳預覽
 	function handleFileSelect(evt) {
 		$("#mylist").empty();
 		
@@ -313,9 +413,79 @@ List<Gift_dataVO> list=gift_dataSvc.getAll();
 	      reader.readAsDataURL(f);
 	    }
 	  }
-
 	  document.getElementById('myfiles').addEventListener('change', handleFileSelect, false);
+	  
+	  function handleFileSelect2(evt) {
+			$("#mylist2").empty();
+			
+			
+			
+		    var files = evt.target.files; // FileList object
+
+		    // Loop through the FileList and render image files as thumbnails.
+		    for (var i = 0, f; f = files[i]; i++) {
+
+		      // Only process image files.
+		      if (!f.type.match('image.*')) {
+		        continue;
+		      }
+
+		      var reader = new FileReader();
+
+		      // Closure to capture the file information.
+		      reader.onload = (function(theFile) {
+		        return function(e) {
+		          // Render thumbnail.
+		          var span = document.createElement('span');
+		          span.innerHTML = ['<img class="thumb" src="', e.target.result,
+		                            '" title="', escape(theFile.name), '"/>'].join('');
+		          document.getElementById('mylist2').insertBefore(span, null);
+		          $(".thumb").width(150).height(100);
+		                        
+		        };
+		      })(f);
+
+		      // Read in the image file as a data URL.
+		      reader.readAsDataURL(f);
+		    }
+		  }
+	  document.getElementById('myfiles2').addEventListener('change', handleFileSelect2, false);
+	  
+	  
+	  // 得到現在時間並設定到#nowTime上作為參數給controller
+	  var d = new Date();
+	  var year = d.getFullYear();
+	  var month = d.getMonth() + 1; // 记得当前月是要+1的
+	  var dt = d.getDate();
+	  var today = year + "-" + month + "-" + dt;  
+	$(".nowTime").val(today);   
 	
+	
+	
+	// 如果上架有錯誤forward回來時會開啟上架modal
+	if(${not empty errorMsgs}){
+	 $("#modal-id").modal({show: true});
+	}
+	
+	// 如果修改有錯誤forward回來時會開啟上架modal
+	if(${not empty errorMsgsForUpdate}){
+		 $("#modal-update").modal({show: true});
+		}
+	if(${not empty openModal}){
+		 $("#modal-update").modal({show: true});
+		}
+	
+	errorMsgsForUpdate
+	<%--
+	$("#modal-update").click(function(){
+		var gift_no=$(".gift_no").val();
+		${gift_dataSvc.}
+		<% gift_dataSvc.getOneGift_data(gift_no); %>
+		
+		
+	})
+		
+	--%>
 	
 	
 	

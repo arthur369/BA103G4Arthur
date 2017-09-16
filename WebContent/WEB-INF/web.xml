@@ -33,6 +33,17 @@
     <url-pattern>/gift_data/gift_dataServlet</url-pattern>
   </servlet-mapping>
   
+   <servlet>
+    <servlet-name>gift_managementServlet</servlet-name>
+    <servlet-class>com.gift_management.controller.Gift_managementServlet</servlet-class>
+  </servlet>
+  <servlet-mapping>
+    <servlet-name>gift_managementServlet</servlet-name>
+    <url-pattern>/gift_management/gift_managementServlet</url-pattern>
+  </servlet-mapping>
+  
+  
+  
   <servlet>
     <servlet-name>GiftImg</servlet-name>
     <servlet-class>com.gift_data.controller.GiftImg</servlet-class>

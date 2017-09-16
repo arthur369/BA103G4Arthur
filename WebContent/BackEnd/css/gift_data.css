@@ -66,9 +66,9 @@
         display: -ms-flexbox;
         display: flex;
         color: #F2F2F2; }
-        .card .right .right_bottom .giftcard .getitem button {
+        .card .right .right_bottom .giftcard .getitem .btn-danger {
           cursor: pointer;
-          padding: 10px 20px;
+          padding: 25px 20px;
           border-radius: 10px;
           margin-right: 15px; }
       .card .right .right_bottom .giftcard .upTime {

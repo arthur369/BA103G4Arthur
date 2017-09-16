@@ -1,4 +1,6 @@
 package com.gift_data.model;
+
+import java.sql.Date;
 import java.util.List;
 import java.util.Set;
 
@@ -17,5 +19,7 @@ public interface Gift_dataDAO_interface {
      // 0914修改
      public Set<Convert_giftVO> getConvert_giftByGift_no(String GIFT_NO);
      
+     //由其他參數取得主鍵 test
+//     public String getPrimaryKeyByOthers(String gift_name, String gift_cont,int gift_pt,int gift_remain);
      
 }
