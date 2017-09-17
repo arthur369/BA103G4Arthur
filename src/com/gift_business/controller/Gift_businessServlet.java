@@ -1,4 +1,4 @@
-package com.gift_management.controller;
+package com.gift_business.controller;
 
 import java.io.BufferedReader;
 import java.io.ByteArrayOutputStream;
@@ -27,7 +27,7 @@ import org.json.JSONArray;
 import org.json.JSONObject;
 
 @MultipartConfig(fileSizeThreshold = 1024 * 1024, maxFileSize = 500 * 1024 * 1024, maxRequestSize = 500* 5 * 1024 * 1024)
-public class Gift_managementServlet extends HttpServlet{
+public class Gift_businessServlet extends HttpServlet{
 
 	public void doGet(HttpServletRequest req, HttpServletResponse res)
 			throws ServletException, IOException {

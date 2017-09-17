@@ -34,7 +34,7 @@ public class Gift_dataJNDIDAO implements Gift_dataDAO_interface{
 		
 	}
 	private static final String INSERT_STMT ="insert into gift_data values('G' || gift_no_seq.nextval,?,?,?,?,?,?)";
-	private static final String GET_ALL_STMT ="select * from gift_data";
+	private static final String GET_ALL_STMT ="select * from gift_data order by gift_no desc";
 	private static final String GET_ONE_STMT="select * from gift_data where GIFT_NO=?";
 	private static final String DELETE_GIFT_DATA = "delete from gift_data where gift_no=?";
 	private static final String UPDATE ="update gift_data set GIFT_NAME=?,GIFT_REMAIN=?,GIFT_CONT=?,GIFT_IMG=?,GIFT_PT=?,GIFT_LAUNCH_DATE=? where gift_no=?";

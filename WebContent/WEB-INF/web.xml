@@ -42,7 +42,14 @@
     <url-pattern>/gift_management/gift_managementServlet</url-pattern>
   </servlet-mapping>
   
-  
+  <servlet>
+    <servlet-name>gift_businessServlet</servlet-name>
+    <servlet-class>com.gift_business.controller.Gift_businessServlet</servlet-class>
+  </servlet>
+  <servlet-mapping>
+    <servlet-name>gift_businessServlet</servlet-name>
+    <url-pattern>/gift_business/gift_businessServlet</url-pattern>
+  </servlet-mapping>
   
   <servlet>
     <servlet-name>GiftImg</servlet-name>

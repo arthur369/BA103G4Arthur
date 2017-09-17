@@ -79,6 +79,15 @@
        #modal-update    .btn-primary{
         color: #eee;
         }
+      .deleteGift{
+      float: right;
+      display: inline-block;
+     
+      }
+     #modal-update  .modal-header  .deleteGift  *{
+        color: #eee; 
+       
+       }
     </style>
     <%
     Gift_dataService gift_dataSvc = new Gift_dataService();
@@ -140,6 +149,7 @@ List<Gift_dataVO> list=gift_dataSvc.getAll();
                       <h4>${gift_data_vo.gift_launch_date}</h4>
                     </div>
                     <input type="hidden"  class="gift_no" name="GIFT_NO"  value=${gift_data_vo.gift_no }>
+                    <input type="hidden" name="whichPage" value="<%=whichPage%>"  >
                     <input type="hidden"   name="action"  value="getOne_For_Display">
                   </div>
                 </div>
@@ -203,6 +213,7 @@ List<Gift_dataVO> list=gift_dataSvc.getAll();
  <%--         贈品上架的modal                        --%>
  
  <% Gift_dataVO gift_data_VO=(Gift_dataVO) request.getAttribute("gift_data_VO");  %>
+ 
     <div class="modal fade" id="modal-id">
 			<div class="modal-dialog">
 				<div class="modal-content">
@@ -224,7 +235,7 @@ List<Gift_dataVO> list=gift_dataSvc.getAll();
 <FORM METHOD="post" ACTION="<%=request.getContextPath() %>/gift_management/gift_managementServlet" name="form1" enctype="multipart/form-data">
 						 <div class="form-group">
     <label for="ad_title" class="h3">贈品名稱</label>
-    <input type="text" class="form-control" id="ad_title"  name="GIFT_NAME" placeholder="請輸入標題">
+    <input type="text" class="form-control" id="ad_title"  name="GIFT_NAME" placeholder="請輸入標題"  value="<%= (gift_data_VO==null)? "":gift_data_VO.getGift_name()%>"/>
   					</div>
 						<div class="modal-body">
 				<h3> 剩餘數量</h3>
@@ -233,7 +244,7 @@ List<Gift_dataVO> list=gift_dataSvc.getAll();
 				<span class="input-group-btn">
 					<button type="button" class="btn btn-default" data-dir="dwn"><span class="glyphicon glyphicon-minus"></span></button>
 				</span>
-				<input type="text"   name="GIFT_REMAIN"  class="form-control text-center" value="1">
+				<input type="text"   name="GIFT_REMAIN"  class="form-control text-center" value="<%= (gift_data_VO==null)? "1":gift_data_VO.getGift_remain()%>">
 				<span class="input-group-btn">
 					<button   type="button" class="btn btn-default" data-dir="up"><span class="glyphicon glyphicon-plus"></span></button>
 				</span>
@@ -245,7 +256,7 @@ List<Gift_dataVO> list=gift_dataSvc.getAll();
 				<span class="input-group-btn">
 					<button  type="button" class="btn btn-default" data-dir="dwn"><span class="glyphicon glyphicon-minus"></span></button>
 				</span>
-				<input type="text"  name="GIFT_PT" class="form-control text-center" value="1">
+				<input type="text"  name="GIFT_PT" class="form-control text-center" value="<%= (gift_data_VO==null)? "1":gift_data_VO.getGift_pt()%>">
 				<span class="input-group-btn">
 					<button type="button" class="btn btn-default" data-dir="up"><span class="glyphicon glyphicon-plus"></span></button>
 				</span>
@@ -254,10 +265,26 @@ List<Gift_dataVO> list=gift_dataSvc.getAll();
 				<div class="form-group">
   				  <label for="exampleInputFile">贈品圖片</label>
   					  <input type="file" id="myfiles"  name="GIFT_IMG"  value="">
- 					 	<output id="mylist"></output>
+ 					 	<output id="mylist">
+ 					 	<%-- 如果上架失敗，將之前上傳的那一張用base64編碼後秀出來預覽，讓使用者不用重新上傳 --%>
+ 					 	
+ 					 	<% 
+ 					 	String gift_img="";
+  						  if(gift_data_VO!=null){
+ 					 	byte[] data=gift_data_VO.getGift_img();
+  						StringBuilder sb = new StringBuilder();
+  						sb.append("data:image/png;base64,");
+  						sb.append(com.sun.org.apache.xerces.internal.impl.dv.util.Base64.encode(data));
+  						gift_img = sb.toString();
+  						}else{
+  							gift_img="";
+  						}
+ 						%>	
+ 					 	<img src="<%=gift_img %>">
+ 					 	</output>
   						</div>
 					<h3>贈品描述</h3>
-					<textarea class="form-control"  name="GIFT_CONT" rows="3"></textarea>
+					<textarea class="form-control"  name="GIFT_CONT" rows="3"  id="gift_cont"><%= (gift_data_VO==null)? "" :gift_data_VO.getGift_cont()%></textarea>
 
 					</div>
 					<div class="modal-footer">
@@ -283,6 +310,14 @@ List<Gift_dataVO> list=gift_dataSvc.getAll();
 					<div class="modal-header">
 						<button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button>
 						<h3 class="modal-title">贈品修改</h3>
+						<FORM METHOD="post" ACTION="<%=request.getContextPath() %>/gift_management/gift_managementServlet" name="form1" >
+						<button  type="submit" class="btn btn-danger deleteGift"  style="color: #eee">下架</button>
+						<input type="hidden" name="action" value="delete">
+						<input type="hidden" name="gift_no" value="${gift_data_vo.gift_no }">
+						</FORM>
+						
+						
+						
 					</div>
 					<div class="modal-body">
 					<%-- 錯誤表列 --%>
@@ -339,6 +374,7 @@ List<Gift_dataVO> list=gift_dataSvc.getAll();
 						<input type="hidden" name="action" value="update">
 						<input type="hidden" name="gift_no" value="${gift_data_vo.gift_no }">
 						<input type="hidden" name="gift_launch_date" value="" class="nowTime">
+						<input type="hidden" name="whichPage" value="<%=whichPage%>"  >
 						<button type="submit" class="btn btn-primary">Save changes</button>
 					</div>
 					</FORM>
@@ -486,7 +522,6 @@ List<Gift_dataVO> list=gift_dataSvc.getAll();
 	})
 		
 	--%>
-	
 	
 	
 	</script>	

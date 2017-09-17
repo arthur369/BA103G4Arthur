@@ -8,6 +8,12 @@
 %>
 
 <%  
+      int page=req.getAttribute("whichPage");
+      if(page!=null){
+      whichPage=page;
+      }
+      
+      
     rowNumber=list.size();
     if (rowNumber%rowsPerPage !=0)
      pageNumber=rowNumber/rowsPerPage +1;
