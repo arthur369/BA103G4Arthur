@@ -58,5 +58,7 @@ public class Convert_giftService {
 		return dao.getAll();
 	}
 	
-	
+	public void updateStatus(String apply_no, String apply_stat){
+		dao.updateStatus(apply_no, apply_stat);
+	}
 }

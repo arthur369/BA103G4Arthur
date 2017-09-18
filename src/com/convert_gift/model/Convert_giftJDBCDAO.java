@@ -21,8 +21,8 @@ public class Convert_giftJDBCDAO implements Convert_giftDAO_interface{
 	private static final String GET_ONE_STMT="select * from convert_gift where APPLY_NO=?";
 	private static final String DELETE = "delete from convert_gift where APPLY_NO=?";
 	private static final String UPDATE ="update convert_gift set MEM_AC=?,APPLY_NAME=?,APPLY_PHONE=?,GIFT_NO=?,APPLY_DATE=?,APPLY_STAT=?,APPLY_ADD=?,SEND_DATE=?,SEND_NO=? where APPLY_NO=?";
-	
-	
+	//  依主鍵改變兌換申請狀態
+	private static final String UPDATE_STATUS="update convert_gift set apply_stat=? where apply_no=?";
 	
 	
 
@@ -360,63 +360,95 @@ public class Convert_giftJDBCDAO implements Convert_giftDAO_interface{
 		
 	}
 
-	
+	@Override
+	public void updateStatus(String apply_no, String apply_stat) {
+		// TODO Auto-generated method stub
+		Connection con = null;
+		PreparedStatement pstmt = null;
+		try {
+			Class.forName(driver);
+		
+				con = DriverManager.getConnection(url, userid, password);
+				pstmt = con.prepareStatement(UPDATE_STATUS);
+				pstmt.setString(1, apply_stat);
+				pstmt.setString(2, apply_no);
+			
+				pstmt.executeUpdate();
+				
+			} catch (SQLException e) {
+				// TODO Auto-generated catch block
+				e.printStackTrace();
+			
+		} catch (ClassNotFoundException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
+	}
 	public static void main(String[] args) {
 		Convert_giftJDBCDAO dao=new Convert_giftJDBCDAO();
 
-		Convert_giftVO convert_gift1=new Convert_giftVO();
-		convert_gift1.setMem_ac("producter71");
-		convert_gift1.setApply_name("陳智遠");
-		convert_gift1.setApply_phone("0925359524");
-		convert_gift1.setGift_no("G1000000004");
-		convert_gift1.setApply_date(java.sql.Date.valueOf("2017-09-07"));
-		convert_gift1.setApply_stat("待出貨");
-		convert_gift1.setApply_add("彰化縣埔鹽鄉角樹村一號");
-		convert_gift1.setSend_date(null);
-		convert_gift1.setSend_no(null);
-		dao.insert(convert_gift1);
+//		Convert_giftVO convert_gift1=new Convert_giftVO();
+//		convert_gift1.setMem_ac("producter71");
+//		convert_gift1.setApply_name("陳智遠");
+//		convert_gift1.setApply_phone("0925359524");
+//		convert_gift1.setGift_no("G1000000004");
+//		convert_gift1.setApply_date(java.sql.Date.valueOf("2017-09-07"));
+//		convert_gift1.setApply_stat("待出貨");
+//		convert_gift1.setApply_add("彰化縣埔鹽鄉角樹村一號");
+//		convert_gift1.setSend_date(null);
+//		convert_gift1.setSend_no(null);
+//		dao.insert(convert_gift1);
+//		
+//		Convert_giftVO convert_gift2=new Convert_giftVO();
+//		convert_gift2.setMem_ac("producter71");
+//		convert_gift2.setApply_name("陳xx");
+//		convert_gift2.setApply_phone("0925359524");
+//		convert_gift2.setGift_no("G1000000004");
+//		convert_gift2.setApply_date(java.sql.Date.valueOf("2017-09-07"));
+//		convert_gift2.setApply_stat("已出貨");
+//		convert_gift2.setApply_add("彰化縣埔鹽鄉角樹村一號");
+//		convert_gift2.setSend_date(null);
+//		convert_gift2.setSend_no(null);
+//		convert_gift2.setApply_no("V1000000007");
+//		dao.update(convert_gift2);
+//		
+//		
+//		dao.delete("V1000000007");
+//		
+//		Convert_giftVO convert_gift3=dao.findByPrimaryKey("V1000000002");
+//		System.out.println(convert_gift3.getApply_no());
+//		System.out.println(convert_gift3.getMem_ac());
+//		System.out.println(convert_gift3.getApply_name());
+//		System.out.println(convert_gift3.getApply_phone());
+//		System.out.println(convert_gift3.getGift_no());
+//		System.out.println(convert_gift3.getApply_date());
+//		System.out.println(convert_gift3.getApply_stat());
+//		System.out.println(convert_gift3.getApply_add());
+//		System.out.println(convert_gift3.getSend_date());
+//		System.out.println(convert_gift3.getSend_no());
+//		
+//		List<Convert_giftVO> list=dao.getAll();
+//		for(Convert_giftVO convert: list){
+//			System.out.print(convert.getApply_no());
+//			System.out.print(convert.getMem_ac());
+//			System.out.print(convert.getApply_name());
+//			System.out.print(convert.getApply_phone());
+//			System.out.print(convert.getGift_no());
+//			System.out.print(convert.getApply_date());
+//			System.out.print(convert.getApply_stat());
+//			System.out.print(convert.getApply_add());
+//			System.out.print(convert.getSend_date());
+//			System.out.print(convert.getSend_no());
+//			System.out.println();
+//		}
 		
-		Convert_giftVO convert_gift2=new Convert_giftVO();
-		convert_gift2.setMem_ac("producter71");
-		convert_gift2.setApply_name("陳xx");
-		convert_gift2.setApply_phone("0925359524");
-		convert_gift2.setGift_no("G1000000004");
-		convert_gift2.setApply_date(java.sql.Date.valueOf("2017-09-07"));
-		convert_gift2.setApply_stat("已出貨");
-		convert_gift2.setApply_add("彰化縣埔鹽鄉角樹村一號");
-		convert_gift2.setSend_date(null);
-		convert_gift2.setSend_no(null);
-		convert_gift2.setApply_no("V1000000007");
-		dao.update(convert_gift2);
+		dao.updateStatus("V1000000005","已出貨");
 		
 		
-		dao.delete("V1000000007");
 		
-		Convert_giftVO convert_gift3=dao.findByPrimaryKey("V1000000002");
-		System.out.println(convert_gift3.getApply_no());
-		System.out.println(convert_gift3.getMem_ac());
-		System.out.println(convert_gift3.getApply_name());
-		System.out.println(convert_gift3.getApply_phone());
-		System.out.println(convert_gift3.getGift_no());
-		System.out.println(convert_gift3.getApply_date());
-		System.out.println(convert_gift3.getApply_stat());
-		System.out.println(convert_gift3.getApply_add());
-		System.out.println(convert_gift3.getSend_date());
-		System.out.println(convert_gift3.getSend_no());
-		
-		List<Convert_giftVO> list=dao.getAll();
-		for(Convert_giftVO convert: list){
-			System.out.print(convert.getApply_no());
-			System.out.print(convert.getMem_ac());
-			System.out.print(convert.getApply_name());
-			System.out.print(convert.getApply_phone());
-			System.out.print(convert.getGift_no());
-			System.out.print(convert.getApply_date());
-			System.out.print(convert.getApply_stat());
-			System.out.print(convert.getApply_add());
-			System.out.print(convert.getSend_date());
-			System.out.print(convert.getSend_no());
-			System.out.println();
-		}
 	}
+
+
+
+	
 }

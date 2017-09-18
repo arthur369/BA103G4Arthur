@@ -38,7 +38,7 @@ public class Convert_giftJNDIDAO implements Convert_giftDAO_interface{
 	private static final String DELETE = "delete from convert_gift where APPLY_NO=?";
 	private static final String UPDATE ="update convert_gift set MEM_AC=?,APPLY_NAME=?,APPLY_PHONE=?,GIFT_NO=?,APPLY_DATE=?,APPLY_STAT=?,APPLY_ADD=?,SEND_DATE=?,SEND_NO=? where APPLY_NO=?";
 	
-	
+	private static final String UPDATE_STATUS="update convert_gift set apply_stat=? where apply_no=?";
 	
 	@Override
 	public void insert(Convert_giftVO convert_gift_VO) {
@@ -298,6 +298,24 @@ public class Convert_giftJNDIDAO implements Convert_giftDAO_interface{
 		}
 		return list;
 		
+	}
+	//  依主鍵改變兌換申請狀態
+	@Override
+	public void updateStatus(String apply_no, String apply_stat) {
+		// TODO Auto-generated method stub
+		Connection con=null;
+		PreparedStatement pstmt=null;
+		try {
+			con = ds.getConnection();
+			pstmt = con.prepareStatement(UPDATE_STATUS);
+			pstmt.setString(1, apply_stat);
+			pstmt.setString(2, apply_no);
+		
+			pstmt.executeUpdate();
+		} catch (SQLException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
 	}
 
 }

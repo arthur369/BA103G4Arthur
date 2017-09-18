@@ -109,6 +109,23 @@ color: red;
 font-size: 50px;
 margin-right: 30px;
 }
+  .errorMessage{
+      margin-right: 70%;
+       }
+   .selectStatus{
+   float: right;
+   display: inline-block;
+   margin-top: 20px;
+   }    
+   .check{
+   display: inline-block;
+   }
+    .dropdown-menu{
+    cursor: pointer;
+    }
+    .mystatus :hover{
+    color: #eee;
+    }
 </style>
 <%
     Convert_giftService convert_giftSvc = new Convert_giftService();
@@ -134,7 +151,18 @@ List<Convert_giftVO> list=convert_giftSvc.getAll();
             <div class="fa fa-gift"> </div><span class="h3">平台業務管理</span>
             <ul class="collapse" id="gift"><a>廣告管理</a><a>兌換贈品管理</a><a href="gift_data.html">兌換贈品業務管理</a></ul></a></div>
         <div class="right col-xs-10">
-          <div class="col-xs-12 right_top"><img src="<%=request.getContextPath()%>/BackEnd/images/bear.jpg" alt="">
+          <div class="col-xs-12 right_top">
+         <%-- 錯誤表列 --%>
+<c:if test="${not empty errorMsgs}" >
+	<font color='red' class="errorMessage">請修正以下錯誤:
+	<ul>
+		<c:forEach var="message" items="${errorMsgs}">
+			<li>${message}</li>
+		</c:forEach>
+	</ul>
+	</font>
+</c:if>
+          <img src="<%=request.getContextPath()%>/BackEnd/images/bear.jpg" alt="">
             <h2>你好</h2><a class="fa fa-bell dropdown-toggle" href="#" data-toggle="dropdown"></a>
             <ul class="dropdown-menu">
               <li><a>10項檢舉未處理</a></li>
@@ -145,7 +173,39 @@ List<Convert_giftVO> list=convert_giftSvc.getAll();
           </div>
           <div class="col-xs-12 right_middle">
             <div class="col-xs-12">
-              <h2 class="check">活動審核</h2>
+              <h2 class="check">兌換贈品業務管理</h2>
+             
+              <div class="btn-group selectStatus">
+  <button class="btn btn-default btn-sm dropdown-toggle  " type="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+    選擇 <span class="caret "></span>
+  </button>
+  <ul class="dropdown-menu">
+    <li>
+    <FORM METHOD="post" ACTION="<%=request.getContextPath() %>/gift_business/gift_businessServlet" name="form1" >
+    <a class="mystatus">全顯示
+    
+    </a>
+    <input type="hidden"  name="showStatus" value="全顯示">
+    </FORM>
+    </li>
+    <li>
+    <FORM METHOD="post" ACTION="<%=request.getContextPath() %>/gift_business/gift_businessServlet" name="form1" >
+    <a class="mystatus">待出貨
+    <input type="hidden"  name="showStatus" value="待出貨">
+    </a>
+    </FORM>
+    </li>
+    <li>
+    <FORM METHOD="post" ACTION="<%=request.getContextPath() %>/gift_business/gift_businessServlet" name="form1" >
+    <a class="mystatus">已出貨
+    <input type="hidden"  name="showStatus" value="已出貨">
+    </a>
+    </FORM>
+    </li>
+  </ul>
+</div>
+              
+              
             </div>
           </div>
           <div class="col-xs-12 right_bottom">
@@ -214,10 +274,11 @@ List<Convert_giftVO> list=convert_giftSvc.getAll();
 						此更動將會更新資料庫內容!!
 					</div>
 					<div class="modal-footer">
-					<FORM METHOD="post" ACTION="<%=request.getContextPath() %>/gift_management/gift_managementServlet" name="form1" >
+					<FORM METHOD="post" ACTION="<%=request.getContextPath() %>/gift_business/gift_businessServlet" name="form1" >
 						<button type="button" class="btn btn-default" data-dismiss="modal">取消</button>
 						<input type="hidden"  name="action" value="changeState">
-						<button type="button" class="btn btn-primary" style="color: #eee">確定</button>
+						<input type="hidden" name="whichPage" value="<%=whichPage%>"  >
+						<button type="submit" class="btn btn-primary" style="color: #eee">確定</button>
 						<div class="getFk"></div>
 						
 						</FORM>
@@ -238,10 +299,24 @@ List<Convert_giftVO> list=convert_giftSvc.getAll();
     	$(this).parent().parent().prev().text("待出貨");
         }
         var fk=$(this).parent().parent().prev().prev().prev().prev().prev().prev().prev().prev().prev().prev().text();
+     var statusValue=$(this).parent().parent().prev().text();
      
-        $(".getFk").append("<input type='hidden' name="+fk+" "+ "value="+fk+">");    	  
+        $(".getFk").append("<input type='hidden' name=primaryKey "+ "value="+fk+">");    	  
+        $(".getFk").append("<input type='hidden' name=statusValue "+ "value="+statusValue+">");
       })
+      $(".dropdown-menu").children().children().mouseenter(function(){
+		$(this).css("background-color","#333");
+		$(this).children().css("color","#eee")
+		                                 .css("text-decoration","none");
+	})
 
+	$(".dropdown-menu").children().children().mouseleave(function(){
+		$(this).css("background-color","#eee");
+		$(this).children().css("color","#333");
+		
+	})
+	
+	
 
     </script>
   </body>

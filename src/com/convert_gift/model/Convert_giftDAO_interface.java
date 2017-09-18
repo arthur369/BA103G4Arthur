@@ -9,6 +9,7 @@ public interface Convert_giftDAO_interface {
      public void update(Convert_giftVO convert_gift_VO);
      public void delete(String APPLY_NO);
      public Convert_giftVO findByPrimaryKey(String APPLY_NO);
+     public void updateStatus(String apply_no,String apply_stat);
      public List<Convert_giftVO> getAll();
      
 }

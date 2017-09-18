@@ -6,8 +6,11 @@ import java.io.IOException;
 import java.io.InputStream;
 import java.io.PrintWriter;
 import java.io.UnsupportedEncodingException;
+import java.util.Hashtable;
 import java.util.LinkedList;
 import java.util.List;
+import java.util.Map;
+import java.util.Set;
 
 import javax.servlet.RequestDispatcher;
 import javax.servlet.ServletException;
@@ -16,6 +19,7 @@ import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
+import com.convert_gift.model.Convert_giftService;
 import com.gift_data.model.Gift_dataJDBCDAO;
 import com.gift_data.model.Gift_dataJNDIDAO;
 import com.gift_data.model.Gift_dataService;
@@ -38,6 +42,71 @@ public class Gift_businessServlet extends HttpServlet{
 		req.setCharacterEncoding("UTF-8");
 		
 		String action = req.getParameter("action");
+		System.out.println(action);
+		if ("changeState".equals(action)) {
+			List<String> errorMsgs = new LinkedList<String>();
+			req.setAttribute("errorMsgs", errorMsgs);
+			
+			try{
+			
+			String [] primaryKey=null;
+			String [] statusValue=null;
+	
+		 primaryKey=	 req.getParameterValues("primaryKey");
+		 statusValue=	req.getParameterValues("statusValue");
+		 System.out.println(primaryKey);
+if(primaryKey==null || statusValue==null){
+	errorMsgs.add("無任何變更");
+	System.out.println("got nothing");
+	 String url ="/BackEnd/convert_gift.jsp";
+	  RequestDispatcher nullView=req.getRequestDispatcher(url);
+	  nullView.forward(req,res);
+	  return;
+}
+		 
+System.out.println("track1");
+		req.setAttribute("whichPage",req.getParameter("whichPage"));   //取得目前所在的頁數，不管失敗獲成功都會停留在同一頁，不會跑到第一頁
+		System.out.println("track2");
+		Map<String ,String> getData=new Hashtable<String ,String>();
+			for(int i=0;i<primaryKey.length;i++){
+				getData.put(primaryKey[i],statusValue[i]);
+			}
+			System.out.println("track3");
+			Convert_giftService convert_giftSvc=new Convert_giftService();
+			Set<String> mykeys=getData.keySet();
+			for(String mykey:mykeys){
+				convert_giftSvc.updateStatus(mykey,getData.get(mykey));
+				
+				
+			}
+	
+			
+			
+			  String url ="/BackEnd/convert_gift.jsp";
+			  RequestDispatcher successView=req.getRequestDispatcher(url);
+			  successView.forward(req,res);
+			  return;
+			}catch(Exception e){
+				errorMsgs.add("更新失敗");
+				 String url ="/BackEnd/convert_gift.jsp";
+				  RequestDispatcher nullView=req.getRequestDispatcher(url);
+				  nullView.forward(req,res);
+			}
+			  
+		}
+		
+	
+		
+		
+		
+		
+		
+		
+		
+		
+		
+		
+		
 		
 		if ("getOne_For_Display".equals(action)) {
 			List<String> errorMsgsForUpdate = new LinkedList<String>();
