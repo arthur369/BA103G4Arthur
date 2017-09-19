@@ -480,15 +480,15 @@ public class Gift_dataJDBCDAO implements Gift_dataDAO_interface{
 	
 		Gift_dataJDBCDAO dao=new Gift_dataJDBCDAO();
 		
-//		Gift_dataVO gift_data_vo1=new Gift_dataVO();
-//		gift_data_vo1.setGift_name("鋼杯");
-//		gift_data_vo1.setGift_remain(100);
-//		gift_data_vo1.setGift_cont("當兵喝咖啡的好幫手");
-//		byte[ ]pic1=getByteArray("C:\\Users\\Java\\Desktop\\專題照片\\forcoffee.jpg");
-//		gift_data_vo1.setGift_img(pic1);
-//		gift_data_vo1.setGift_pt(5);
-//		gift_data_vo1.setGift_launch_date(java.sql.Date.valueOf("2017-09-07"));
-//		dao.insert(gift_data_vo1);
+		Gift_dataVO gift_data_vo1=new Gift_dataVO();
+		gift_data_vo1.setGift_name("鋼杯");
+		gift_data_vo1.setGift_remain(100);
+		gift_data_vo1.setGift_cont("當兵喝咖啡的好幫手");
+		byte[ ]pic1=getByteArray("C:\\Users\\Java\\Desktop\\專題照片\\forcoffee.jpg");
+		gift_data_vo1.setGift_img(pic1);
+		gift_data_vo1.setGift_pt(5);
+		gift_data_vo1.setGift_launch_date(java.sql.Date.valueOf("2017-09-07"));
+		dao.insert(gift_data_vo1);
 //		System.out.println("ee");
 		
 //		Gift_dataVO gift_data_vo2=new Gift_dataVO();

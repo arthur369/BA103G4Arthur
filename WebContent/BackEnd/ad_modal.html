@@ -2,39 +2,43 @@
 <html>
   <head>
     <meta charset="UTF-8">
-    <title>後端活動審核</title>
+    <title>後端首頁0902</title>
     <link rel="stylesheet prefetch" href="https://cdnjs.cloudflare.com/ajax/libs/twitter-bootstrap/3.3.7/css/bootstrap.min.css">
     <link rel="stylesheet" href="font-awesome-4.7.0/css/font-awesome.css">
     <link rel="stylesheet" href="font-awesome-4.7.0/css/font-awesome.min.css">
-    <link rel="stylesheet" href="css/style.css">
-    <link rel="stylesheet" href="css/act.css">
-  <style type="text/css">
-    *{
-      position: relative;
-    }
-    .ad_img{
-      width: 150px;
-      height: 120px;
-    }
-    td{
-      vertical-align: middle;
-      /*border: solid 1px black;*/
-      /*padding: 10px;*/
-    }
-.table>tbody>tr>td, .table>tbody>tr>th, .table>tfoot>tr>td, .table>tfoot>tr>th, .table>thead>tr>td, .table>thead>tr>th{
+  <link rel="stylesheet" href="css/style.css">
 
-  vertical-align: middle;
-}
-  </style>
+ <link rel="stylesheet" href="./css/bootstrap-material-datetimepicker.css" />
+<link href="https://fonts.googleapis.com/icon?family=Material+Icons" rel="stylesheet">
+
+<style>
+  .btn-sm{
+    margin-right: 10px;
+  }
+  .right_bottom{
+    margin-bottom: 10px;
+    padding: 20px ;
+  }
+  .right_bottom input{
+    margin: 20px 0px;
+  }
+ 
+
+
+</style>
+
 
 
   </head>
   <body>
-    <div class="container_fluid titlebar"><a class="form-inline titlebarForm" href="main.html"><img class="icon" src="images/BeanLifeLogo2.png" alt="">
+    <div class="container_fluid titlebar"><a class="form-inline titlebarForm" href="main.html"><img class="icon" src="images/BeanLifeLogo2.png">
         <h1>Bean-Life</h1></a></div>
+    <!-- .left是左邊導覽列的部分-->
+    <!-- .left選擔部分0910修正選單內容-->
+    <!-- 0910 玲當部份新增下拉選單-->
     <div class="container card">
       <div class="row">
-        <div class="col-xs-2 left"><a class="h3 title" href="#action" aria-expanded="false" aria-controls="action" data-toggle="collapse" style="text-decoration: none;">
+        <div class="col-xs-2 left"><a class="h3 title act" href="#action" aria-expanded="false" aria-controls="action" data-toggle="collapse" style="text-decoration: none;">
             <div class="fa fa-futbol-o"></div><a class="h3" href="act.html"> 活動審核</a></a><a class="h3 title" href="#check" aria-expanded="false" aria-controls="check" data-toggle="collapse" style="text-decoration: none;">
             <div class="fa fa-check-circle"></div><span class="h3">檢舉管理</span>
             <ul class="collapse" id="check"><a>評論檢舉</a><a>商品檢舉</a><a>討論區檢舉</a></ul></a><a class="h3 title" href="#mem" aria-expanded="false" aria-controls="mem" data-toggle="collapse" style="text-decoration: none;">
@@ -56,43 +60,71 @@
           </div>
           <div class="col-xs-12 right_middle">
             <div class="col-xs-12">
-              <h2 class="check">活動審核</h2>
+              <h2 class="check">待審核</h2>
             </div>
           </div>
           <div class="col-xs-12 right_bottom">
-            <table class="table table-striped">
-              <tr>
-                <th>廣告編號</th>
-                <th>商品編號</th>
-                <th>廣告標題</th>
-                <th>廣告圖片</th>
-                <th>開始時間</th>
-                <th>結束時間</th>
-                <th>管理</th>
-              </tr>
-              <tr>
-                <td  valign="middle">D1000000001</td>
-                <td>P1000000001</td>
-                <td>藍山咖啡限時40%</td>
-                <td><img class="ad_img"src="C:\Users\Java\Desktop\專題照片\blue_mountain_coffee.jpg"></td>
-                <td>10-9月 -17</td>
-                <td>12-9月 -17</td>
-                <td>
-                  <button class="btn btn-danger">下架</button>
-                  <button class="btn btn-success">修改</button>
-                </td>
-              </tr>
-             
-            </table>
-            <ul class="pager">
-              <li class="previous"><a href="#">← 上一頁</a></li>
-              <li class="next"><a href="#">下一頁 →</a></li>
-            </ul>
+            
+       <form>
+  <div class="form-group">
+    <label for="prod_no">商品編號</label>
+    <input type="text" class="form-control" id="prod_no" placeholder="ex:D1000000001">
+  </div>
+  <div class="form-group">
+    <label for="ad_title">廣告標題</label>
+    <input type="text" class="form-control" id="ad_title" placeholder="請輸入標題">
+  </div>
+  
+  <p id="datepairExample">
+   廣告時間 
+            <input type="text" id="date-fr" class="form-control floating-label date-fr" value="" placeholder="請輸入開始時間">
+           至
+     <input type="text" id="date-fr" class="form-control floating-label date-fr" value="" placeholder="請輸入結束時間">
+</p>
+ 
+
+   <div class="form-group">
+    <label for="exampleInputFile">廣告圖片</label>
+    <input type="file" id="exampleInputFile" >
+    <p class="help-block">Example block-level help text here.</p>
+  </div>
+
+   <button type="submit" class="btn btn-info">Submit</button>
+</form>
+
+
+
+
           </div>
         </div>
       </div>
     </div>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.1.1/jquery.min.js"></script>
     <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/js/bootstrap.min.js"></script>
+    <script src="js/index.js"></script>
+
+
+<script src="https://code.jquery.com/jquery-1.12.3.min.js" integrity="sha256-aaODHAgvwQW1bFOGXMeX+pC4PZIPsvn2h1sArYOhgXQ=" crossorigin="anonymous"></script>
+  <script type="text/javascript" src="http://momentjs.com/downloads/moment-with-locales.min.js"></script>
+   <script type="text/javascript" src="./js/bootstrap-material-datetimepicker.js"></script> 
+    <script>
+// 
+
+$(document).ready(function()
+    {
+      
+      $('.date-fr').bootstrapMaterialDatePicker
+      ({
+        format: 'DD/MM/YYYY HH:mm',
+        lang: 'fr',
+        weekStart: 1, 
+        cancelText : 'cancel',
+        nowButton : true,
+        switchOnClick : true
+      });
+
+      
+    });
+</script>
   </body>
 </html>

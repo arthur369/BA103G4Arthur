@@ -6,7 +6,9 @@ import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.util.ArrayList;
+import java.util.Calendar;
 import java.util.List;
+import java.util.Map;
 
 import javax.naming.Context;
 import javax.naming.InitialContext;
@@ -14,6 +16,8 @@ import javax.naming.NamingException;
 import javax.sql.DataSource;
 
 import com.gift_data.model.Gift_dataVO;
+
+import jdbc.util.CompositeQuery.jdbcUtil_CompositeQuery_Convert_gift;
 
 public class Convert_giftJNDIDAO implements Convert_giftDAO_interface{
 
@@ -38,7 +42,7 @@ public class Convert_giftJNDIDAO implements Convert_giftDAO_interface{
 	private static final String DELETE = "delete from convert_gift where APPLY_NO=?";
 	private static final String UPDATE ="update convert_gift set MEM_AC=?,APPLY_NAME=?,APPLY_PHONE=?,GIFT_NO=?,APPLY_DATE=?,APPLY_STAT=?,APPLY_ADD=?,SEND_DATE=?,SEND_NO=? where APPLY_NO=?";
 	
-	private static final String UPDATE_STATUS="update convert_gift set apply_stat=? where apply_no=?";
+	private static final String UPDATE_STATUS="update convert_gift set apply_stat=?,send_no=?,send_date =?where apply_no=?";
 	
 	@Override
 	public void insert(Convert_giftVO convert_gift_VO) {
@@ -301,7 +305,7 @@ public class Convert_giftJNDIDAO implements Convert_giftDAO_interface{
 	}
 	//  依主鍵改變兌換申請狀態
 	@Override
-	public void updateStatus(String apply_no, String apply_stat) {
+	public void updateStatus(String apply_no, String apply_stat,String send_no) {
 		// TODO Auto-generated method stub
 		Connection con=null;
 		PreparedStatement pstmt=null;
@@ -309,13 +313,87 @@ public class Convert_giftJNDIDAO implements Convert_giftDAO_interface{
 			con = ds.getConnection();
 			pstmt = con.prepareStatement(UPDATE_STATUS);
 			pstmt.setString(1, apply_stat);
-			pstmt.setString(2, apply_no);
+			
+			java.sql.Date send_date;
+			if(apply_stat.equals("待出貨")){
+				send_date=null;
+				send_no=null;
+			}else{
+				send_date=new java.sql.Date(Calendar.getInstance().getTime().getTime());
+			}
+			pstmt.setString(2, send_no);
+			pstmt.setDate(3, send_date);
+			
+			pstmt.setString(4, apply_no);
+		
+			pstmt.executeUpdate();
 		
 			pstmt.executeUpdate();
 		} catch (SQLException e) {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
 		}
+	}
+
+	@Override
+	public List<Convert_giftVO> getAll(Map<String, String[]> map) {
+		List<Convert_giftVO> list=new ArrayList<Convert_giftVO>();
+		Convert_giftVO convert_gift_vo=null;
+		Connection con=null;
+		ResultSet rs=null;
+		PreparedStatement pstmt=null;
+		try {
+			con = ds.getConnection();
+			String finalSQL = "select * from convert_gift "
+			          + jdbcUtil_CompositeQuery_Convert_gift.get_WhereCondition(map)
+			          ;
+		
+			pstmt = con.prepareStatement(finalSQL);
+			rs=pstmt.executeQuery();
+			 while(rs.next()){
+				 convert_gift_vo=new Convert_giftVO();
+				 convert_gift_vo.setApply_no(rs.getString("APPLY_NO"));
+				 convert_gift_vo.setMem_ac(rs.getString("MEM_AC"));
+				 convert_gift_vo.setApply_name(rs.getString("APPLY_NAME"));
+				 convert_gift_vo.setApply_phone(rs.getString("APPLY_PHONE"));
+				 convert_gift_vo.setGift_no(rs.getString("GIFT_NO"));
+				 convert_gift_vo.setApply_date(rs.getDate("APPLY_DATE"));
+				 convert_gift_vo.setApply_stat(rs.getString("APPLY_STAT"));
+				 convert_gift_vo.setApply_add(rs.getString("APPLY_ADD"));
+				 convert_gift_vo.setSend_date(rs.getDate("SEND_DATE"));
+				 convert_gift_vo.setSend_no(rs.getString("SEND_NO"));
+				 list.add(convert_gift_vo);
+			 }
+			
+		} catch (SQLException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}finally {
+			if (rs != null) {
+				try {
+					rs.close();
+				} catch (SQLException se) {
+					se.printStackTrace(System.err);
+				}
+			}
+			if (pstmt != null) {
+				try {
+					pstmt.close();
+				} catch (SQLException se) {
+					se.printStackTrace(System.err);
+				}
+			}
+			if (con != null) {
+				try {
+					con.close();
+				} catch (Exception e) {
+					e.printStackTrace(System.err);
+				}
+			}
+		}
+		return list;
+		
+		
 	}
 
 }

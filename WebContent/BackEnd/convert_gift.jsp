@@ -67,17 +67,16 @@
   transition: .4s;
 }
 
-input:checked + .slider {
+ .slider {
   background-color: #2196F3;
 }
 
 input:focus + .slider {
   box-shadow: 0 0 1px #2196F3;
 }
-
+<%--  --%>
 input:checked + .slider:before {
-  -webkit-transform: translateX(26px);
-  -ms-transform: translateX(26px);
+ 
   transform: translateX(26px);
 }
 
@@ -126,11 +125,27 @@ margin-right: 30px;
     .mystatus :hover{
     color: #eee;
     }
+    .convert_gift_no{
+    cursor: pointer;
+    }
+    .convert_gift_no:hover{
+    text-decoration: none;
+    
+    }
+    .gift_info{
+    font-size: 30px;
+    font-weight: 800;
+    color: #333;
+    }
 </style>
 <%
     Convert_giftService convert_giftSvc = new Convert_giftService();
-
-List<Convert_giftVO> list=convert_giftSvc.getAll();
+List<Convert_giftVO> list=null;
+if(request.getAttribute("showConvert_gift")==null){
+ list=convert_giftSvc.getAll();
+}else{
+	 list=(List<Convert_giftVO>)request.getAttribute("showConvert_gift");
+}
     pageContext.setAttribute("list",list);
 %>
 
@@ -181,25 +196,32 @@ List<Convert_giftVO> list=convert_giftSvc.getAll();
   </button>
   <ul class="dropdown-menu">
     <li>
-    <FORM METHOD="post" ACTION="<%=request.getContextPath() %>/gift_business/gift_businessServlet" name="form1" >
+    <FORM METHOD="post"   ACTION="<%=request.getContextPath() %>/gift_business/gift_businessServlet" name="form1" >
     <a class="mystatus">全顯示
-    
     </a>
-    <input type="hidden"  name="showStatus" value="全顯示">
+     <input type="hidden"  name="APPLY_STAT" value="全顯示">
+    <input type="hidden" name="requestURL"  value="<%=request.getServletPath() %>">
+    <input type="hidden"  name="action" value="show_select_list">
     </FORM>
     </li>
     <li>
     <FORM METHOD="post" ACTION="<%=request.getContextPath() %>/gift_business/gift_businessServlet" name="form1" >
     <a class="mystatus">待出貨
-    <input type="hidden"  name="showStatus" value="待出貨">
+  
     </a>
+      <input type="hidden"  name="APPLY_STAT" value="待出貨">
+      <input type="hidden" name="requestURL"  value="<%=request.getServletPath() %>">
+    <input type="hidden"  name="action" value="show_select_list">
     </FORM>
     </li>
     <li>
     <FORM METHOD="post" ACTION="<%=request.getContextPath() %>/gift_business/gift_businessServlet" name="form1" >
     <a class="mystatus">已出貨
-    <input type="hidden"  name="showStatus" value="已出貨">
+    
     </a>
+    <input type="hidden"  name="APPLY_STAT" value="已出貨">
+      <input type="hidden" name="requestURL"  value="<%=request.getServletPath() %>">
+    <input type="hidden"  name="action" value="show_select_list">
     </FORM>
     </li>
   </ul>
@@ -230,11 +252,15 @@ List<Convert_giftVO> list=convert_giftSvc.getAll();
                 <td>${convert_gift_vo.mem_ac }</td>
                 <td>${convert_gift_vo.apply_name }</td>
                 <td>${convert_gift_vo.apply_phone }</td>
-                 <td>${convert_gift_vo.gift_no }</td>
+                 <td  class="gift_no_td">
+                 <FORM METHOD="post" ACTION="<%=request.getContextPath() %>/gift_management/gift_managementServlet" name="form1" class="gift_no_form" >
+                 <a  class="convert_gift_no">${convert_gift_vo.gift_no }</a>
+             </FORM>    
+                 </td>
                 <td>${convert_gift_vo.apply_date }</td>
                 <td>${convert_gift_vo.apply_add }</td>
                 <td>${convert_gift_vo.send_date }</td>
-                <td>${convert_gift_vo.send_no }</td>     
+                <td><input type="text"  value="${convert_gift_vo.send_no }" class="inputData"></td>     
                 <td class="status">${convert_gift_vo.apply_stat }</td>
                 <td><label class="switch">
                      <input type="checkbox">
@@ -247,7 +273,7 @@ List<Convert_giftVO> list=convert_giftSvc.getAll();
   
             </table>
             
-            <a href='#modal-id' data-toggle="modal" class="btn btn-success confirm"  style="color: #eee">確定更改狀態</a>
+            <a href='#modal-update' data-toggle="modal" class="btn btn-success confirm"  style="color: #eee">確定更改狀態</a>
             
              <%-- 
             <ul class="pager">
@@ -262,8 +288,8 @@ List<Convert_giftVO> list=convert_giftSvc.getAll();
       </div>
        
     </div>
-    
-    <div class="modal fade" id="modal-id">
+    <%--   更新確認視窗madal --%>
+    <div class="modal fade" id="modal-update">
 			<div class="modal-dialog">
 				<div class="modal-content">
 					<div class="modal-header">
@@ -286,36 +312,108 @@ List<Convert_giftVO> list=convert_giftSvc.getAll();
 				</div>
 			</div>
 		</div>
-    
+		
+		<%--   贈品詳細資訊madal --%>
+    <div class="modal fade" id="modal-id">
+			<div class="modal-dialog">
+				<div class="modal-content">
+					<div class="modal-header">
+						<button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button>
+						<h4 class="modal-title gift_info">贈品詳細資訊</h4>
+					</div>
+				<div class="modal-body">
+					 <h3>贈品名稱:${gift_data_vo.gift_name }<h3>
+   
+  				
+						
+				<h3> 剩餘數量:${gift_data_vo.gift_remain }</h3>
+				
+
+				<h3> 所需積分:${gift_data_vo.gift_pt }</h3>
+				
+
+				
+ 					 	<img src="<%=request.getContextPath()%>/GiftImg.do?gift_no=${gift_data_vo.gift_no }" >
+  					
+					<h3>贈品描述:</h3>
+					<p>${gift_data_vo.gift_cont }</p>
+				
+							<button type="button" class="btn btn-default" data-dismiss="modal">關閉</button>
+					</div>
+					</div>
+				
+				</div>
+			</div>
+	
     
     <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.1.1/jquery.min.js"></script>
     <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/js/bootstrap.min.js"></script>
     <script type="text/javascript">
+    
+    <%-- switch被點擊時觸發 --%>
       $(".slider").click(function(){
-
+	$(this).parent().parent().addClass("changeState");
+	
+	<%-- 錯誤處理，若待出貨改成已出貨，則物流編號須有值否則跳出提醒視窗 --%>
         if($(this).parent().parent().prev().text()=="待出貨"){
+        	if($(this).parent().parent().prev().prev().children().val().length==0){
+        		
+        		alert("請輸入物流編號");
+        		
+        		return;
+        	}
+        <%-- 修改頁面文字，將已出貨改成待出貨，待出貨改成已出貨  --%>
         	$(this).parent().parent().prev().text("已出貨");
     }else{
     	$(this).parent().parent().prev().text("待出貨");
         }
+        
+        <%-- 得到被點擊的贈品明細資訊(兌換申請編號、出貨狀態、物流編號) 產生input type="hidden" 方便之後送出 --%>
         var fk=$(this).parent().parent().prev().prev().prev().prev().prev().prev().prev().prev().prev().prev().text();
      var statusValue=$(this).parent().parent().prev().text();
-     
+     var send_no=$(this).parent().parent().prev().prev().children().val();
         $(".getFk").append("<input type='hidden' name=primaryKey "+ "value="+fk+">");    	  
         $(".getFk").append("<input type='hidden' name=statusValue "+ "value="+statusValue+">");
+        $(".getFk").append("<input type='hidden' name=send_no "+ "value="+send_no+">");
       })
+      
+      <%-- 滑鼠移入移出時產生背景顏色和顏色的變化  --%>
       $(".dropdown-menu").children().children().mouseenter(function(){
 		$(this).css("background-color","#333");
 		$(this).children().css("color","#eee")
 		                                 .css("text-decoration","none");
 	})
-
 	$(".dropdown-menu").children().children().mouseleave(function(){
 		$(this).css("background-color","#eee");
 		$(this).children().css("color","#333");
 		
 	})
 	
+	<%--  點擊超連結後送出(submit) --%>
+	$(".mystatus").click(function(){
+		$(this).parent().submit();
+		
+		
+	})
+	
+	
+	<%-- 點擊贈品編號，取得相關資訊並產生input type=hidden，在submit將這些資料一併送出 --%>
+	$(".convert_gift_no").click(function(){
+		var fk= $(this).parent().text();
+		var url="<%= request.getServletPath()%>";
+		var whichPage="<%= whichPage%>";
+				
+		$(this).parent().append("<input type='hidden' name=GIFT_NO "+ "value="+fk+">");
+		$(this).parent().append("<input type='hidden' name=whichPage "+ "value="+whichPage+">");
+		$(this).parent().append("<input type='hidden' name=url "+ "value="+url+">");
+		$(this).parent().append("<input type='hidden' name=action "+ "value=getOne_For_Display>");
+		
+		$(this).parent().submit();
+	})
+	
+	if(${not empty openModal}){
+		 $("#modal-id").modal({show: true});
+		}
 	
 
     </script>

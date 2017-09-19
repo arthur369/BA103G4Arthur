@@ -20,6 +20,7 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
 import com.convert_gift.model.Convert_giftService;
+import com.convert_gift.model.Convert_giftVO;
 import com.gift_data.model.Gift_dataJDBCDAO;
 import com.gift_data.model.Gift_dataJNDIDAO;
 import com.gift_data.model.Gift_dataService;
@@ -43,7 +44,7 @@ public class Gift_businessServlet extends HttpServlet{
 		
 		String action = req.getParameter("action");
 		System.out.println(action);
-		if ("changeState".equals(action)) {
+if ("changeState".equals(action)) {
 			List<String> errorMsgs = new LinkedList<String>();
 			req.setAttribute("errorMsgs", errorMsgs);
 			
@@ -51,10 +52,11 @@ public class Gift_businessServlet extends HttpServlet{
 			
 			String [] primaryKey=null;
 			String [] statusValue=null;
-	
+			String [] send_no=null;
 		 primaryKey=	 req.getParameterValues("primaryKey");
 		 statusValue=	req.getParameterValues("statusValue");
-		 System.out.println(primaryKey);
+		 send_no=req.getParameterValues("send_no");
+		
 if(primaryKey==null || statusValue==null){
 	errorMsgs.add("無任何變更");
 	System.out.println("got nothing");
@@ -63,22 +65,43 @@ if(primaryKey==null || statusValue==null){
 	  nullView.forward(req,res);
 	  return;
 }
+for(int i=0;i<statusValue.length;i++){
+	System.out.println("statusValue["+i+"]="+statusValue[i]);
+	System.out.println("send_no["+i+"].trim()="+send_no[i].trim());
+if(statusValue[i].equals("已出貨") && send_no[i].trim().length()==0){
+	
+	errorMsgs.add("請輸入物流編號");
+	 String url ="/BackEnd/convert_gift.jsp";
+	  RequestDispatcher nullView=req.getRequestDispatcher(url);
+	  nullView.forward(req,res);
+	  return;
+}
+
+}
 		 
 System.out.println("track1");
 		req.setAttribute("whichPage",req.getParameter("whichPage"));   //取得目前所在的頁數，不管失敗獲成功都會停留在同一頁，不會跑到第一頁
 		System.out.println("track2");
-		Map<String ,String> getData=new Hashtable<String ,String>();
-			for(int i=0;i<primaryKey.length;i++){
-				getData.put(primaryKey[i],statusValue[i]);
-			}
+//		Map<String ,String> getData=new Hashtable<String ,String>();
+//			for(int i=0;i<primaryKey.length;i++){
+//				getData.put(primaryKey[i],statusValue[i]);
+//			}
 			System.out.println("track3");
 			Convert_giftService convert_giftSvc=new Convert_giftService();
-			Set<String> mykeys=getData.keySet();
-			for(String mykey:mykeys){
-				convert_giftSvc.updateStatus(mykey,getData.get(mykey));
-				
-				
+			
+			for(int i=0;i<primaryKey.length;i++){
+			String mykey=primaryKey[i];
+			String myStatus=statusValue[i];	
+			String mySend_no=send_no[i];
+				convert_giftSvc.updateStatus(mykey,myStatus,mySend_no);
 			}
+			
+//			Set<String> mykeys=getData.keySet();
+//			for(String mykey:mykeys){
+//				convert_giftSvc.updateStatus(mykey,getData.get(mykey));
+//				
+//				
+//			}
 	
 			
 			
@@ -100,7 +123,18 @@ System.out.println("track1");
 		
 		
 		
-		
+		if ("show_select_list".equals(action)) {
+			String apply_stat=req.getParameter("requestURL");
+			Map<String,String[]>map= req.getParameterMap();
+			
+			Convert_giftService convert_giftSvc=new Convert_giftService();
+			List<Convert_giftVO> list=convert_giftSvc.getAll(map);
+			req.setAttribute("showConvert_gift", list);
+			String url=apply_stat;
+			RequestDispatcher successView = req.getRequestDispatcher(url); // 成功轉交listEmps_ByCompositeQuery.jsp
+			successView.forward(req, res);
+			
+		}
 		
 		
 		
@@ -141,15 +175,27 @@ System.out.println("track1");
 				return;//程式中斷
 			}
 			req.setAttribute("gift_data_vo", gift_data_vo);
-			String url = "/BackEnd/gift_data.jsp";
+			String url =null;
+			if(req.getAttribute("url")!=null){
+				url=(String) req.getAttribute("url");
+			}else{
+			
+		 url = "/BackEnd/gift_data.jsp";
+			}
 			RequestDispatcher successView = req.getRequestDispatcher(url);
 			successView.forward(req, res);
 			
 			
 		}catch (Exception e) {
 			errorMsgsForUpdate.add("無法取得資料:" + e.getMessage());
+			String errorUrl =null;
+			if(req.getAttribute("url")!=null){
+				errorUrl=(String) req.getAttribute("url");
+			}else{
+			errorUrl="/BackEnd/gift_data.jsp";
+			}
 			RequestDispatcher failureView = req
-					.getRequestDispatcher("/BackEnd/gift_data.jsp");
+					.getRequestDispatcher(errorUrl);
 			failureView.forward(req, res);
 		}
 			

@@ -2,6 +2,7 @@ package com.convert_gift.model;
 
 import java.sql.Date;
 import java.util.List;
+import java.util.Map;
 
 public class Convert_giftService {
 
@@ -58,7 +59,14 @@ public class Convert_giftService {
 		return dao.getAll();
 	}
 	
-	public void updateStatus(String apply_no, String apply_stat){
-		dao.updateStatus(apply_no, apply_stat);
+	public List<Convert_giftVO> getAll(Map<String,String[] >map){
+		return dao.getAll(map);
+		
+	}
+	
+	
+	
+	public void updateStatus(String apply_no, String apply_stat ,String send_no){
+		dao.updateStatus(apply_no, apply_stat,send_no);
 	}
 }

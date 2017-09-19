@@ -60,5 +60,12 @@
     <url-pattern>/GiftImg.do</url-pattern>
   </servlet-mapping>
   
-  
+  <servlet>
+    <servlet-name>AdImg</servlet-name>
+    <servlet-class>com.ad_management.controller.AdImg</servlet-class>
+  </servlet>
+  <servlet-mapping>
+    <servlet-name>AdImg</servlet-name>
+    <url-pattern>/AdImg.do</url-pattern>
+  </servlet-mapping>
 </web-app>

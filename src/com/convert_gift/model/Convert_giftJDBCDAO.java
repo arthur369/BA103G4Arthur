@@ -6,9 +6,14 @@ import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.util.ArrayList;
+import java.util.Calendar;
 import java.util.List;
+import java.util.Map;
+import java.util.TreeMap;
 
 import com.gift_data.model.Gift_dataVO;
+
+import jdbc.util.CompositeQuery.jdbcUtil_CompositeQuery_Convert_gift;
 
 public class Convert_giftJDBCDAO implements Convert_giftDAO_interface{
 	String driver="oracle.jdbc.driver.OracleDriver";
@@ -22,7 +27,7 @@ public class Convert_giftJDBCDAO implements Convert_giftDAO_interface{
 	private static final String DELETE = "delete from convert_gift where APPLY_NO=?";
 	private static final String UPDATE ="update convert_gift set MEM_AC=?,APPLY_NAME=?,APPLY_PHONE=?,GIFT_NO=?,APPLY_DATE=?,APPLY_STAT=?,APPLY_ADD=?,SEND_DATE=?,SEND_NO=? where APPLY_NO=?";
 	//  依主鍵改變兌換申請狀態
-	private static final String UPDATE_STATUS="update convert_gift set apply_stat=? where apply_no=?";
+	private static final String UPDATE_STATUS="update convert_gift set apply_stat=?,send_no=?,send_date =?where apply_no=?";
 	
 	
 
@@ -361,7 +366,7 @@ public class Convert_giftJDBCDAO implements Convert_giftDAO_interface{
 	}
 
 	@Override
-	public void updateStatus(String apply_no, String apply_stat) {
+	public void updateStatus(String apply_no, String apply_stat,String send_no) {
 		// TODO Auto-generated method stub
 		Connection con = null;
 		PreparedStatement pstmt = null;
@@ -371,7 +376,18 @@ public class Convert_giftJDBCDAO implements Convert_giftDAO_interface{
 				con = DriverManager.getConnection(url, userid, password);
 				pstmt = con.prepareStatement(UPDATE_STATUS);
 				pstmt.setString(1, apply_stat);
-				pstmt.setString(2, apply_no);
+				
+				java.sql.Date send_date;
+				if(apply_stat.equals("待出貨")){
+					send_date=null;
+					send_no=null;
+				}else{
+					send_date=new java.sql.Date(Calendar.getInstance().getTime().getTime());
+				}
+				pstmt.setString(2, send_no);
+				pstmt.setDate(3, send_date);
+				
+				pstmt.setString(4, apply_no);
 			
 				pstmt.executeUpdate();
 				
@@ -384,6 +400,77 @@ public class Convert_giftJDBCDAO implements Convert_giftDAO_interface{
 			e.printStackTrace();
 		}
 	}
+	
+	
+	@Override
+	public List<Convert_giftVO> getAll(Map<String, String[]> map) {
+		List<Convert_giftVO> list=new ArrayList<Convert_giftVO>();
+		Convert_giftVO convert_gift_vo=null;
+		
+		Connection con=null;
+		PreparedStatement pstmt=null;
+		ResultSet rs=null;
+		try {
+			Class.forName(driver);
+	
+				con = DriverManager.getConnection(url, userid, password);
+				String finalSQL = "select * from convert_gift "
+				          + jdbcUtil_CompositeQuery_Convert_gift.get_WhereCondition(map)
+				          ;
+			System.out.println(finalSQL);
+				pstmt = con.prepareStatement(finalSQL);
+				rs=pstmt.executeQuery();
+				 while(rs.next()){
+					 convert_gift_vo=new Convert_giftVO();
+					 convert_gift_vo.setApply_no(rs.getString("APPLY_NO"));
+					 convert_gift_vo.setMem_ac(rs.getString("MEM_AC"));
+					 convert_gift_vo.setApply_name(rs.getString("APPLY_NAME"));
+					 convert_gift_vo.setApply_phone(rs.getString("APPLY_PHONE"));
+					 convert_gift_vo.setGift_no(rs.getString("GIFT_NO"));
+					 convert_gift_vo.setApply_date(rs.getDate("APPLY_DATE"));
+					 convert_gift_vo.setApply_stat(rs.getString("APPLY_STAT"));
+					 convert_gift_vo.setApply_add(rs.getString("APPLY_ADD"));
+					 convert_gift_vo.setSend_date(rs.getDate("SEND_DATE"));
+					 convert_gift_vo.setSend_no(rs.getString("SEND_NO"));
+					 list.add(convert_gift_vo);
+				 }
+			} catch (SQLException e) {
+				// TODO Auto-generated catch block
+				e.printStackTrace();
+			
+		} catch (ClassNotFoundException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		} finally {
+			if (rs != null) {
+				try {
+					rs.close();
+				} catch (SQLException se) {
+					se.printStackTrace(System.err);
+				}
+			}
+			if (pstmt != null) {
+				try {
+					pstmt.close();
+				} catch (SQLException se) {
+					se.printStackTrace(System.err);
+				}
+			}
+			if (con != null) {
+				try {
+					con.close();
+				} catch (Exception e) {
+					e.printStackTrace(System.err);
+				}
+			}
+		}
+		return list;
+		
+		
+	}
+	
+	
+	
 	public static void main(String[] args) {
 		Convert_giftJDBCDAO dao=new Convert_giftJDBCDAO();
 
@@ -442,11 +529,33 @@ public class Convert_giftJDBCDAO implements Convert_giftDAO_interface{
 //			System.out.println();
 //		}
 		
-		dao.updateStatus("V1000000005","已出貨");
-		
-		
+		dao.updateStatus("V1000000003","待出貨","182548");
+//Map<String, String[]> map = new TreeMap<String, String[]>();
+//		
+//		map.put("APPLY_STAT", new String[] { "全顯示" });
+//		map.put("action", new String[] { "show_select_list" }); // 注意Map裡面會含有action的key
+//		map.put("requestURL", new String[] { "ssssss" });
+//		
+//		List<Convert_giftVO> list2=dao.getAll(map);
+//		for(Convert_giftVO convert: list2){
+//			System.out.print(convert.getApply_no());
+//			System.out.print(convert.getMem_ac());
+//			System.out.print(convert.getApply_name());
+//			System.out.print(convert.getApply_phone());
+//			System.out.print(convert.getGift_no());
+//			System.out.print(convert.getApply_date());
+//			System.out.print(convert.getApply_stat());
+//			System.out.print(convert.getApply_add());
+//			System.out.print(convert.getSend_date());
+//			System.out.print(convert.getSend_no());
+//			System.out.println();
+//		}
 		
 	}
+
+
+
+	
 
 
 

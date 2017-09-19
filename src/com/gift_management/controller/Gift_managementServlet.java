@@ -40,44 +40,64 @@ public class Gift_managementServlet extends HttpServlet{
 		String action = req.getParameter("action");
 		
 		if ("getOne_For_Display".equals(action)) {
+			System.out.println("track1");
 			List<String> errorMsgsForUpdate = new LinkedList<String>();
 			List<String> openModal=new LinkedList<String>();
 			openModal.add("baba");
 			req.setAttribute("openModal", openModal);
 			
 			req.setAttribute("errorMsgsForUpdate", errorMsgsForUpdate);
+			System.out.println("track2");
 		try{	
 			String str = req.getParameter("GIFT_NO");
+			System.out.println("gift_no="+str);
 			if (str == null || (str.trim()).length() == 0) {
 				errorMsgsForUpdate.add("請輸入贈品編號");
 			}
 			req.setAttribute("whichPage",req.getParameter("whichPage"));   //取得目前所在的頁數，不管失敗獲成功都會停留在同一頁，不會跑到第一頁
+			System.out.println("track3");
 			if (!errorMsgsForUpdate.isEmpty()) {
 				RequestDispatcher failureView = req
 						.getRequestDispatcher("/BackEnd/gift_data.jsp");
 				failureView.forward(req, res);
 				return;//程式中斷
 			}
+			System.out.println("track4");
 			String gift_no=str;
 			Gift_dataService gift_dataSvc=new Gift_dataService();
+			System.out.println("gift_no2="+gift_no);
 			Gift_dataVO gift_data_vo=gift_dataSvc.getOneGift_data(gift_no);
+			System.out.println("track5");
 			if ( gift_data_vo == null) {
+				System.out.println("find nothing");
 				errorMsgsForUpdate.add("查無資料");
 			}
-			
+			System.out.println("track6");
 			if (!errorMsgsForUpdate.isEmpty()) {
 				RequestDispatcher failureView = req
 						.getRequestDispatcher("/BackEnd/gift_data.jsp");
 				failureView.forward(req, res);
 				return;//程式中斷
 			}
+			System.out.println("track7");
+			String url =null;
+			System.out.println("url copy="+(String) req.getParameter("url"));
+			if(req.getParameter("url")!=null){
+				url=(String) req.getParameter("url");
+				System.out.println("url="+url);
+			}else{
+			 url = "/BackEnd/gift_data.jsp";
+			 System.out.println("track8 not got url");
+			}
+			
 			req.setAttribute("gift_data_vo", gift_data_vo);
-			String url = "/BackEnd/gift_data.jsp";
+			System.out.println("track9");
 			RequestDispatcher successView = req.getRequestDispatcher(url);
 			successView.forward(req, res);
 			
 			
 		}catch (Exception e) {
+			System.out.println("error: something wrong");
 			errorMsgsForUpdate.add("無法取得資料:" + e.getMessage());
 			RequestDispatcher failureView = req
 					.getRequestDispatcher("/BackEnd/gift_data.jsp");
