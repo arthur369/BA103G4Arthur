@@ -8,6 +8,7 @@ import java.sql.SQLException;
 import java.util.ArrayList;
 import java.util.LinkedHashSet;
 import java.util.List;
+import java.util.Map;
 import java.util.Set;
 
 import javax.naming.Context;
@@ -20,6 +21,8 @@ import com.act_pair.model.Act_pairVO;
 import com.ad.model.AdDAO_interface;
 import com.ad.model.AdVO;
 import com.fo_act.model.Fo_actVO;
+
+import jdbc.util.CompositeQuery.jdbcUtil_CompositeQuery_act;
 
 public class ActJNDIDAO implements ActDAO_interface{
 	private static DataSource ds=null;
@@ -557,8 +560,89 @@ public class ActJNDIDAO implements ActDAO_interface{
 		
 		
 	}
+	@Override
+	public List<ActVO> getAll(Map<String, String[]> map) {
+		List<ActVO> list=new ArrayList<ActVO>();
+		ActVO act_vo=null;
+		Connection con=null;
+		PreparedStatement pstmt=null;
+		ResultSet rs=null;
+		
+		try {
+			con = ds.getConnection();
+			String finalSQL = "select * from act "
+			          + jdbcUtil_CompositeQuery_act.get_WhereCondition(map)+"order by act_op_date desc"
+			          ;
+			System.out.println("ActJNDI response! finalSQL="+finalSQL);
+			pstmt=con.prepareStatement(finalSQL);
+			rs=pstmt.executeQuery();
+			while(rs.next()){
+				act_vo=new ActVO();
+				act_vo.setAct_no(rs.getString("ACT_NO"));
+				act_vo.setMem_ac(rs.getString("MEM_AC"));
+				act_vo.setOrg_cont(rs.getString("ORG_CONT"));
+				act_vo.setAct_name(rs.getString("ACT_NAME"));
+				act_vo.setMin_mem(rs.getInt("MIN_MEM"));
+				act_vo.setMax_mem(rs.getInt("MAX_MEM"));
+				act_vo.setMem_count(rs.getInt("MEM_COUNT"));
+				act_vo.setAct_op_date(rs.getDate("ACT_OP_DATE"));
+				act_vo.setAct_ed_date(rs.getDate("ACT_ED_DATE"));
+				act_vo.setDl_date(rs.getDate("DL_DATE"));
+				act_vo.setFd_date(rs.getDate("FD_DATE"));
+				act_vo.setAct_add(rs.getString("ACT_ADD"));
+				act_vo.setAct_add_lat(rs.getString("ACT_ADD_LAT"));
+				act_vo.setAct_add_lon(rs.getString("ACT_ADD_LON"));
+				act_vo.setAct_cont(rs.getString("ACT_CONT"));
+				act_vo.setAct_tag(rs.getString("ACT_TAG"));
+				act_vo.setAct_fee(rs.getInt("ACT_FEE"));
+				act_vo.setPay_way(rs.getString("PAY_WAY"));
+			
+				act_vo.setAct_pic1(rs.getBytes("ACT_PIC1"));
+				act_vo.setAct_pic2(rs.getBytes("ACT_PIC2"));
+				act_vo.setAct_pic3(rs.getBytes("ACT_PIC3"));
+				act_vo.setAct_stat(rs.getString("ACT_STAT"));
+				act_vo.setRe_cont(rs.getString("RE_CONT"));
+				act_vo.setReview_ed_date(rs.getDate("REVIEW_ED_DATE"));
+				
+				list.add(act_vo);
+			}
+			
+			
+		} catch (SQLException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}finally {
+			if (rs != null) {
+				try {
+					rs.close();
+				} catch (SQLException se) {
+					se.printStackTrace(System.err);
+				}
+			}
+			if (pstmt != null) {
+				try {
+					pstmt.close();
+				} catch (SQLException se) {
+					se.printStackTrace(System.err);
+				}
+			}
+			if (con != null) {
+				try {
+					con.close();
+				} catch (Exception e) {
+					e.printStackTrace(System.err);
+				}
+			}
+		}
+		return list;
+		
+		
+		
+	}
+		
+	}
 	
 	
 	
 	
-}
+

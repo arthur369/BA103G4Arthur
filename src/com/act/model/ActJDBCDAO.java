@@ -14,11 +14,16 @@ import java.util.ArrayList;
 import java.util.LinkedHashSet;
 import java.util.LinkedList;
 import java.util.List;
+import java.util.Map;
 import java.util.Set;
+import java.util.TreeMap;
 
 import com.act_comm.model.Act_commVO;
 import com.act_pair.model.Act_pairVO;
 import com.fo_act.model.Fo_actVO;
+
+import jdbc.util.CompositeQuery.jdbcUtil_CompositeQuery_Convert_gift;
+import jdbc.util.CompositeQuery.jdbcUtil_CompositeQuery_act;
 
 public class ActJDBCDAO implements ActDAO_interface{
 	String driver="oracle.jdbc.driver.OracleDriver";
@@ -614,38 +619,122 @@ public class ActJDBCDAO implements ActDAO_interface{
 		
 	}
 	
-	
+	@Override
+	public List<ActVO> getAll(Map<String, String[]> map) {
+		List<ActVO> list=new ArrayList<ActVO>();
+		ActVO act_vo=null;
+		
+		Connection con=null;
+		PreparedStatement pstmt=null;
+		ResultSet rs=null;
+		try {
+			Class.forName(driver);
+
+				con = DriverManager.getConnection(url, userid, password);
+				String finalSQL = "select * from act "
+				          + jdbcUtil_CompositeQuery_act.get_WhereCondition(map)+"order by act_op_date desc"
+				          ;
+				System.out.println(finalSQL);
+				pstmt=con.prepareStatement(finalSQL);
+				rs=pstmt.executeQuery();
+				while(rs.next()){
+					act_vo=new ActVO();
+					act_vo.setAct_no(rs.getString("ACT_NO"));
+					act_vo.setMem_ac(rs.getString("MEM_AC"));
+					act_vo.setOrg_cont(rs.getString("ORG_CONT"));
+					act_vo.setAct_name(rs.getString("ACT_NAME"));
+					act_vo.setMin_mem(rs.getInt("MIN_MEM"));
+					act_vo.setMax_mem(rs.getInt("MAX_MEM"));
+					act_vo.setMem_count(rs.getInt("MEM_COUNT"));
+					act_vo.setAct_op_date(rs.getDate("ACT_OP_DATE"));
+					act_vo.setAct_ed_date(rs.getDate("ACT_ED_DATE"));
+					act_vo.setDl_date(rs.getDate("DL_DATE"));
+					act_vo.setFd_date(rs.getDate("FD_DATE"));
+					act_vo.setAct_add(rs.getString("ACT_ADD"));
+					act_vo.setAct_add_lat(rs.getString("ACT_ADD_LAT"));
+					act_vo.setAct_add_lon(rs.getString("ACT_ADD_LON"));
+					act_vo.setAct_cont(rs.getString("ACT_CONT"));
+					act_vo.setAct_tag(rs.getString("ACT_TAG"));
+					act_vo.setAct_fee(rs.getInt("ACT_FEE"));
+					act_vo.setPay_way(rs.getString("PAY_WAY"));
+				
+					act_vo.setAct_pic1(rs.getBytes("ACT_PIC1"));
+					act_vo.setAct_pic2(rs.getBytes("ACT_PIC2"));
+					act_vo.setAct_pic3(rs.getBytes("ACT_PIC3"));
+					act_vo.setAct_stat(rs.getString("ACT_STAT"));
+					act_vo.setRe_cont(rs.getString("RE_CONT"));
+					act_vo.setReview_ed_date(rs.getDate("REVIEW_ED_DATE"));
+					
+					list.add(act_vo);
+				}
+				
+				
+			} catch (SQLException e) {
+				// TODO Auto-generated catch block
+				e.printStackTrace();
+			
+		} catch (ClassNotFoundException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}finally {
+			if (rs != null) {
+				try {
+					rs.close();
+				} catch (SQLException se) {
+					se.printStackTrace(System.err);
+				}
+			}
+			if (pstmt != null) {
+				try {
+					pstmt.close();
+				} catch (SQLException se) {
+					se.printStackTrace(System.err);
+				}
+			}
+			if (con != null) {
+				try {
+					con.close();
+				} catch (Exception e) {
+					e.printStackTrace(System.err);
+				}
+			}
+		}
+		return list;
+		
+		
+		
+	}
 	
 	public static void main(String[] args) throws IOException {
 		// TODO Auto-generated method stub
 ActJDBCDAO dao=new ActJDBCDAO();
 
-ActVO act_vo1=new ActVO();
-	act_vo1.setMem_ac("camacoffee");
-	act_vo1.setOrg_cont("我是主辦人");
-	act_vo1.setAct_name("我是活動");
-	act_vo1.setMin_mem(6);
-	act_vo1.setMax_mem(10);
-	act_vo1.setMem_count(5);
-	act_vo1.setAct_op_date(java.sql.Date.valueOf("2017-09-07"));
-	act_vo1.setAct_ed_date(java.sql.Date.valueOf("2017-09-09"));
-	act_vo1.setDl_date(java.sql.Date.valueOf("2017-09-02"));
-	act_vo1.setFd_date(java.sql.Date.valueOf("2017-09-01"));
-	act_vo1.setAct_add("台灣");
-	act_vo1.setAct_add_lat("121.550537");
-	act_vo1.setAct_add_lon("25.032904");
-	act_vo1.setAct_cont("bababa~~");
-	act_vo1.setAct_tag("隨便啦~");
-	act_vo1.setAct_fee(0);
-	act_vo1.setPay_way("不需繳費");
-	byte[ ]pic1=getByteArray("C:\\Users\\Java\\Desktop\\專題照片\\act.jpg");
-	act_vo1.setAct_pic1(pic1);
-	act_vo1.setAct_pic2(null);
-	act_vo1.setAct_pic3(null);
-	act_vo1.setAct_stat("已審核");
-	act_vo1.setRe_cont(null);
-	act_vo1.setReview_ed_date(java.sql.Date.valueOf("2017-09-01"));
-	dao.insert(act_vo1);
+//ActVO act_vo1=new ActVO();
+//	act_vo1.setMem_ac("camacoffee");
+//	act_vo1.setOrg_cont("我是主辦人");
+//	act_vo1.setAct_name("我是活動");
+//	act_vo1.setMin_mem(6);
+//	act_vo1.setMax_mem(10);
+//	act_vo1.setMem_count(5);
+//	act_vo1.setAct_op_date(java.sql.Date.valueOf("2017-09-07"));
+//	act_vo1.setAct_ed_date(java.sql.Date.valueOf("2017-09-09"));
+//	act_vo1.setDl_date(java.sql.Date.valueOf("2017-09-02"));
+//	act_vo1.setFd_date(java.sql.Date.valueOf("2017-09-01"));
+//	act_vo1.setAct_add("台灣");
+//	act_vo1.setAct_add_lat("121.550537");
+//	act_vo1.setAct_add_lon("25.032904");
+//	act_vo1.setAct_cont("bababa~~");
+//	act_vo1.setAct_tag("隨便啦~");
+//	act_vo1.setAct_fee(0);
+//	act_vo1.setPay_way("不需繳費");
+//	byte[ ]pic1=getByteArray("C:\\Users\\Java\\Desktop\\專題照片\\act.jpg");
+//	act_vo1.setAct_pic1(pic1);
+//	act_vo1.setAct_pic2(null);
+//	act_vo1.setAct_pic3(null);
+//	act_vo1.setAct_stat("已審核");
+//	act_vo1.setRe_cont(null);
+//	act_vo1.setReview_ed_date(java.sql.Date.valueOf("2017-09-01"));
+//	dao.insert(act_vo1);
 //	
 //	Act_vo act_vo2=new Act_vo();
 //	act_vo2.setMem_ac("starter4244");
@@ -720,7 +809,24 @@ ActVO act_vo1=new ActVO();
 //	System.out.println();
 //	}
 
-
+	Map<String, String[]> map = new TreeMap<String, String[]>();
+//	map.put("act_add", new String[] { "新北市" });
+//	map.put("act_op_date", new String[] { "2016-12-20" });
+//	map.put("act_ed_date", new String[] { "2018-12-25" });
+//	
+	List<ActVO>list=dao.getAll(map);
+	for(ActVO act_vo5:list){
+		System.out.print(act_vo5.getMem_ac()+",");
+		System.out.print(act_vo5.getOrg_cont()+",");
+		System.out.println();
+		
+	}
+	
+	
+	
+	
+	
+	
 	}
 	
 	public static byte[] getByteArray(String path) throws IOException{
@@ -733,6 +839,8 @@ ActVO act_vo1=new ActVO();
 		}
 		return baos.toByteArray();
 	}
+
+	
 
 	
 	

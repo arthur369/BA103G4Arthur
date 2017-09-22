@@ -1,4 +1,4 @@
 eclipse.preferences.version=1
-encoding//WebContent/BackEnd/ad.jsp=UTF-8
-encoding//WebContent/BackEnd/convert_gift.jsp=UTF-8
-encoding//WebContent/BackEnd/gift_data.jsp=UTF-8
+encoding//WebContent/BackEnd/ad/ad.jsp=UTF-8
+encoding//WebContent/BackEnd/gift/convert_gift.jsp=UTF-8
+encoding//WebContent/BackEnd/gift/gift_data.jsp=UTF-8

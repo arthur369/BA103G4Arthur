@@ -8,10 +8,10 @@
     <meta charset="UTF-8">
     <title>後端贈品上下架</title>
     <link rel="stylesheet prefetch" href="https://cdnjs.cloudflare.com/ajax/libs/twitter-bootstrap/3.3.7/css/bootstrap.min.css">
-    <link rel="stylesheet" href="<%=request.getContextPath()%>/BackEnd/font-awesome-4.7.0/css/font-awesome.css">
-    <link rel="stylesheet" href="<%=request.getContextPath()%>/BackEnd/font-awesome-4.7.0/css/font-awesome.min.css">
-    <link rel="stylesheet" href="<%=request.getContextPath()%>/BackEnd/css/style.css">
-    <link rel="stylesheet" href="<%=request.getContextPath()%>/BackEnd/css/gift_data.css">
+    <link rel="stylesheet" href="<%=request.getContextPath()%>/BackEnd/res/font-awesome-4.7.0/css/font-awesome.css">
+    <link rel="stylesheet" href="<%=request.getContextPath()%>/BackEnd/res/font-awesome-4.7.0/css/font-awesome.min.css">
+    <link rel="stylesheet" href="<%=request.getContextPath()%>/BackEnd/res/css/style.css">
+    <link rel="stylesheet" href="<%=request.getContextPath()%>/BackEnd/res/css/gift_data.css">
     
     <style>
     *{
@@ -99,7 +99,7 @@ List<Gift_dataVO> list=gift_dataSvc.getAll();
     
   </head>
   <body>
-    <div class="container_fluid titlebar"><a class="form-inline titlebarForm" href="main.html"><img class="icon" src="<%=request.getContextPath()%>/BackEnd/images/BeanLifeLogo2.png" alt="">
+    <div class="container_fluid titlebar"><a class="form-inline titlebarForm" href="<%=request.getContextPath()%>/BackEnd/main.jsp"><img class="icon" src="<%=request.getContextPath()%>/BackEnd/res/images/BeanLifeLogo2.png" alt="">
         <h1>Bean-Life</h1></a></div>
     <div class="container card">
       <div class="row composing">
@@ -112,15 +112,15 @@ List<Gift_dataVO> list=gift_dataSvc.getAll();
             <div class="fa fa-user-o"> </div><span class="h3">管理員管理</span>
             <ul class="collapse" id="admin"><a>管理帳戶授權</a><a>帳戶管理</a></ul></a><a class="h3 title" href="#gift" aria-expanded="false" aria-controls="gift" data-toggle="collapse" style="text-decoration: none;">
             <div class="fa fa-gift"> </div><span class="h3">平台業務管理</span>
-            <ul class="collapse" id="gift"><a>廣告管理</a><a>兌換贈品管理</a><a href="gift_data.html">兌換贈品業務管理</a></ul></a></div>
+            <ul class="collapse" id="gift"><a href="<%=request.getContextPath()%>/BackEnd/ad/ad.jsp">廣告管理</a><a  href="<%=request.getContextPath()%>/BackEnd/gift/convert_gift.jsp">兌換贈品管理</a><a href="<%=request.getContextPath()%>/BackEnd/gift/gift_data.jsp">兌換贈品業務管理</a></ul></a></div>
         <div class="right col-xs-10">
-          <div class="col-xs-12 right_top"><img src="<%=request.getContextPath()%>/BackEnd/images/bear.jpg" alt="">
+          <div class="col-xs-12 right_top"><img src="<%=request.getContextPath()%>/BackEnd/res/images/bear.jpg" alt="">
             <h2>你好</h2><a class="fa fa-bell dropdown-toggle" href="#" data-toggle="dropdown"></a>
             <ul class="dropdown-menu">
               <li><a>10項檢舉未處理</a></li>
               <li><a>10項活動未審核</a></li>
               <li><a>10項廠商會員申請未審核</a></li>
-              <li><a>10項兌換贈品申請</a></li>
+              <li><a  href="<%=request.getContextPath()%>/BackEnd/gift/convert_gift.jsp">10項兌換贈品申請</a></li>
             </ul>
           </div>
           <div class="col-xs-12 right_middle">
@@ -151,6 +151,7 @@ List<Gift_dataVO> list=gift_dataSvc.getAll();
                     </div>
                     <input type="hidden"  class="gift_no" name="GIFT_NO"  value=${gift_data_vo.gift_no }>
                     <input type="hidden" name="whichPage" value="<%=whichPage%>"  >
+                    <input type="hidden" name="gift_data.jsp" value="<%=request.getServletPath() %>">
                     <input type="hidden"   name="action"  value="getOne_For_Display">
                   </div>
                 </div>
@@ -292,6 +293,7 @@ List<Gift_dataVO> list=gift_dataSvc.getAll();
 						<button type="button" class="btn btn-default" data-dismiss="modal">關閉</button>
 						<input type="hidden" name="action" value="insert">
 						<input type="hidden" name="GIFT_LAUNCH_DATE" value="" class="nowTime">
+						<input type="hidden" name="gift_data.jsp" value="<%=request.getServletPath() %>">
 						<button type="submit" class="btn btn-primary">Save changes</button>
 					</div>
 					</FORM>
@@ -315,6 +317,7 @@ List<Gift_dataVO> list=gift_dataSvc.getAll();
 						<button  type="submit" class="btn btn-danger deleteGift"  style="color: #eee">下架</button>
 						<input type="hidden" name="action" value="delete">
 						<input type="hidden" name="gift_no" value="${gift_data_vo.gift_no }">
+						<input type="hidden"  name="gift_data.jsp" value="<%=request.getServletPath() %>">
 						</FORM>
 						
 						
@@ -376,6 +379,7 @@ List<Gift_dataVO> list=gift_dataSvc.getAll();
 						<input type="hidden" name="gift_no" value="${gift_data_vo.gift_no }">
 						<input type="hidden" name="gift_launch_date" value="" class="nowTime">
 						<input type="hidden" name="whichPage" value="<%=whichPage%>"  >
+						<input type="hidden" name="gift_data.jsp" value="<%=request.getServletPath() %>">
 						<button type="submit" class="btn btn-primary">Save changes</button>
 					</div>
 					</FORM>
@@ -504,7 +508,7 @@ List<Gift_dataVO> list=gift_dataSvc.getAll();
 	 $("#modal-id").modal({show: true});
 	}
 	
-	// 如果修改有錯誤forward回來時會開啟上架modal
+	// 如果修改有錯誤forward回來時會開啟修改modal
 	if(${not empty errorMsgsForUpdate}){
 		 $("#modal-update").modal({show: true});
 		}

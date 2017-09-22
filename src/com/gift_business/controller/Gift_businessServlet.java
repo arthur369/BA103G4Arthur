@@ -60,7 +60,7 @@ if ("changeState".equals(action)) {
 if(primaryKey==null || statusValue==null){
 	errorMsgs.add("無任何變更");
 	System.out.println("got nothing");
-	 String url ="/BackEnd/convert_gift.jsp";
+	 String url =req.getParameter("convert_gift.jsp");
 	  RequestDispatcher nullView=req.getRequestDispatcher(url);
 	  nullView.forward(req,res);
 	  return;
@@ -71,7 +71,7 @@ for(int i=0;i<statusValue.length;i++){
 if(statusValue[i].equals("已出貨") && send_no[i].trim().length()==0){
 	
 	errorMsgs.add("請輸入物流編號");
-	 String url ="/BackEnd/convert_gift.jsp";
+	String url =req.getParameter("convert_gift.jsp");
 	  RequestDispatcher nullView=req.getRequestDispatcher(url);
 	  nullView.forward(req,res);
 	  return;
@@ -105,13 +105,13 @@ System.out.println("track1");
 	
 			
 			
-			  String url ="/BackEnd/convert_gift.jsp";
+			String url =req.getParameter("convert_gift.jsp");
 			  RequestDispatcher successView=req.getRequestDispatcher(url);
 			  successView.forward(req,res);
 			  return;
 			}catch(Exception e){
 				errorMsgs.add("更新失敗");
-				 String url ="/BackEnd/convert_gift.jsp";
+				String url =req.getParameter("convert_gift.jsp");
 				  RequestDispatcher nullView=req.getRequestDispatcher(url);
 				  nullView.forward(req,res);
 			}

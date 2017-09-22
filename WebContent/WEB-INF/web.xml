@@ -42,6 +42,33 @@
     <url-pattern>/gift_management/gift_managementServlet</url-pattern>
   </servlet-mapping>
   
+   <servlet>
+    <servlet-name>act_managementServlet</servlet-name>
+    <servlet-class>com.act_management.controller.Act_managementServlet</servlet-class>
+  </servlet>
+  <servlet-mapping>
+    <servlet-name>act_managementServlet</servlet-name>
+    <url-pattern>/act_management/act_managementServlet</url-pattern>
+  </servlet-mapping>
+  
+  
+  
+  
+  <servlet>
+    <servlet-name>ad_managementServlet</servlet-name>
+    <servlet-class>com.ad_management.controller.Ad_managementServlet</servlet-class>
+  </servlet>
+  <servlet-mapping>
+    <servlet-name>ad_managementServlet</servlet-name>
+    <url-pattern>/ad_management/ad_managementServlet</url-pattern>
+  </servlet-mapping>
+  
+  
+  
+  
+  
+  
+  
   <servlet>
     <servlet-name>gift_businessServlet</servlet-name>
     <servlet-class>com.gift_business.controller.Gift_businessServlet</servlet-class>
@@ -68,4 +95,17 @@
     <servlet-name>AdImg</servlet-name>
     <url-pattern>/AdImg.do</url-pattern>
   </servlet-mapping>
+  
+  
+  <servlet>
+    <servlet-name>ActImg</servlet-name>
+    <servlet-class>com.act_management.controller.ActImg</servlet-class>
+  </servlet>
+  <servlet-mapping>
+    <servlet-name>ActImg</servlet-name>
+    <url-pattern>/ActImg.do</url-pattern>
+  </servlet-mapping>
+  
+  
+  
 </web-app>

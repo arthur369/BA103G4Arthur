@@ -40,67 +40,70 @@ public class Gift_managementServlet extends HttpServlet{
 		String action = req.getParameter("action");
 		
 		if ("getOne_For_Display".equals(action)) {
-			System.out.println("track1");
+		
 			List<String> errorMsgsForUpdate = new LinkedList<String>();
 			List<String> openModal=new LinkedList<String>();
 			openModal.add("baba");
 			req.setAttribute("openModal", openModal);
 			
 			req.setAttribute("errorMsgsForUpdate", errorMsgsForUpdate);
-			System.out.println("track2");
+		
 		try{	
 			String str = req.getParameter("GIFT_NO");
-			System.out.println("gift_no="+str);
+		
 			if (str == null || (str.trim()).length() == 0) {
 				errorMsgsForUpdate.add("請輸入贈品編號");
 			}
 			req.setAttribute("whichPage",req.getParameter("whichPage"));   //取得目前所在的頁數，不管失敗獲成功都會停留在同一頁，不會跑到第一頁
-			System.out.println("track3");
+		
+			String url=req.getParameter("gift_data.jsp");
+	
 			if (!errorMsgsForUpdate.isEmpty()) {
 				RequestDispatcher failureView = req
-						.getRequestDispatcher("/BackEnd/gift_data.jsp");
+						.getRequestDispatcher(url);
 				failureView.forward(req, res);
 				return;//程式中斷
 			}
-			System.out.println("track4");
+		
 			String gift_no=str;
 			Gift_dataService gift_dataSvc=new Gift_dataService();
-			System.out.println("gift_no2="+gift_no);
+		
 			Gift_dataVO gift_data_vo=gift_dataSvc.getOneGift_data(gift_no);
-			System.out.println("track5");
+			
 			if ( gift_data_vo == null) {
-				System.out.println("find nothing");
+				
 				errorMsgsForUpdate.add("查無資料");
 			}
-			System.out.println("track6");
+		
 			if (!errorMsgsForUpdate.isEmpty()) {
 				RequestDispatcher failureView = req
-						.getRequestDispatcher("/BackEnd/gift_data.jsp");
+						.getRequestDispatcher(url);
 				failureView.forward(req, res);
 				return;//程式中斷
 			}
-			System.out.println("track7");
-			String url =null;
-			System.out.println("url copy="+(String) req.getParameter("url"));
+	
+			
+	
 			if(req.getParameter("url")!=null){
 				url=(String) req.getParameter("url");
-				System.out.println("url="+url);
+			
 			}else{
-			 url = "/BackEnd/gift_data.jsp";
-			 System.out.println("track8 not got url");
+				url=(String) req.getParameter("url");
+		
 			}
 			
 			req.setAttribute("gift_data_vo", gift_data_vo);
-			System.out.println("track9");
+		
 			RequestDispatcher successView = req.getRequestDispatcher(url);
 			successView.forward(req, res);
 			
 			
 		}catch (Exception e) {
-			System.out.println("error: something wrong");
+		
+			String url=req.getParameter("gift_data.jsp");
 			errorMsgsForUpdate.add("無法取得資料:" + e.getMessage());
 			RequestDispatcher failureView = req
-					.getRequestDispatcher("/BackEnd/gift_data.jsp");
+					.getRequestDispatcher(url);
 			failureView.forward(req, res);
 		}
 			
@@ -189,7 +192,7 @@ public class Gift_managementServlet extends HttpServlet{
 					 	gift_img=buffer.toByteArray();
 				  req.getSession().setAttribute("gift_img",gift_img);  //將gift_img上傳到session上，如果使用者上架失敗可以從session拿到舊圖，使用者不用重新上傳
 				  }
-				  
+				  String url=req.getParameter("gift_data.jsp");
 				  
 				  Gift_dataVO gift_data_VO=new Gift_dataVO();
 				  gift_data_VO.setGift_name(gift_name);
@@ -201,7 +204,7 @@ public class Gift_managementServlet extends HttpServlet{
 					if (!errorMsgs.isEmpty()) {
 						req.setAttribute("gift_data_VO", gift_data_VO); // 含有輸入格式錯誤的empVO物件,也存入req
 						RequestDispatcher failureView = req
-								.getRequestDispatcher("/BackEnd/gift_data.jsp");
+								.getRequestDispatcher(url);
 						failureView.forward(req, res);
 						return;
 					}
@@ -214,16 +217,16 @@ public class Gift_managementServlet extends HttpServlet{
 			
 				  
 				  
-				  String url ="/BackEnd/gift_data.jsp";
+				  
 				  RequestDispatcher successView=req.getRequestDispatcher(url);
 				  successView.forward(req,res);
 				  
 			  }catch (Exception e) {
-				  
+				  String url=req.getParameter("gift_data.jsp");
 				  errorMsgs.add(e.getMessage());
 					errorMsgs.add("系統錯誤");
 					RequestDispatcher failureView = req
-							.getRequestDispatcher("/BackEnd/gift_data.jsp");
+							.getRequestDispatcher(url);
 					failureView.forward(req, res);
 				}
 		
@@ -354,9 +357,11 @@ public class Gift_managementServlet extends HttpServlet{
 				
 					if (!errorMsgsForUpdate.isEmpty()) {
 					 // 含有輸入格式錯誤的empVO物件,也存入req
+						String url=req.getParameter("gift_data.jsp");
+						
 						req.setAttribute("gift_data_vo", gift_data_vo);
 						RequestDispatcher failureView = req
-								.getRequestDispatcher("/BackEnd/gift_data.jsp");
+								.getRequestDispatcher(url);
 						failureView.forward(req, res);
 						return; //程式中斷
 					}
@@ -366,14 +371,14 @@ public class Gift_managementServlet extends HttpServlet{
 				
 					req.setAttribute("gift_data_vo", gift_data_vo);
 					
-					String url="/BackEnd/gift_data.jsp";
+					String url=req.getParameter("gift_data.jsp");
 					RequestDispatcher successView=req.getRequestDispatcher(url);
 					successView.forward(req, res);
 				}catch (Exception e) {
 					errorMsgsForUpdate.add("修改資料失敗:"+e.getMessage());
-				
+					String url=req.getParameter("gift_data.jsp");
 					RequestDispatcher failureView = req
-							.getRequestDispatcher("/BackEnd/gift_data.jsp");
+							.getRequestDispatcher(url);
 				
 					failureView.forward(req, res);
 				}
@@ -393,13 +398,14 @@ public class Gift_managementServlet extends HttpServlet{
 				  Gift_dataService gift_dataSvc=new Gift_dataService();
 				  gift_dataSvc.deleteGift_data(gift_no);
 				  
-				  String url="/BackEnd/gift_data.jsp";
+				  String url=req.getParameter("gift_data.jsp");
 				  RequestDispatcher successView=req.getRequestDispatcher(url);
 				  successView.forward(req,res);
 			  }catch (Exception e) {
 					errorMsgs.add("刪除資料失敗:"+e.getMessage());
+					String url=req.getParameter("gift_data.jsp");
 					RequestDispatcher failureView = req
-							.getRequestDispatcher("/BackEnd/gift_data.jsp");
+							.getRequestDispatcher(url);
 					failureView.forward(req, res);
 				}
 			  

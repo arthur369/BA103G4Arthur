@@ -2,10 +2,12 @@ package com.act.model;
 
 import java.sql.Date;
 import java.util.List;
+import java.util.Map;
 import java.util.Set;
 
 import com.act_comm.model.Act_commVO;
 import com.act_pair.model.Act_pairVO;
+import com.convert_gift.model.Convert_giftVO;
 import com.fo_act.model.Fo_actVO;
 
 public class ActService {
@@ -103,6 +105,10 @@ public Set<Act_pairVO> getAct_pairByAct_no1(String ACT_NO){
 public Set<Fo_actVO> getFo_actByAct_no(String ACT_NO){
 	
 	return dao.getFo_actByAct_no(ACT_NO);
+}
+public List<ActVO> getAll(Map<String,String[] >map){
+	return dao.getAll(map);
+	
 }
 
 

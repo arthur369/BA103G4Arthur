@@ -95,7 +95,7 @@ input:checked + .slider:before {
             <div class="fa fa-user-o"> </div><span class="h3">管理員管理</span>
             <ul class="collapse" id="admin"><a>管理帳戶授權</a><a>帳戶管理</a></ul></a><a class="h3 title" href="#gift" aria-expanded="false" aria-controls="gift" data-toggle="collapse" style="text-decoration: none;">
             <div class="fa fa-gift"> </div><span class="h3">平台業務管理</span>
-            <ul class="collapse" id="gift"><a>廣告管理</a><a>兌換贈品管理</a><a href="gift_data.html">兌換贈品業務管理</a></ul></a></div>
+            <ul class="collapse" id="gift"><a href="<%=request.getContextPath()%>/BackEnd/ad/ad.jsp">廣告管理</a><a href="<%=request.getContextPath()%>/BackEnd/gift/convert_gift.jsp">兌換贈品管理</a><a href="<%=request.getContextPath()%>/BackEnd/gift/gift_data.jsp">兌換贈品業務管理</a></ul></a></div>
         <div class="right col-xs-10">
           <div class="col-xs-12 right_top"><img src="images/bear.jpg" alt="">
             <h2>你好</h2><a class="fa fa-bell dropdown-toggle" href="#" data-toggle="dropdown"></a>
@@ -103,7 +103,7 @@ input:checked + .slider:before {
               <li><a>10項檢舉未處理</a></li>
               <li><a>10項活動未審核</a></li>
               <li><a>10項廠商會員申請未審核</a></li>
-              <li><a>10項兌換贈品申請</a></li>
+              <li><a href="<%=request.getContextPath()%>/BackEnd/gift/convert_gift.jsp">10項兌換贈品申請</a></li>
             </ul>
           </div>
           <div class="col-xs-12 right_middle">
