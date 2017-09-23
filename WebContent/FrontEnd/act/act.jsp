@@ -77,8 +77,10 @@ width: 30px;
 </style>
 <%
 List<ActVO> list=null;
-if(request.getAttribute("add_date_query")!=null){
-	list=(List<ActVO>) request.getAttribute("add_date_query");
+System.out.println(session.getAttribute("add_date_query")!=null);
+if(session.getAttribute("add_date_query")!=null){
+	list=(List<ActVO>) session.getAttribute("add_date_query");
+	
 }else{
 ActService actSvc=new ActService();
  list=  actSvc.getAll();
@@ -161,11 +163,16 @@ pageContext.setAttribute("mylist",list);
 <div class="actionbar">
   <h3 class="label">達人教學</h3>
   <h3 class="time"><span class="add_display">${act_add}</span><span  class="op_display">${ act_op_date} </span><span class="into">${(empty act_op_date)?"":"~" }</span></span><span   class="ed_display">${ act_ed_date}</span></h3>
-  <select class="quene">
-    <option>排序方式</option>
-    <option>test2</option>
-    <option>test3</option>
+   <form  class="sort_form"   method="post"  action="<%=request.getContextPath() %>/act_management/act_managementServlet">
+  <select class="quene" name="sort">
+    <option  value="">排序方式</option>
+    <option value="act_op_date">依時間</option>
+    <option value="act_add">依地點</option>
   </select>
+  <input type="hidden"  name="act.jsp" value="<%=request.getServletPath() %>"> ;
+  <input type="hidden"  name="action" value="sort"> ;
+  </form>
+  
 </div>
 
 
@@ -225,7 +232,7 @@ pageContext.setAttribute("mylist",list);
         <div class="joinNumber"  style="width: calc(${act_vo.mem_count }% *  100 /  ${act_vo.max_mem })"></div>
       </div>
       <h3>已招募<span  class="mem_cont">${act_vo.mem_count }</span><span>/</span><span  class="max_mem">${act_vo.max_mem }</span><span>人</span></h3>
-      <p class="dataLocation"><span class="date">${act_op_date } 舉辦</span><span class="act_add">${act_vo.act_add }</span></p><a class="info">詳細資訊</a>
+      <p class="dataLocation"><span class="date">${act_vo.act_op_date } 舉辦</span><span class="act_add">${act_vo.act_add }</span></p><a class="info">詳細資訊</a>
     </div>
   </div>
 </div>
@@ -299,6 +306,12 @@ $(".fa-search").click(function(){
 $(".titlebarForm ").submit();
 })
 
+$(".quene").change(function(){
+	
+	$(".sort_form").submit();
+	
+	
+})
 
 
 

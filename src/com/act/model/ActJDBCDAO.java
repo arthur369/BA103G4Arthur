@@ -705,22 +705,113 @@ public class ActJDBCDAO implements ActDAO_interface{
 		
 	}
 	
+	
+	@Override
+	public List<ActVO> getSort(String sort) {
+		List<ActVO> list=new ArrayList<ActVO>();
+		ActVO act_vo=null;
+		
+		Connection con=null;
+		PreparedStatement pstmt=null;
+		ResultSet rs=null;
+		try {
+			Class.forName(driver);
+	
+				con = DriverManager.getConnection(url, userid, password);
+				String finalSQL;
+				if(!sort.equals("")){
+				 finalSQL = "select * from act   order by "+sort;
+				}else{
+					 finalSQL = "select * from act";
+				}
+		System.out.println(finalSQL);
+		pstmt=con.prepareStatement(finalSQL);
+		rs=pstmt.executeQuery();
+		while(rs.next()){
+			act_vo=new ActVO();
+			act_vo.setAct_no(rs.getString("ACT_NO"));
+			act_vo.setMem_ac(rs.getString("MEM_AC"));
+			act_vo.setOrg_cont(rs.getString("ORG_CONT"));
+			act_vo.setAct_name(rs.getString("ACT_NAME"));
+			act_vo.setMin_mem(rs.getInt("MIN_MEM"));
+			act_vo.setMax_mem(rs.getInt("MAX_MEM"));
+			act_vo.setMem_count(rs.getInt("MEM_COUNT"));
+			act_vo.setAct_op_date(rs.getDate("ACT_OP_DATE"));
+			act_vo.setAct_ed_date(rs.getDate("ACT_ED_DATE"));
+			act_vo.setDl_date(rs.getDate("DL_DATE"));
+			act_vo.setFd_date(rs.getDate("FD_DATE"));
+			act_vo.setAct_add(rs.getString("ACT_ADD"));
+			act_vo.setAct_add_lat(rs.getString("ACT_ADD_LAT"));
+			act_vo.setAct_add_lon(rs.getString("ACT_ADD_LON"));
+			act_vo.setAct_cont(rs.getString("ACT_CONT"));
+			act_vo.setAct_tag(rs.getString("ACT_TAG"));
+			act_vo.setAct_fee(rs.getInt("ACT_FEE"));
+			act_vo.setPay_way(rs.getString("PAY_WAY"));
+		
+			act_vo.setAct_pic1(rs.getBytes("ACT_PIC1"));
+			act_vo.setAct_pic2(rs.getBytes("ACT_PIC2"));
+			act_vo.setAct_pic3(rs.getBytes("ACT_PIC3"));
+			act_vo.setAct_stat(rs.getString("ACT_STAT"));
+			act_vo.setRe_cont(rs.getString("RE_CONT"));
+			act_vo.setReview_ed_date(rs.getDate("REVIEW_ED_DATE"));
+			
+			list.add(act_vo);
+		}
+			} catch (SQLException e) {
+				// TODO Auto-generated catch block
+				e.printStackTrace();
+		
+			
+		} catch (ClassNotFoundException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}finally {
+			if (rs != null) {
+				try {
+					rs.close();
+				} catch (SQLException se) {
+					se.printStackTrace(System.err);
+				}
+			}
+			if (pstmt != null) {
+				try {
+					pstmt.close();
+				} catch (SQLException se) {
+					se.printStackTrace(System.err);
+				}
+			}
+			if (con != null) {
+				try {
+					con.close();
+				} catch (Exception e) {
+					e.printStackTrace(System.err);
+				}
+			}
+		}
+		return list;
+		
+		
+	}
+	
+	
+	
+	
 	public static void main(String[] args) throws IOException {
 		// TODO Auto-generated method stub
 ActJDBCDAO dao=new ActJDBCDAO();
 
 //ActVO act_vo1=new ActVO();
 //	act_vo1.setMem_ac("camacoffee");
-//	act_vo1.setOrg_cont("我是主辦人");
-//	act_vo1.setAct_name("我是活動");
+//	act_vo1.setOrg_cont("我是主辦人~~baba");
+//	act_vo1.setAct_name("我是活動baba");
 //	act_vo1.setMin_mem(6);
 //	act_vo1.setMax_mem(10);
 //	act_vo1.setMem_count(5);
-//	act_vo1.setAct_op_date(java.sql.Date.valueOf("2017-09-07"));
-//	act_vo1.setAct_ed_date(java.sql.Date.valueOf("2017-09-09"));
-//	act_vo1.setDl_date(java.sql.Date.valueOf("2017-09-02"));
-//	act_vo1.setFd_date(java.sql.Date.valueOf("2017-09-01"));
-//	act_vo1.setAct_add("台灣");
+//	act_vo1.setAct_op_date(java.sql.Date.valueOf("2017-09-09"));
+//	act_vo1.setAct_ed_date(java.sql.Date.valueOf("2017-09-15"));
+//	act_vo1.setDl_date(java.sql.Date.valueOf("2017-09-05"));
+//	act_vo1.setFd_date(java.sql.Date.valueOf("2017-09-02"));
+//	act_vo1.setAct_add("高雄市82區152巷");
 //	act_vo1.setAct_add_lat("121.550537");
 //	act_vo1.setAct_add_lon("25.032904");
 //	act_vo1.setAct_cont("bababa~~");
@@ -809,22 +900,27 @@ ActJDBCDAO dao=new ActJDBCDAO();
 //	System.out.println();
 //	}
 
-	Map<String, String[]> map = new TreeMap<String, String[]>();
+//	Map<String, String[]> map = new TreeMap<String, String[]>();
 //	map.put("act_add", new String[] { "新北市" });
 //	map.put("act_op_date", new String[] { "2016-12-20" });
 //	map.put("act_ed_date", new String[] { "2018-12-25" });
 //	
-	List<ActVO>list=dao.getAll(map);
-	for(ActVO act_vo5:list){
-		System.out.print(act_vo5.getMem_ac()+",");
-		System.out.print(act_vo5.getOrg_cont()+",");
-		System.out.println();
-		
-	}
+//	List<ActVO>list=dao.getAll(map);
+//	for(ActVO act_vo5:list){
+//		System.out.print(act_vo5.getMem_ac()+",");
+//		System.out.print(act_vo5.getOrg_cont()+",");
+//		System.out.println();
+//		
+//	}
 	
 	
-	
-	
+List<ActVO>list=dao.getSort("");
+for(ActVO act_vo6:list){
+System.out.print(act_vo6.getAct_op_date()+",");
+System.out.print(act_vo6.getAct_add()+",");
+System.out.println();
+
+}
 	
 	
 	}
@@ -839,6 +935,8 @@ ActJDBCDAO dao=new ActJDBCDAO();
 		}
 		return baos.toByteArray();
 	}
+
+	
 
 	
 

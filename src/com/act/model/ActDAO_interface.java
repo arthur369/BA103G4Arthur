@@ -24,4 +24,7 @@ public interface ActDAO_interface {
      //複合查詢使用
      public List<ActVO> getAll(Map<String, String[]> map); 
      
+   //排序使用
+     public List<ActVO> getSort(String sort); 
+     
 }

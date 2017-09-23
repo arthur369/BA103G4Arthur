@@ -16,6 +16,7 @@ import javax.servlet.annotation.MultipartConfig;
 import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
+import javax.servlet.http.HttpSession;
 
 import com.act.model.ActService;
 import com.act.model.ActVO;
@@ -44,6 +45,32 @@ public class Act_managementServlet extends HttpServlet{
 		
 		String action = req.getParameter("action");
 		
+		if("sort".equals(action)){
+			String url=req.getParameter("act.jsp");
+			try{
+				String sort=req.getParameter("sort");
+				ActService actSvc=new ActService();
+				List<ActVO> list=   actSvc.getSort(sort);
+				HttpSession session=req.getSession();
+				session.setAttribute("add_date_query", list);
+				RequestDispatcher dispatcher=req.getRequestDispatcher(url);
+				dispatcher.forward(req, res);
+				
+				
+				
+			}catch(Exception e){
+				RequestDispatcher dispatcher=req.getRequestDispatcher(url);
+				dispatcher.forward(req, res);
+			}
+			
+			
+		}
+		
+		
+		
+		
+		
+		
 		if ("add_date_query".equals(action)) {
 		
 			
@@ -63,7 +90,9 @@ public class Act_managementServlet extends HttpServlet{
 			
 			ActService actSvc=new ActService();
 			List<ActVO> list=actSvc.getAll(map);
-			req.setAttribute("add_date_query", list);
+			HttpSession session=req.getSession();
+			System.out.println("set to session");
+			session.setAttribute("add_date_query", list);
 			
 			RequestDispatcher successView = req.getRequestDispatcher(url); // 成功轉交listEmps_ByCompositeQuery.jsp
 			

@@ -111,5 +111,8 @@ public List<ActVO> getAll(Map<String,String[] >map){
 	
 }
 
-
+public List<ActVO> getSort(String sort){
+	return dao.getSort(sort);
+	
+}
 }
