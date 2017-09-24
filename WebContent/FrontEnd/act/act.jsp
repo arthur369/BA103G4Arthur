@@ -67,13 +67,40 @@ transform: translate(12%,-10%);
 padding: 0;
 }
 .form_date{
-flex: 9;
+flex: 2;
+transform: translate(-50%,0);
 
 }
 .fa-search{
 width: 30px;
+transform: translate(-60%,0);
+}
+.input-group {
+height: 30px;
+}
+
+.date{
+display: inline-block;
+}
+.titlebarForm .form-group{
+flex: 5;
+}
+.button{
+margin-right: -50px;
 
 }
+.button button{
+margin-left: 0;
+}
+
+.set_action{
+margin-left:30px;
+}
+.actionbar{
+right: 0%
+
+}
+
 </style>
 <%
 List<ActVO> list=null;
@@ -129,28 +156,29 @@ pageContext.setAttribute("mylist",list);
     </select>
     
     <div class="form-group">
-      
+    <div class="form-group">
+                <label for="dtp_input1" class="col-md-2 control-label">開始時間</label>
+                <div class="input-group date form_datetime col-md-5" data-date="" data-date-format="yyyy-mm-dd HH:ii:ss" data-link-field="dtp_input1">
+                    <input class="form-control  test" size="16" type="text"  name="act_op_date"    value=""  ">
+                    <span class="input-group-addon"><span class="glyphicon glyphicon-remove"></span></span>
+					<span class="input-group-addon"><span class="glyphicon glyphicon-th"></span></span>
+                </div>
+				<input type="hidden" id="dtp_input1" value="" /><br/>
+          
+                <label for="dtp_input1" class="col-md-2 control-label">結束時間</label>
+                <div class="input-group date form_datetime col-md-5" data-date="" data-date-format="yyyy-mm-dd HH:ii:ss" data-link-field="dtp_input1">
+                    <input class="form-control  test" size="16" type="text"  name="act_ed_date"    value="" >
+                    <div class="input-group-addon "><span class="glyphicon glyphicon-remove"></span></div>
+					<span class="input-group-addon"><span class="glyphicon glyphicon-th"></span></span>
+                </div>
+				<input type="hidden" id="dtp_input1" value="" /><br/>
+            </div>  
 			
-                <label for="dtp_input2" class="col-md-2 control-label  h4">開始時間</label>
-                <div class="input-group date form_date col-md-5" data-date="" data-date-format="yyyy-mm-dd" data-link-field="dtp_input2" data-link-format="yyyy-mm-dd">
-                    <input class="form-control  test" size="16" type="text"  name="act_op_date"  value="" readonly>
-                    <span class="input-group-addon"><span class="glyphicon glyphicon-remove"></span></span>
-					<span class="input-group-addon"><span class="glyphicon glyphicon-calendar"></span></span>
-                </div>
-				<input type="hidden" id="dtp_input2" value="" /><br/>
-        
-           
-                <label for="dtp_input2" class="col-md-2 control-label  h4 ">結束時間</label>
-                <div class="input-group date form_date col-md-5" data-date="" data-date-format="yyyy-mm-dd" data-link-field="dtp_input2" data-link-format="yyyy-mm-dd">
-                    <input class="form-control  test" size="16" type="text"  name="act_ed_date"  value="" readonly>
-                    <span class="input-group-addon"><span class="glyphicon glyphicon-remove"></span></span>
-					<span class="input-group-addon"><span class="glyphicon glyphicon-calendar"></span></span>
-                </div>
-				<input type="hidden" id="dtp_input2" value="" /><br/>
+                
            
   <span class="fa fa-search"></span>
     </div>
-    <button class="btn-success">發起活動</button>
+    <button class="btn-success  set_action">發起活動</button>
     <div class="button">
       <button class="btn-primary">達人教學</button>
       <button class="btn-primary">咖啡課程</button>
@@ -182,7 +210,7 @@ pageContext.setAttribute("mylist",list);
 <div class="container card">
   <div class="row">
     <div class="col-sm-6 img">
-<div id="carousel-id" class="carousel slide" data-ride="carousel">
+<div id="${act_vo.act_no }" class="carousel slide" data-ride="carousel">
         <!-- 幻燈片小圓點區 -->
         <ol class="carousel-indicators">
             <li data-target="#carousel-id" data-slide-to="0" class=""></li>
@@ -217,8 +245,8 @@ pageContext.setAttribute("mylist",list);
             </div>
         </div>
         <!-- 上下頁控制區 -->
-        <a class="left carousel-control" href="#carousel-id" data-slide="prev"><span class="glyphicon glyphicon-chevron-left"></span></a>
-        <a class="right carousel-control" href="#carousel-id" data-slide="next"><span class="glyphicon glyphicon-chevron-right"></span></a>
+        <a class="left carousel-control" href="#${act_vo.act_no }" data-slide="prev"><span class="glyphicon glyphicon-chevron-left"></span></a>
+        <a class="right carousel-control" href="#${act_vo.act_no }" data-slide="next"><span class="glyphicon glyphicon-chevron-right"></span></a>
     </div>
 
     </div>
@@ -232,7 +260,13 @@ pageContext.setAttribute("mylist",list);
         <div class="joinNumber"  style="width: calc(${act_vo.mem_count }% *  100 /  ${act_vo.max_mem })"></div>
       </div>
       <h3>已招募<span  class="mem_cont">${act_vo.mem_count }</span><span>/</span><span  class="max_mem">${act_vo.max_mem }</span><span>人</span></h3>
-      <p class="dataLocation"><span class="date">${act_vo.act_op_date } 舉辦</span><span class="act_add">${act_vo.act_add }</span></p><a class="info">詳細資訊</a>
+      <p class="dataLocation"><span class="act_op_date">${act_vo.act_op_date }<span>舉辦</span> </span><span class="act_add">${act_vo.act_add }</span></p>
+      <form  method="post" action="<%=request.getContextPath() %>/act_management/act_managementServlet">
+      <a class="info">詳細資訊</a>
+      <input type="hidden" name=action  value="goto_act_detail" >
+      <input type="hidden"  name="act_no"  value="${act_vo.act_no }">
+      <input type="hidden"  name="act.jsp" value="<%=request.getServletPath() %>">
+    </form>
     </div>
   </div>
 </div>
@@ -290,16 +324,16 @@ for(var i=0;i<$(".act_add").length;i++){
 }
 
 <%--Date picker--%>
-$('.form_date').datetimepicker({
-      language:  'en',
-      weekStart: 1,
-      todayBtn:  1,
-		autoclose: 1,
-		todayHighlight: 1,
-		startView: 2,
-		minView: 2,
-		forceParse: 0
-  });
+$('.form_datetime').datetimepicker({
+    //language:  'fr',
+    weekStart: 1,
+    todayBtn:  1,
+	autoclose: 1,
+	todayHighlight: 1,
+	startView: 2,
+	forceParse: 0,
+    showMeridian: 1
+});
 
 
 $(".fa-search").click(function(){
@@ -314,7 +348,19 @@ $(".quene").change(function(){
 })
 
 
+$(".info").click(function(){
+$(this).parent().submit();
+	
+	
+})
 
+
+	<%--裁切日期 去除時分秒--%>
+for(var i=0;i<$(".act_op_date").length;i++){
+	var op_date=$(".act_op_date").eq(i).text().substring(0,10);
+	$(".act_op_date").eq(i).text(op_date);
+}
+	
 
 
 

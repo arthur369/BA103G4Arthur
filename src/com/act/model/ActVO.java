@@ -2,6 +2,7 @@ package com.act.model;
 
 import java.io.Serializable;
 import java.sql.Date;
+import java.sql.Timestamp;
 
 public class ActVO implements Serializable{
 	private String act_no;
@@ -11,10 +12,14 @@ public class ActVO implements Serializable{
 	private Integer min_mem;
 	private Integer max_mem;
 	private Integer mem_count;
-	private Date act_op_date;
-	private Date act_ed_date;
-	private Date dl_date;
-	private Date fd_date;
+//	private Date act_op_date;
+//	private Date act_ed_date;
+//	private Date dl_date;
+//	private Date fd_date;
+	private Timestamp act_op_date;
+	private  Timestamp act_ed_date;
+	private  Timestamp dl_date;
+	private  Timestamp fd_date;
 	private String act_add;
 	private String act_add_lat;
 	private String act_add_lon;
@@ -27,7 +32,8 @@ public class ActVO implements Serializable{
 	private byte[] act_pic3;
 	private String act_stat;
 	private String re_cont;
-	private Date review_ed_date;
+//	private Date review_ed_date;
+	private Timestamp review_ed_date;
 	public ActVO() {
 		
 		super();
@@ -75,31 +81,59 @@ public class ActVO implements Serializable{
 	public void setMem_count(Integer mEM_COUNT) {
 		mem_count = mEM_COUNT;
 	}
-	public Date getAct_op_date() {
-	
+//	public Date getAct_op_date() {
+//	
+//		return act_op_date;
+//	}
+//	public void setAct_op_date(Date aCT_OP_DATE) {
+//		act_op_date = aCT_OP_DATE;
+//	}
+//	public Date getAct_ed_date() {
+//		return act_ed_date;
+//	}
+//	public void setAct_ed_date(Date aCT_ED_DATE) {
+//		act_ed_date = aCT_ED_DATE;
+//	}
+//	public Date getDl_date() {
+//		return dl_date;
+//	}
+//	public void setDl_date(Date dL_DATE) {
+//		dl_date = dL_DATE;
+//	}
+//	public Date getFd_date() {
+//		return fd_date;
+//	}
+//	public void setFd_date(Date fD_DATE) {
+//		fd_date = fD_DATE;
+//	}
+	public Timestamp getAct_op_date() {
+		
 		return act_op_date;
 	}
-	public void setAct_op_date(Date aCT_OP_DATE) {
+	public void setAct_op_date(Timestamp aCT_OP_DATE) {
 		act_op_date = aCT_OP_DATE;
 	}
-	public Date getAct_ed_date() {
+	public Timestamp getAct_ed_date() {
 		return act_ed_date;
 	}
-	public void setAct_ed_date(Date aCT_ED_DATE) {
+	public void setAct_ed_date(Timestamp aCT_ED_DATE) {
 		act_ed_date = aCT_ED_DATE;
 	}
-	public Date getDl_date() {
+	public Timestamp getDl_date() {
 		return dl_date;
 	}
-	public void setDl_date(Date dL_DATE) {
+	public void setDl_date(Timestamp dL_DATE) {
 		dl_date = dL_DATE;
 	}
-	public Date getFd_date() {
+	public Timestamp getFd_date() {
 		return fd_date;
 	}
-	public void setFd_date(Date fD_DATE) {
+	public void setFd_date(Timestamp fD_DATE) {
 		fd_date = fD_DATE;
 	}
+	
+	
+	
 	public String getAct_add() {
 		return act_add;
 	}
@@ -172,10 +206,16 @@ public class ActVO implements Serializable{
 	public void setRe_cont(String rE_CONT) {
 		re_cont = rE_CONT;
 	}
-	public Date getReview_ed_date() {
+//	public Date getReview_ed_date() {
+//		return review_ed_date;
+//	}
+	public Timestamp getReview_ed_date() {
 		return review_ed_date;
 	}
-	public void setReview_ed_date(Date rEVIEW_ED_DATE) {
+//	public void setReview_ed_date(Date rEVIEW_ED_DATE) {
+//		review_ed_date = rEVIEW_ED_DATE;
+//	}
+	public void setReview_ed_date(Timestamp rEVIEW_ED_DATE) {
 		review_ed_date = rEVIEW_ED_DATE;
 	}
 	

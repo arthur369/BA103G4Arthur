@@ -188,7 +188,7 @@ if(request.getAttribute("showConvert_gift")==null){
           </div>
           <div class="col-xs-12 right_middle">
             <div class="col-xs-12">
-              <h2 class="check">兌換贈品業務管理</h2>
+              <h2 class="check">兌換贈品管理</h2>
              
               <div class="btn-group selectStatus">
   <button class="btn btn-default btn-sm dropdown-toggle  " type="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">

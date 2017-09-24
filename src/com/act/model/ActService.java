@@ -1,6 +1,7 @@
 package com.act.model;
 
 import java.sql.Date;
+import java.sql.Timestamp;
 import java.util.List;
 import java.util.Map;
 import java.util.Set;
@@ -18,7 +19,7 @@ public class ActService {
 		dao= new ActJNDIDAO();
 	}
 	
-	public ActVO addAct(String act_no,String mem_ac,String org_cont,String act_name, int min_mem,int max_mem,int mem_count,Date act_op_date,Date act_ed_date,Date dl_date,Date fd_date,String act_add,String act_add_lat,String act_add_lon,String act_cont,String act_tag,int act_fee,String pay_way,byte[] act_pic1,byte[] act_pic2,byte[] act_pic3,String act_stat,String re_cont,Date review_ed_date){
+	public ActVO addAct(String act_no,String mem_ac,String org_cont,String act_name, int min_mem,int max_mem,int mem_count,Timestamp act_op_date,Timestamp act_ed_date,Timestamp dl_date,Timestamp fd_date,String act_add,String act_add_lat,String act_add_lon,String act_cont,String act_tag,int act_fee,String pay_way,byte[] act_pic1,byte[] act_pic2,byte[] act_pic3,String act_stat,String re_cont,Timestamp review_ed_date){
 		
 		
 		ActVO act_VO=new ActVO();
@@ -29,10 +30,12 @@ public class ActService {
 		act_VO.setMin_mem(min_mem);
 		act_VO.setMax_mem(max_mem);
 		act_VO.setMem_count(mem_count);
+
 		act_VO.setAct_op_date(act_op_date);
 		act_VO.setAct_ed_date(act_ed_date);
 		act_VO.setDl_date(dl_date);
 		act_VO.setFd_date(fd_date);
+		
 		act_VO.setAct_add(act_add);
 		act_VO.setAct_add_lat(act_add_lat);
 		act_VO.setAct_add_lon(act_add_lon);
@@ -51,7 +54,7 @@ public class ActService {
 		return act_VO;
 	}
 	
-public ActVO updateAct(String act_no,String mem_ac,String org_cont,String act_name, int min_mem,int max_mem,int mem_count,Date act_op_date,Date act_ed_date,Date dl_date,Date fd_date,String act_add,String act_add_lat,String act_add_lon,String act_cont,String act_tag,int act_fee,String pay_way,byte[] act_pic1,byte[] act_pic2,byte[] act_pic3,String act_stat,String re_cont,Date review_ed_date){
+public ActVO updateAct(String act_no,String mem_ac,String org_cont,String act_name, int min_mem,int max_mem,int mem_count,Timestamp act_op_date,Timestamp act_ed_date,Timestamp dl_date,Timestamp fd_date,String act_add,String act_add_lat,String act_add_lon,String act_cont,String act_tag,int act_fee,String pay_way,byte[] act_pic1,byte[] act_pic2,byte[] act_pic3,String act_stat,String re_cont,Timestamp review_ed_date){
 		
 		ActVO act_VO=new ActVO();
 		act_VO.setAct_no(act_no);

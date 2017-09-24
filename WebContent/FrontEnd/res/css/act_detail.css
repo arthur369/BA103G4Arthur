@@ -137,6 +137,7 @@ h3 {
 }
 .section_info .introduction p {
   margin-top: 20px;
+  font-size: 20px;
 }
 .section_info .actionMap hr {
   border: solid 1px #eee;

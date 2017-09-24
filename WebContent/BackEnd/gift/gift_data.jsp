@@ -125,7 +125,7 @@ List<Gift_dataVO> list=gift_dataSvc.getAll();
           </div>
           <div class="col-xs-12 right_middle">
             <div class="col-xs-12 middle">
-              <h2 class="check">兌換贈品管理</h2>
+              <h2 class="check">兌換贈品業務管理</h2>
               <a href='#modal-id' data-toggle="modal"  class="btn btn-success">上架</a>
             </div>
           </div>

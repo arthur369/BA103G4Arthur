@@ -105,8 +105,31 @@ public class Act_managementServlet extends HttpServlet{
 		}
 		}
 		
+		if ("goto_act_detail".equals(action)) {
+			try{
+		String act_no=req.getParameter("act_no");
+		ActService actSvc=new ActService();
+		ActVO act_vo= actSvc.getOneAct(act_no);
+		HttpSession session=req.getSession();
+		session.setAttribute("act_vo", act_vo);
+		String url="/FrontEnd/act/act_detail.jsp";
+		System.out.println(url);
+		RequestDispatcher dispatcher=req.getRequestDispatcher(url);
+		dispatcher.forward(req, res);
 		
 		
+			}catch(Exception e){
+				String url=req.getParameter("act.jsp");
+				RequestDispatcher dispatcher=req.getRequestDispatcher(url);
+				dispatcher.forward(req, res);
+				
+				
+				
+			}
+			
+			
+			
+		}
 		
 //		if ("getOne_For_Display".equals(action)) {
 //		
