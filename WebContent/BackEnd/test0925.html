@@ -1,0 +1,93 @@
+<!DOCTYPE html>
+<html lang="">
+	<head>
+		<meta charset="utf-8">
+		<meta http-equiv="X-UA-Compatible" content="IE=edge">
+		<meta name="viewport" content="width=device-width, initial-scale=1.0, shrink-to-fit=no">
+		<title>Title Page</title>
+		<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/twitter-bootstrap/3.3.7/css/bootstrap.min.css">
+		<!--[if lt IE 9]>
+			<script src="https://cdnjs.cloudflare.com/ajax/libs/html5shiv/3.7.3/html5shiv.min.js"></script>
+			<script src="https://cdnjs.cloudflare.com/ajax/libs/respond.js/1.4.2/respond.min.js"></script>
+		<![endif]-->
+		<style>
+      #map {
+        height: 400px;
+        width: 100%;
+       }
+    </style>
+	</head>
+	<body>
+		
+		 <h3>My Google Maps Demo</h3>
+    <div class="myadd">台北市大安區文昌街47號2樓</div>
+    <div class="lat"></div>
+    <div class="lng"></div>
+    <div id="map"></div>
+		
+		
+		<script src="https://code.jquery.com/jquery.js"></script>
+		<script src="https://cdnjs.cloudflare.com/ajax/libs/twitter-bootstrap/3.3.7/js/bootstrap.min.js"></script>
+<script async defer
+    src="https://maps.googleapis.com/maps/api/js?key=AIzaSyDZqbxURS33Q5XimlMq6it_KanwhInsh0Q" async defer>
+    </script>
+<script>
+ 
+
+$(document).ready(function(){
+setTimeout(doIt(),1000);
+
+})
+    
+var lat1;
+var lng1;
+
+function doIt(){
+	getLatLngByAddr($(".myadd").text());
+initMap();
+}
+
+
+function getLatLngByAddr($address) {
+			var geocoder = new google.maps.Geocoder(); //定義一個Geocoder物件
+			geocoder.geocode({
+				address : $address
+			}, //設定地址的字串
+			function(results, status) { //callback function
+				if (status == google.maps.GeocoderStatus.OK) { //判斷狀態
+					$lat = results[0].geometry.location.lat();
+					var lat = $lat;
+					 lat1 = lat.toFixed(12);
+					$(".lat").text(lat1);
+					$lng = results[0].geometry.location.lng();
+					var lng = $lng;
+					 lng1 = lng.toFixed(12);
+					$(".lng").text(lng1);
+
+				}
+			});
+		}
+		// $("#address").focusout(function() { //地址查詢經緯度
+
+
+			
+
+		// });
+function initMap() {
+        var uluru = {lat: -25.363, lng: 131.044};
+        // var uluru = {lat: 23.697810000000, lng: 120.960515000000};
+        // var uluru = {lat: $(".lat").text(), lng: $(".lng").text()};
+        var map = new google.maps.Map(document.getElementById('map'), {
+          zoom: 10,
+          center: uluru
+        });
+        var marker = new google.maps.Marker({
+          position: uluru,
+          map: map
+        });
+      }
+    </script>
+ 
+
+	</body>
+</html>

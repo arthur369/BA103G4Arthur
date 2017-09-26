@@ -106,6 +106,13 @@
     <url-pattern>/ActImg.do</url-pattern>
   </servlet-mapping>
   
-  
+  <servlet>
+    <servlet-name>MemImg</servlet-name>
+    <servlet-class>com.act_management.controller.MemImg</servlet-class>
+  </servlet>
+  <servlet-mapping>
+    <servlet-name>MemImg</servlet-name>
+    <url-pattern>/MemImg.do</url-pattern>
+  </servlet-mapping>
   
 </web-app>

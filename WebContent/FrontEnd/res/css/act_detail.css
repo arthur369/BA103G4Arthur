@@ -143,13 +143,7 @@ h3 {
   border: solid 1px #eee;
   width: 100%;
 }
-.section_info .actionMap .map {
-  border: solid 1px blue;
-  width: 600px;
-  height: 300px;
-  transform: translate(10%, 10%);
-  margin-bottom: 80px;
-}
+
 .section_info .message hr {
   border: solid 1px #eee;
   width: 100%;
@@ -161,14 +155,7 @@ h3 {
 .section_info .message .guestAsk .iconSpace {
   flex: 1;
 }
-.section_info .message .guestAsk .iconSpace .icon {
-  width: 50px;
-  height: 50px;
-  border: solid 1px blue;
-  border-radius: 50%;
-  left: 50%;
-  transform: translate(-50%, 0);
-}
+
 .section_info .message .guestAsk .askDetail {
   flex: 9;
 }
@@ -218,13 +205,7 @@ h3 {
   float: right;
 }
 
-.col-md-4 {
-  padding: 20px;
-  border: solid 1px black;
-  border-radius: 50px;
-  height: 700px;
-  background-color: #fff;
-}
+
 .col-md-4 .host {
   display: flex;
   flex-direction: column;
@@ -232,12 +213,7 @@ h3 {
   justify-content: space-evenly;
   height: 100%;
 }
-.col-md-4 .host .hostIcon {
-  width: 200px;
-  height: 200px;
-  border: solid 1px black;
-  border-radius: 50%;
-}
+
 
 .bookMarks {
   text-align: center;

@@ -11,6 +11,7 @@ import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.util.ArrayList;
+import java.util.Date;
 import java.util.LinkedHashSet;
 import java.util.LinkedList;
 import java.util.List;
@@ -60,14 +61,20 @@ public class ActJDBCDAO implements ActDAO_interface{
 				pstmt.setInt(4,act_VO.getMin_mem());
 				pstmt.setInt(5,act_VO.getMax_mem());
 				pstmt.setInt(6,act_VO.getMem_count());
+			
+				
 //				pstmt.setDate(7,act_VO.getAct_op_date());
-//				pstmt.setDate(8,act_VO.getAct_ed_date());
-//				pstmt.setDate(9,act_VO.getDl_date());
-//				pstmt.setDate(10,act_VO.getFd_date());
-				pstmt.setTimestamp(7,act_VO.getAct_op_date());
-				pstmt.setTimestamp(8,act_VO.getAct_ed_date());
-				pstmt.setTimestamp(9,act_VO.getDl_date());
-				pstmt.setTimestamp(10,act_VO.getFd_date());
+				pstmt.setTimestamp(7,dateToTimestamp(act_VO.getAct_op_date()));
+				
+				
+				
+				pstmt.setTimestamp(8,dateToTimestamp(act_VO.getAct_ed_date()));
+				pstmt.setTimestamp(9,dateToTimestamp(act_VO.getDl_date()));
+				pstmt.setTimestamp(10,dateToTimestamp(act_VO.getFd_date()));
+//				pstmt.setTimestamp(7,act_VO.getAct_op_date());
+//				pstmt.setTimestamp(8,act_VO.getAct_ed_date());
+//				pstmt.setTimestamp(9,act_VO.getDl_date());
+//				pstmt.setTimestamp(10,act_VO.getFd_date());
 				pstmt.setString(11,act_VO.getAct_add());
 				pstmt.setString(12,act_VO.getAct_add_lat());
 				pstmt.setString(13,act_VO.getAct_add_lon());
@@ -89,8 +96,8 @@ public class ActJDBCDAO implements ActDAO_interface{
 				pstmt.setBlob(20,blob3);
 				pstmt.setString(21,act_VO.getAct_stat());
 				pstmt.setString(22,act_VO.getRe_cont());
-//				pstmt.setDate(23,act_VO.getReview_ed_date());
-				pstmt.setTimestamp(23,act_VO.getReview_ed_date());
+				pstmt.setTimestamp(23,dateToTimestamp(act_VO.getReview_ed_date()));
+//				pstmt.setTimestamp(23,act_VO.getReview_ed_date());
 				pstmt.executeUpdate();
 				
 			} catch (SQLException e) {
@@ -141,14 +148,14 @@ public class ActJDBCDAO implements ActDAO_interface{
 				pstmt.setInt(4,act_VO.getMin_mem());
 				pstmt.setInt(5,act_VO.getMax_mem());
 				pstmt.setInt(6,act_VO.getMem_count());
-//				pstmt.setDate(7,act_VO.getAct_op_date());
-//				pstmt.setDate(8,act_VO.getAct_ed_date());
-//				pstmt.setDate(9,act_VO.getDl_date());
-//				pstmt.setDate(10,act_VO.getFd_date());
-				pstmt.setTimestamp(7,act_VO.getAct_op_date());
-				pstmt.setTimestamp(8,act_VO.getAct_ed_date());
-				pstmt.setTimestamp(9,act_VO.getDl_date());
-				pstmt.setTimestamp(10,act_VO.getFd_date());
+				pstmt.setTimestamp(7,dateToTimestamp(act_VO.getAct_op_date()));
+				pstmt.setTimestamp(8,dateToTimestamp(act_VO.getAct_ed_date()));
+				pstmt.setTimestamp(9,dateToTimestamp(act_VO.getDl_date()));
+				pstmt.setTimestamp(10,dateToTimestamp(act_VO.getFd_date()));
+//				pstmt.setTimestamp(7,act_VO.getAct_op_date());
+//				pstmt.setTimestamp(8,act_VO.getAct_ed_date());
+//				pstmt.setTimestamp(9,act_VO.getDl_date());
+//				pstmt.setTimestamp(10,act_VO.getFd_date());
 				pstmt.setString(11,act_VO.getAct_add());
 				pstmt.setString(12,act_VO.getAct_add_lat());
 				pstmt.setString(13,act_VO.getAct_add_lon());
@@ -170,8 +177,8 @@ public class ActJDBCDAO implements ActDAO_interface{
 				pstmt.setBlob(20,blob3);
 				pstmt.setString(21,act_VO.getAct_stat());
 				pstmt.setString(22,act_VO.getRe_cont());
-//				pstmt.setDate(23,act_VO.getReview_ed_date());
-				pstmt.setTimestamp(23,act_VO.getReview_ed_date());
+				pstmt.setTimestamp(23,dateToTimestamp(act_VO.getReview_ed_date()));
+//				pstmt.setTimestamp(23,act_VO.getReview_ed_date());
 				pstmt.setString(24,act_VO.getAct_no());
 				pstmt.executeUpdate();
 				
@@ -299,14 +306,18 @@ public class ActJDBCDAO implements ActDAO_interface{
 				act_vo.setMin_mem(rs.getInt("MIN_MEM"));
 				act_vo.setMax_mem(rs.getInt("MAX_MEM"));
 				act_vo.setMem_count(rs.getInt("MEM_COUNT"));
+				
+	
+			act_vo.setAct_op_date(timestampToDate(rs.getTimestamp("ACT_OP_DATE")));
+			
 //				act_vo.setAct_op_date(rs.getDate("ACT_OP_DATE"));
-//				act_vo.setAct_ed_date(rs.getDate("ACT_ED_DATE"));
-//				act_vo.setDl_date(rs.getDate("DL_DATE"));
-//				act_vo.setFd_date(rs.getDate("FD_DATE"));
-				act_vo.setAct_op_date(rs.getTimestamp("ACT_OP_DATE"));
-				act_vo.setAct_ed_date(rs.getTimestamp("ACT_ED_DATE"));
-				act_vo.setDl_date(rs.getTimestamp("DL_DATE"));
-				act_vo.setFd_date(rs.getTimestamp("FD_DATE"));
+				act_vo.setAct_ed_date(timestampToDate(rs.getTimestamp("ACT_ED_DATE")));
+				act_vo.setDl_date(timestampToDate(rs.getTimestamp("DL_DATE")));
+				act_vo.setFd_date(timestampToDate(rs.getTimestamp("FD_DATE")));
+//				act_vo.setAct_op_date(rs.getTimestamp("ACT_OP_DATE"));
+//				act_vo.setAct_ed_date(rs.getTimestamp("ACT_ED_DATE"));
+//				act_vo.setDl_date(rs.getTimestamp("DL_DATE"));
+//				act_vo.setFd_date(rs.getTimestamp("FD_DATE"));
 				act_vo.setAct_add(rs.getString("ACT_ADD"));
 				act_vo.setAct_add_lat(rs.getString("ACT_ADD_LAT"));
 				act_vo.setAct_add_lon(rs.getString("ACT_ADD_LON"));
@@ -320,8 +331,8 @@ public class ActJDBCDAO implements ActDAO_interface{
 				act_vo.setAct_pic3(rs.getBytes("ACT_PIC3"));
 				act_vo.setAct_stat(rs.getString("ACT_STAT"));
 				act_vo.setRe_cont(rs.getString("RE_CONT"));
-//				act_vo.setReview_ed_date(rs.getDate("REVIEW_ED_DATE"));
-				act_vo.setReview_ed_date(rs.getTimestamp("REVIEW_ED_DATE"));
+				act_vo.setReview_ed_date(timestampToDate(rs.getTimestamp("REVIEW_ED_DATE")));
+//				act_vo.setReview_ed_date(rs.getTimestamp("REVIEW_ED_DATE"));
 				
 			}
 				
@@ -388,14 +399,14 @@ public class ActJDBCDAO implements ActDAO_interface{
 					act_vo.setMin_mem(rs.getInt("MIN_MEM"));
 					act_vo.setMax_mem(rs.getInt("MAX_MEM"));
 					act_vo.setMem_count(rs.getInt("MEM_COUNT"));
-//					act_vo.setAct_op_date(rs.getDate("ACT_OP_DATE"));
-//					act_vo.setAct_ed_date(rs.getDate("ACT_ED_DATE"));
-//					act_vo.setDl_date(rs.getDate("DL_DATE"));
-//					act_vo.setFd_date(rs.getDate("FD_DATE"));
-					act_vo.setAct_op_date(rs.getTimestamp("ACT_OP_DATE"));
-					act_vo.setAct_ed_date(rs.getTimestamp("ACT_ED_DATE"));
-					act_vo.setDl_date(rs.getTimestamp("DL_DATE"));
-					act_vo.setFd_date(rs.getTimestamp("FD_DATE"));
+					act_vo.setAct_op_date(timestampToDate(rs.getTimestamp("ACT_OP_DATE")));
+					act_vo.setAct_ed_date(timestampToDate(rs.getTimestamp("ACT_ED_DATE")));
+					act_vo.setDl_date(timestampToDate(rs.getTimestamp("DL_DATE")));
+					act_vo.setFd_date(timestampToDate(rs.getTimestamp("FD_DATE")));
+//					act_vo.setAct_op_date(rs.getTimestamp("ACT_OP_DATE"));
+//					act_vo.setAct_ed_date(rs.getTimestamp("ACT_ED_DATE"));
+//					act_vo.setDl_date(rs.getTimestamp("DL_DATE"));
+//					act_vo.setFd_date(rs.getTimestamp("FD_DATE"));
 					act_vo.setAct_add(rs.getString("ACT_ADD"));
 					act_vo.setAct_add_lat(rs.getString("ACT_ADD_LAT"));
 					act_vo.setAct_add_lon(rs.getString("ACT_ADD_LON"));
@@ -409,8 +420,8 @@ public class ActJDBCDAO implements ActDAO_interface{
 					act_vo.setAct_pic3(rs.getBytes("ACT_PIC3"));
 					act_vo.setAct_stat(rs.getString("ACT_STAT"));
 					act_vo.setRe_cont(rs.getString("RE_CONT"));
-//					act_vo.setReview_ed_date(rs.getDate("REVIEW_ED_DATE"));
-					act_vo.setReview_ed_date(rs.getTimestamp("REVIEW_ED_DATE"));
+					act_vo.setReview_ed_date(timestampToDate(rs.getTimestamp("REVIEW_ED_DATE")));
+//					act_vo.setReview_ed_date(rs.getTimestamp("REVIEW_ED_DATE"));
 					
 					list.add(act_vo);
 				}
@@ -666,14 +677,14 @@ public class ActJDBCDAO implements ActDAO_interface{
 					act_vo.setMin_mem(rs.getInt("MIN_MEM"));
 					act_vo.setMax_mem(rs.getInt("MAX_MEM"));
 					act_vo.setMem_count(rs.getInt("MEM_COUNT"));
-//					act_vo.setAct_op_date(rs.getDate("ACT_OP_DATE"));
-//					act_vo.setAct_ed_date(rs.getDate("ACT_ED_DATE"));
-//					act_vo.setDl_date(rs.getDate("DL_DATE"));
-//					act_vo.setFd_date(rs.getDate("FD_DATE"));
-					act_vo.setAct_op_date(rs.getTimestamp("ACT_OP_DATE"));
-					act_vo.setAct_ed_date(rs.getTimestamp("ACT_ED_DATE"));
-					act_vo.setDl_date(rs.getTimestamp("DL_DATE"));
-					act_vo.setFd_date(rs.getTimestamp("FD_DATE"));
+					act_vo.setAct_op_date(timestampToDate(rs.getTimestamp("ACT_OP_DATE")));
+					act_vo.setAct_ed_date(timestampToDate(rs.getTimestamp("ACT_ED_DATE")));
+					act_vo.setDl_date(timestampToDate(rs.getTimestamp("DL_DATE")));
+					act_vo.setFd_date(timestampToDate(rs.getTimestamp("FD_DATE")));
+//					act_vo.setAct_op_date(rs.getTimestamp("ACT_OP_DATE"));
+//					act_vo.setAct_ed_date(rs.getTimestamp("ACT_ED_DATE"));
+//					act_vo.setDl_date(rs.getTimestamp("DL_DATE"));
+//					act_vo.setFd_date(rs.getTimestamp("FD_DATE"));
 					act_vo.setAct_add(rs.getString("ACT_ADD"));
 					act_vo.setAct_add_lat(rs.getString("ACT_ADD_LAT"));
 					act_vo.setAct_add_lon(rs.getString("ACT_ADD_LON"));
@@ -687,8 +698,8 @@ public class ActJDBCDAO implements ActDAO_interface{
 					act_vo.setAct_pic3(rs.getBytes("ACT_PIC3"));
 					act_vo.setAct_stat(rs.getString("ACT_STAT"));
 					act_vo.setRe_cont(rs.getString("RE_CONT"));
-//					act_vo.setReview_ed_date(rs.getDate("REVIEW_ED_DATE"));
-					act_vo.setReview_ed_date(rs.getTimestamp("REVIEW_ED_DATE"));
+					act_vo.setReview_ed_date(timestampToDate(rs.getTimestamp("REVIEW_ED_DATE")));
+//					act_vo.setReview_ed_date(rs.getTimestamp("REVIEW_ED_DATE"));
 					
 					list.add(act_vo);
 				}
@@ -761,14 +772,14 @@ public class ActJDBCDAO implements ActDAO_interface{
 			act_vo.setMin_mem(rs.getInt("MIN_MEM"));
 			act_vo.setMax_mem(rs.getInt("MAX_MEM"));
 			act_vo.setMem_count(rs.getInt("MEM_COUNT"));
-//			act_vo.setAct_op_date(rs.getDate("ACT_OP_DATE"));
-//			act_vo.setAct_ed_date(rs.getDate("ACT_ED_DATE"));
-//			act_vo.setDl_date(rs.getDate("DL_DATE"));
-//			act_vo.setFd_date(rs.getDate("FD_DATE"));
-			act_vo.setAct_op_date(rs.getTimestamp("ACT_OP_DATE"));
-			act_vo.setAct_ed_date(rs.getTimestamp("ACT_ED_DATE"));
-			act_vo.setDl_date(rs.getTimestamp("DL_DATE"));
-			act_vo.setFd_date(rs.getTimestamp("FD_DATE"));
+			act_vo.setAct_op_date(timestampToDate(rs.getTimestamp("ACT_OP_DATE")));
+			act_vo.setAct_ed_date(timestampToDate(rs.getTimestamp("ACT_ED_DATE")));
+			act_vo.setDl_date(timestampToDate(rs.getTimestamp("DL_DATE")));
+			act_vo.setFd_date(timestampToDate(rs.getTimestamp("FD_DATE")));
+//			act_vo.setAct_op_date(rs.getTimestamp("ACT_OP_DATE"));
+//			act_vo.setAct_ed_date(rs.getTimestamp("ACT_ED_DATE"));
+//			act_vo.setDl_date(rs.getTimestamp("DL_DATE"));
+//			act_vo.setFd_date(rs.getTimestamp("FD_DATE"));
 			act_vo.setAct_add(rs.getString("ACT_ADD"));
 			act_vo.setAct_add_lat(rs.getString("ACT_ADD_LAT"));
 			act_vo.setAct_add_lon(rs.getString("ACT_ADD_LON"));
@@ -782,8 +793,8 @@ public class ActJDBCDAO implements ActDAO_interface{
 			act_vo.setAct_pic3(rs.getBytes("ACT_PIC3"));
 			act_vo.setAct_stat(rs.getString("ACT_STAT"));
 			act_vo.setRe_cont(rs.getString("RE_CONT"));
-//			act_vo.setReview_ed_date(rs.getDate("REVIEW_ED_DATE"));
-			act_vo.setReview_ed_date(rs.getTimestamp("REVIEW_ED_DATE"));
+			act_vo.setReview_ed_date(timestampToDate(rs.getTimestamp("REVIEW_ED_DATE")));
+//			act_vo.setReview_ed_date(rs.getTimestamp("REVIEW_ED_DATE"));
 			
 			list.add(act_vo);
 		}
@@ -830,37 +841,43 @@ public class ActJDBCDAO implements ActDAO_interface{
 		// TODO Auto-generated method stub
 ActJDBCDAO dao=new ActJDBCDAO();
 
-ActVO act_vo1=new ActVO();
-	act_vo1.setMem_ac("camacoffee");
-	act_vo1.setOrg_cont("我xxact_op_date test主辦人~~baba0924cc");
-	act_vo1.setAct_name("我是活動baba0924gg");
-	act_vo1.setMin_mem(6);
-	act_vo1.setMax_mem(10);
-	act_vo1.setMem_count(5);
-//	act_vo1.setAct_op_date(java.sql.Date.valueOf("2017-09-09"));
-//	act_vo1.setAct_ed_date(java.sql.Date.valueOf("2017-09-15"));
-//	act_vo1.setDl_date(java.sql.Date.valueOf("2017-09-05"));
-//	act_vo1.setFd_date(java.sql.Date.valueOf("2017-09-02"));
-	act_vo1.setAct_op_date(java.sql.Timestamp.valueOf("2017-10-24 05:09:32"));
-	act_vo1.setAct_ed_date(java.sql.Timestamp.valueOf("2017-10-24 15:00:00"));
-	act_vo1.setDl_date(java.sql.Timestamp.valueOf("2017-09-24 22:00:00"));
-	act_vo1.setFd_date(java.sql.Timestamp.valueOf("2017-09-02 13:30:00"));
-	act_vo1.setAct_add("高雄市82區152巷");
-	act_vo1.setAct_add_lat("121.550537");
-	act_vo1.setAct_add_lon("25.032904");
-	act_vo1.setAct_cont("bababa~~");
-	act_vo1.setAct_tag("隨便啦~");
-	act_vo1.setAct_fee(0);
-	act_vo1.setPay_way("不需繳費");
-	byte[ ]pic1=getByteArray("C:\\Users\\Java\\Desktop\\專題照片\\act.jpg");
-	act_vo1.setAct_pic1(pic1);
-	act_vo1.setAct_pic2(null);
-	act_vo1.setAct_pic3(null);
-	act_vo1.setAct_stat("已審核");
-	act_vo1.setRe_cont(null);
-//	act_vo1.setReview_ed_date(java.sql.Date.valueOf("2017-09-01"));
-	act_vo1.setReview_ed_date(java.sql.Timestamp.valueOf("2017-09-01 15:00:00"));
-	dao.insert(act_vo1);
+//ActVO act_vo1=new ActVO();
+//	act_vo1.setMem_ac("camacoffee");
+//	act_vo1.setOrg_cont("arthur我xxact_op_date test主辦人~~baba0925cc");
+//	act_vo1.setAct_name("arthur我是活動baba0925555ggkk");
+//	act_vo1.setMin_mem(6);
+//	act_vo1.setMax_mem(10);
+//	act_vo1.setMem_count(5);
+//	java.sql.Date  op_date=timestampToDate(java.sql.Timestamp.valueOf("2017-09-09 18:45:30"));
+//	act_vo1.setAct_op_date(op_date);
+//	java.sql.Date  ed_date=timestampToDate(java.sql.Timestamp.valueOf("2017-09-09 18:00:00"));
+//	act_vo1.setAct_ed_date(ed_date);
+//	java.sql.Date  dl_date=timestampToDate(java.sql.Timestamp.valueOf("2017-09-05 12:00:00"));
+//	act_vo1.setDl_date(dl_date);
+//	java.sql.Date  fd_date=timestampToDate(java.sql.Timestamp.valueOf("2017-09-02 16:00:00"));
+//	act_vo1.setFd_date(fd_date);
+////	act_vo1.setAct_op_date(java.sql.Timestamp.valueOf("2017-10-24 05:09:32"));
+////	act_vo1.setAct_ed_date(java.sql.Timestamp.valueOf("2017-10-24 15:00:00"));
+////	act_vo1.setDl_date(java.sql.Timestamp.valueOf("2017-09-24 22:00:00"));
+////	act_vo1.setFd_date(java.sql.Timestamp.valueOf("2017-09-02 13:30:00"));
+//	act_vo1.setAct_add("高雄市82區152巷");
+//	act_vo1.setAct_add_lat("121.550537");
+//	act_vo1.setAct_add_lon("25.032904");
+//	act_vo1.setAct_cont("bababa~~");
+//	act_vo1.setAct_tag("隨便啦~");
+//	act_vo1.setAct_fee(0);
+//	act_vo1.setPay_way("不需繳費");
+//	byte[ ]pic1=getByteArray("C:\\Users\\Java\\Desktop\\專題照片\\act.jpg");
+//	act_vo1.setAct_pic1(pic1);
+//	act_vo1.setAct_pic2(null);
+//	act_vo1.setAct_pic3(null);
+//	act_vo1.setAct_stat("已審核");
+//	act_vo1.setRe_cont(null);
+//	Date test_timestamp=  java.sql.Timestamp.valueOf("2017-09-01 15:00:00");
+//	java.sql.Date test_date=new java.sql.Date(test_timestamp.getTime());
+//	act_vo1.setReview_ed_date(  test_date);
+////	act_vo1.setReview_ed_date(java.sql.Timestamp.valueOf("2017-09-01 15:00:00"));
+//	dao.insert(act_vo1);
 	
 //	ActVO act_vo2=new ActVO();
 //	act_vo2.setMem_ac("flowerGood");
@@ -873,10 +890,10 @@ ActVO act_vo1=new ActVO();
 ////	act_vo2.setAct_ed_date(java.sql.Date.valueOf("2017-09-09"));
 ////	act_vo2.setDl_date(java.sql.Date.valueOf("2017-09-02"));
 ////	act_vo2.setFd_date(java.sql.Date.valueOf("2017-09-01"));
-//	act_vo2.setAct_op_date(java.sql.Timestamp.valueOf("2017-09-07 12:00:00"));
-//	act_vo2.setAct_ed_date(java.sql.Timestamp.valueOf("2017-09-09 14:00:00"));
-//	act_vo2.setDl_date(java.sql.Timestamp.valueOf("2017-09-02 13:00:00"));
-//	act_vo2.setFd_date(java.sql.Timestamp.valueOf("2017-09-01 16:00:00"));
+//	act_vo2.setAct_op_date(timestampToDate(java.sql.Timestamp.valueOf("2017-09-07 12:00:00")));
+//	act_vo2.setAct_ed_date(timestampToDate(java.sql.Timestamp.valueOf("2017-09-09 14:00:00")));
+//	act_vo2.setDl_date(timestampToDate(java.sql.Timestamp.valueOf("2017-09-02 13:00:00")));
+//	act_vo2.setFd_date(timestampToDate(java.sql.Timestamp.valueOf("2017-09-01 16:00:00")));
 //	act_vo2.setAct_add("桃園市");
 //	act_vo2.setAct_add_lat("121.550537");
 //	act_vo2.setAct_add_lon("25.032904");
@@ -891,20 +908,21 @@ ActVO act_vo1=new ActVO();
 //	act_vo2.setAct_stat("已審核");
 //	act_vo2.setRe_cont(null);
 ////	act_vo2.setReview_ed_date(java.sql.Date.valueOf("2017-09-01"));
-//	act_vo2.setReview_ed_date(java.sql.Timestamp.valueOf("2017-09-01 16:00:00"));
-//	act_vo2.setAct_no("A1000000012");
+//	act_vo2.setReview_ed_date(timestampToDate(java.sql.Timestamp.valueOf("2017-09-01 16:00:00")));
+//	act_vo2.setAct_no("A1000000005");
 //	dao.update(act_vo2);
 	
-//	dao.delete("A1000000028");
+//	dao.delete("A1000000037");
 	
-//ActVO act_vo3=dao.findByPrimaryKey("A1000000005");
+//ActVO act_vo3=dao.findByPrimaryKey("A1000000036");
 //System.out.print(act_vo3.getMem_ac());
 //System.out.print(act_vo3.getOrg_cont());
+//System.out.println(new java.sql.Timestamp(act_vo3.getAct_op_date().getTime()));
 
 //	List<ActVO>list=dao.getAll();
 //	for(ActVO act_vo4:list){
 //		System.out.print(act_vo4.getMem_ac()+",");
-//		System.out.print(act_vo4.getOrg_cont()+",");
+//		System.out.print(dateToTimestamp(act_vo4.getAct_op_date())+",");
 //		System.out.println();
 //		
 //	}
@@ -954,7 +972,7 @@ ActVO act_vo1=new ActVO();
 //	}
 	
 	
-//List<ActVO>list=dao.getSort("");
+//List<ActVO>list=dao.getSort("act_op_date");
 //for(ActVO act_vo6:list){
 //System.out.print(act_vo6.getAct_op_date()+",");
 //System.out.print(act_vo6.getAct_add()+",");
@@ -976,9 +994,18 @@ ActVO act_vo1=new ActVO();
 		return baos.toByteArray();
 	}
 
-	
+	public static java.sql.Date timestampToDate(java.sql.Timestamp timestamp){
+		Date test_timestamp=timestamp;
+		java.sql.Date test_date=new java.sql.Date(test_timestamp.getTime());
+		return test_date;
+	}
 
-	
+	public static java.sql.Timestamp dateToTimestamp(java.sql.Date date){
+		
+		java.sql.Timestamp timestamp = new java.sql.Timestamp(date.getTime());
+		return timestamp;
+		
+	}
 
 	
 	

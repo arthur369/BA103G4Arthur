@@ -6,9 +6,11 @@ import java.io.IOException;
 import java.io.InputStream;
 import java.io.PrintWriter;
 import java.io.UnsupportedEncodingException;
+import java.util.Date;
 import java.util.LinkedList;
 import java.util.List;
 import java.util.Map;
+import java.util.Set;
 
 import javax.servlet.RequestDispatcher;
 import javax.servlet.ServletException;
@@ -20,6 +22,8 @@ import javax.servlet.http.HttpSession;
 
 import com.act.model.ActService;
 import com.act.model.ActVO;
+import com.act_comm.model.Act_commService;
+import com.act_comm.model.Act_commVO;
 import com.convert_gift.model.Convert_giftService;
 import com.convert_gift.model.Convert_giftVO;
 import com.gift_data.model.Gift_dataJDBCDAO;
@@ -27,6 +31,8 @@ import com.gift_data.model.Gift_dataJNDIDAO;
 import com.gift_data.model.Gift_dataService;
 import com.gift_data.model.Gift_dataVO;
 import com.google.gson.Gson;
+import com.mem.model.MemService;
+import com.mem.model.MemVO;
 
 import org.apache.tomcat.util.http.fileupload.IOUtils;
 import org.json.JSONArray;
@@ -44,6 +50,112 @@ public class Act_managementServlet extends HttpServlet{
 		req.setCharacterEncoding("UTF-8");
 		
 		String action = req.getParameter("action");
+		
+		if("start_act_to_pg2".equals(action)){
+			List<String> errorMsgs = new LinkedList<String>();
+			  req.setAttribute("errorMsgs", errorMsgs);
+			try{
+				String act_name= req.getParameter("act_name");
+				if(act_name.length()==0){
+					  errorMsgs.add("請輸入活動名稱");
+				}
+				String act_add=req.getParameter("act_add");
+				if(act_add.length()==0){
+					errorMsgs.add("請輸入活動地點");
+				}
+				
+				Integer act_fee=null;
+				try{
+				 act_fee=new Integer(req.getParameter("act_fee"));
+				}catch(NumberFormatException e){
+					act_fee=0;
+					errorMsgs.add("價格請填數字");
+				}
+			String act_tag=req.getParameter("act_tag");
+			if(act_tag.length()==0){
+				errorMsgs.add("請輸入活動標籤");
+			}
+		Integer min_mem=null;
+		try{
+			min_mem=new Integer(req.getParameter("min_mem"));
+		}catch(NumberFormatException e){
+			min_mem=0;
+			errorMsgs.add("最低參加人數請填數字");
+		}
+			if(min_mem==0){
+				errorMsgs.add("請輸入最低參加人數");
+			}
+		Integer max_mem=null;
+		try{
+			max_mem=new Integer(req.getParameter("max_mem"));
+		}catch(NumberFormatException e){
+			max_mem=0;
+			errorMsgs.add("最高參加人數請填數字");
+		}	
+		if(max_mem==0){
+			errorMsgs.add("請輸入最高參加人數");
+		}
+		if(min_mem>max_mem || min_mem==max_mem){
+			errorMsgs.add("最高人數須大於最低人數");
+		}
+		
+		
+		java.sql.Timestamp timestamp_dl_date;
+		java.sql.Date dl_date;
+		try{		
+			timestamp_dl_date=java.sql.Timestamp.valueOf(req.getParameter("dl_date"));
+			dl_date=timestampToDate(timestamp_dl_date);
+		}catch(IllegalArgumentException e){
+			timestamp_dl_date=new java.sql.Timestamp(System.currentTimeMillis());
+			dl_date=timestampToDate(timestamp_dl_date);
+			errorMsgs.add("請輸入截止日期!");
+		}
+		
+		String pay_way=req.getParameter("pay_way");
+		if(pay_way==null){
+			errorMsgs.add("請選擇繳費方式");
+		}
+		
+		ActVO act_vo=new ActVO();
+		act_vo.setAct_name(act_name);
+		act_vo.setAct_add(act_add);
+		act_vo.setAct_fee(act_fee);
+		act_vo.setAct_tag(act_tag);
+		act_vo.setMin_mem(min_mem);
+		act_vo.setMax_mem(max_mem);
+		act_vo.setDl_date(dl_date);
+		act_vo.setPay_way(pay_way);
+		HttpSession session=req.getSession();
+		System.out.println(dateToTimestamp(dl_date));	
+		session.setAttribute("dl_date",dateToTimestamp(dl_date));
+		session.setAttribute("act_vo",act_vo);
+		if (!errorMsgs.isEmpty()) {
+		
+			String url=req.getParameter("start_act.jsp");
+			RequestDispatcher failureView = req
+					.getRequestDispatcher(url);
+			failureView.forward(req, res);
+			return;
+		}
+		
+		String url="/FrontEnd/act/start_act2.jsp";
+		RequestDispatcher successView=req.getRequestDispatcher(url);
+		successView.forward(req, res);
+		
+			}catch(Exception e){
+				String url=req.getParameter("start_act.jsp");
+				errorMsgs.add(e.getMessage());
+				errorMsgs.add("系統錯誤");
+				RequestDispatcher failureView = req
+						.getRequestDispatcher(url);
+				failureView.forward(req, res);
+			}
+			
+			
+			
+		}
+		
+		
 		
 		if("sort".equals(action)){
 			String url=req.getParameter("act.jsp");
@@ -91,7 +203,7 @@ public class Act_managementServlet extends HttpServlet{
 			ActService actSvc=new ActService();
 			List<ActVO> list=actSvc.getAll(map);
 			HttpSession session=req.getSession();
-			System.out.println("set to session");
+		
 			session.setAttribute("add_date_query", list);
 			
 			RequestDispatcher successView = req.getRequestDispatcher(url); // 成功轉交listEmps_ByCompositeQuery.jsp
@@ -108,10 +220,25 @@ public class Act_managementServlet extends HttpServlet{
 		if ("goto_act_detail".equals(action)) {
 			try{
 		String act_no=req.getParameter("act_no");
+		System.out.println("act_no= "+act_no);
 		ActService actSvc=new ActService();
 		ActVO act_vo= actSvc.getOneAct(act_no);
+		String mem_ac=act_vo.getMem_ac();
+		System.out.println("mem_ac= "+mem_ac);
+		MemService memSvc=new MemService();
+		System.out.println("track1");
+		MemVO mem_vo= memSvc.getOneProd(mem_ac);
+	
+		Set<Act_commVO> act_comm_set= actSvc.getAct_commByAct_no(act_no);
+		
+		
+		
+		System.out.println("mem_vo.getMem_email()= "+mem_vo.getMem_email());
+		
 		HttpSession session=req.getSession();
+		session.setAttribute("mem_vo",mem_vo);
 		session.setAttribute("act_vo", act_vo);
+		session.setAttribute("act_comm_set", act_comm_set);
 		String url="/FrontEnd/act/act_detail.jsp";
 		System.out.println(url);
 		RequestDispatcher dispatcher=req.getRequestDispatcher(url);
@@ -119,6 +246,7 @@ public class Act_managementServlet extends HttpServlet{
 		
 		
 			}catch(Exception e){
+				System.out.println("gotoDetail error");
 				String url=req.getParameter("act.jsp");
 				RequestDispatcher dispatcher=req.getRequestDispatcher(url);
 				dispatcher.forward(req, res);
@@ -494,7 +622,18 @@ public class Act_managementServlet extends HttpServlet{
 		
 	}
 	
-	
+	public static java.sql.Date timestampToDate(java.sql.Timestamp timestamp){
+		Date test_timestamp=timestamp;
+		java.sql.Date test_date=new java.sql.Date(test_timestamp.getTime());
+		return test_date;
+	}
+
+	public static java.sql.Timestamp dateToTimestamp(java.sql.Date date){
+		
+		java.sql.Timestamp timestamp = new java.sql.Timestamp(date.getTime());
+		return timestamp;
+		
+	}
 	
 	
 	

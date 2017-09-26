@@ -95,10 +95,32 @@ margin-left: 0;
 
 .set_action{
 margin-left:30px;
+padding: 10px 20px;
+cursor: pointer;
+}
+
+.set_action:hover{
+text-decoration: none;
+
 }
 .actionbar{
 right: 0%
 
+}
+
+.card .detail .info {
+  display: inline-block;
+  position: absolute;
+  right: 2%;
+  padding: 10px 25px;
+  text-decoration: none;
+  color: #C8B6A1;
+  font-weight: 900;
+  background-color: #6F5C60;
+ 
+  margin-bottom: 30px;
+  transition: 0.5s;
+  cursor: pointer;
 }
 
 </style>
@@ -178,7 +200,7 @@ pageContext.setAttribute("mylist",list);
            
   <span class="fa fa-search"></span>
     </div>
-    <button class="btn-success  set_action">發起活動</button>
+    <a  href="<%=request.getContextPath() %>/FrontEnd/act/start_act.jsp" class="btn-success  set_action">發起活動</a>
     <div class="button">
       <button class="btn-primary">達人教學</button>
       <button class="btn-primary">咖啡課程</button>
