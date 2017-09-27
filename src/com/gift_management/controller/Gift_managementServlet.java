@@ -167,7 +167,7 @@ public class Gift_managementServlet extends HttpServlet{
 //				 buffer.flush();
 				 
 				  InputStream  is= req.getPart("GIFT_IMG").getInputStream(); 
-				
+			
 				  byte[] 	gift_img=null;
 				  if(!req.getPart("GIFT_IMG").getContentType().contains("image")){   //判斷是否有上傳照片
 					 

@@ -118,7 +118,7 @@ right: 0%
   font-weight: 900;
   background-color: #6F5C60;
  
-  margin-bottom: 30px;
+  bottom: 30px;
   transition: 0.5s;
   cursor: pointer;
 }
@@ -181,7 +181,7 @@ pageContext.setAttribute("mylist",list);
     <div class="form-group">
                 <label for="dtp_input1" class="col-md-2 control-label">開始時間</label>
                 <div class="input-group date form_datetime col-md-5" data-date="" data-date-format="yyyy-mm-dd HH:ii:ss" data-link-field="dtp_input1">
-                    <input class="form-control  test" size="16" type="text"  name="act_op_date"    value=""  ">
+                    <input class="form-control  test  myop_date" size="16" type="text"  name="act_op_date"    value=""  ">
                     <span class="input-group-addon"><span class="glyphicon glyphicon-remove"></span></span>
 					<span class="input-group-addon"><span class="glyphicon glyphicon-th"></span></span>
                 </div>
@@ -189,7 +189,7 @@ pageContext.setAttribute("mylist",list);
           
                 <label for="dtp_input1" class="col-md-2 control-label">結束時間</label>
                 <div class="input-group date form_datetime col-md-5" data-date="" data-date-format="yyyy-mm-dd HH:ii:ss" data-link-field="dtp_input1">
-                    <input class="form-control  test" size="16" type="text"  name="act_ed_date"    value="" >
+                    <input class="form-control  test  myed_date" size="16" type="text"  name="act_ed_date"    value="" >
                     <div class="input-group-addon "><span class="glyphicon glyphicon-remove"></span></div>
 					<span class="input-group-addon"><span class="glyphicon glyphicon-th"></span></span>
                 </div>
@@ -383,9 +383,18 @@ for(var i=0;i<$(".act_op_date").length;i++){
 	$(".act_op_date").eq(i).text(op_date);
 }
 	
+<%-- 修正日曆會選取到秒數 強制將秒數設成0 --%>
+$(".myop_date").change(function(){
+var myop_date=$(".myop_date").val();
+new_time=  myop_date.substring(0,17)+"00";
+$(".myop_date").val(new_time);
+})
 
-
-
+$(".myed_date").change(function(){
+var myed_date=$(".myed_date").val();
+new_time=  myed_date.substring(0,17)+"00";
+$(".myed_date").val(new_time);
+})
 
 </script>
   

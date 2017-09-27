@@ -88,6 +88,11 @@ transform: translate(-100%,0);
 	</font>
 </c:if>
 <form method="post"  action="<%=request.getContextPath() %>/act_management/act_managementServlet">
+<input type="hidden"  name="act_add_lat"   class="act_add_lat">
+<input type="hidden"  name="act_add_lon"   class="act_add_lon">
+<input type="hidden"  name="mem_ac"   value="${(mem_ac==null)? "mamabeak":mem_ac}">
+
+
 <input type="hidden"  name="action"  value="start_act_to_pg2">
 <input type="hidden" name="start_act.jsp"  value=<%=request.getServletPath() %> >
 <div class="container">
@@ -102,7 +107,7 @@ transform: translate(-100%,0);
         
         <div class="address">
           <h2>活動地點:</h2>
-          <input type="text"   name="act_add"  value="${(act_vo==null)?"":act_vo.act_add }"/>
+          <input type="text"   class="act_add"  name="act_add"  value="${(act_vo==null)?"":act_vo.act_add }"/>
         </div>
          <div class="price"  >
           <h2>活動費用: NT</h2>
@@ -170,7 +175,7 @@ transform: translate(-100%,0);
 </div>
 
 <div class="next">
-  <button class="btn-success btn-lg"  type="submit">下一步</button>
+  <button class="btn-success btn-lg  next_step"  type="button">下一步</button>
  
 </div>
  </form>
@@ -180,9 +185,25 @@ transform: translate(-100%,0);
 <%--date picker專用js --%> 
      <script type="text/javascript"  src="<%=request.getContextPath()%>/BackEnd/res/js/bootstrap-datetimepicker.js"></script> 
  <script type="text/javascript"  src="<%=request.getContextPath()%>/BackEnd/res/js/bootstrap-datetimepicker.fr.js"></script>
-
+<%--google map 地圖 --%>
+ <script async defer
+    src="https://maps.googleapis.com/maps/api/js?key=AIzaSyDZqbxURS33Q5XimlMq6it_KanwhInsh0Q">
+    </script>
 
 <script>
+
+<%-- 修正日曆會選取到秒數 強制將秒數設成0 --%>
+$(".test").change(function(){
+var de=$(".test").val();
+new_time=  de.substring(0,17)+"00";
+$(".test").val(new_time);
+})
+<%-- 修正日期會跑出秒數以下的部分 --%>
+ var dl_date= $(".test").val().substring(0,19);
+ $(".test").val(dl_date);
+
+
+
  // 數字的+、-按鈕控制
 			$(document).on('click', '.number-spinner button', function () {    
 	var btn = $(this),
@@ -224,7 +245,54 @@ transform: translate(-100%,0);
 	 
 	 
  }
-			
+	
+ <%--由地圖查經緯度--%>
+
+ function getLatLngByAddr($address) {
+ 	var geocoder = new google.maps.Geocoder(); //定義一個Geocoder物件
+ 	geocoder.geocode({
+ 		address : $address
+ 	}, //設定地址的字串
+ 	function(results, status) { //callback function
+ 		if (status == google.maps.GeocoderStatus.OK) { //判斷狀態
+ 			$lat = results[0].geometry.location.lat();
+ 			var lat = $lat;
+ 			var  lat1 = lat.toFixed(12);
+ 			$(".act_add_lat").val(lat1);
+ 			$lng = results[0].geometry.location.lng();
+ 			var lng = $lng;
+ 			var  lng1 = lng.toFixed(12);
+ 			$(".act_add_lon").val(lng1);
+
+ 		}
+ 	});
+ }
+ function compute(){
+	 getLatLngByAddr($(".act_add").val());
+ }
+ 
+ 
+$(".next_step").click(function(){
+	compute();
+	 $(this).parent().parent().submit();
+})
+
+$(".next_step").mouseenter(function(){
+	compute();
+	
+})
+
+
+<%-- --%>
+ $(".act_add").change(function(){
+	
+	 getLatLngByAddr($(".act_add").val());
+	 
+	 
+	 
+ })
+ 
+ 
 
  
 			</script>

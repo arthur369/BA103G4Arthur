@@ -31,6 +31,16 @@ cursor: pointer;
 .previous:hover{
 text-decoration: none;
 }
+.memory{
+width: 150px;
+height: 100px;
+}
+.myerror{
+position: relative;
+left: 45%;
+
+
+}
 </style>
 
 
@@ -50,13 +60,25 @@ text-decoration: none;
     <h2>3</h2>
   </div>
 </div>
-
-<form  method="post"  action="<%=request.getContextPath() %>/act_management/act_managementServlet">
+<% ActVO act_vo=(ActVO) session.getAttribute("act_vo");  %>
+<form  method="post"  action="<%=request.getContextPath() %>/act_management/act_managementServlet" enctype="multipart/form-data">
 <input type="hidden" name="start_act2.jsp" value="<%=request.getServletPath() %>">
 <input type="hidden"  name="action" value="start_act_to_pg3">
 
 
 <h1 class="title">填寫活動資訊</h1>
+<c:if test="${not empty errorMsgs}">
+	<font color='red'  class="myerror" >請修正以下錯誤:
+	<ul>
+		<c:forEach var="message" items="${errorMsgs} ">
+			<li>${message}</li>
+		</c:forEach>
+	</ul>
+	</font>
+</c:if>
+
+
+
 <div class="container">
   <div class="col-md-12">
  
@@ -67,7 +89,21 @@ text-decoration: none;
   					  <input type="file" id="myfiles"    name="act_pic1"  value="">
  					 	<output id="mylist">
  					 	
- 					 	<img src="">
+ 					 <%-- 如果上架失敗，將之前上傳的那一張用base64編碼後秀出來預覽，讓使用者不用重新上傳 --%>
+ 					 	
+ 					 	<% 
+ 					 	String act_pic1="";
+  						  if(act_vo!=null){
+ 					 	byte[] data=act_vo.getAct_pic1();
+  						StringBuilder sb = new StringBuilder();
+  						sb.append("data:image/png;base64,");
+  						sb.append(com.sun.org.apache.xerces.internal.impl.dv.util.Base64.encode(data));
+  						act_pic1 = sb.toString();
+  						}else{
+  							act_pic1="";
+  						}
+ 						%>	
+ 					 	<img class="memory"  src="<%=act_pic1 %>">
  					 	</output>
   						</div>
   						 <div class="form-group">
@@ -75,7 +111,21 @@ text-decoration: none;
   					  <input type="file" id="myfiles2"  name="act_pic2"  value="">
  					 	<output id="mylist2">
  					 	
- 					 	<img src="">
+ 					 	<%-- 如果上架失敗，將之前上傳的那一張用base64編碼後秀出來預覽，讓使用者不用重新上傳 --%>
+ 					 	
+ 					 	<% 
+ 					 	String act_pic2="";
+  						  if(act_vo!=null){
+ 					 	byte[] data=act_vo.getAct_pic2();
+  						StringBuilder sb = new StringBuilder();
+  						sb.append("data:image/png;base64,");
+  						sb.append(com.sun.org.apache.xerces.internal.impl.dv.util.Base64.encode(data));
+  						act_pic2 = sb.toString();
+  						}else{
+  							act_pic2="";
+  						}
+ 						%>	
+ 					 	<img  class="memory" src="<%=act_pic2 %>">
  					 	</output>
   						</div>
   						 <div class="form-group">
@@ -83,7 +133,21 @@ text-decoration: none;
   					  <input type="file" id="myfiles3"  name="act_pic3"  value="">
  					 	<output id="mylist3">
  					 	
- 					 	<img src="">
+ 					 	<%-- 如果上架失敗，將之前上傳的那一張用base64編碼後秀出來預覽，讓使用者不用重新上傳 --%>
+ 					 	
+ 					 	<% 
+ 					 	String act_pic3="";
+  						  if(act_vo!=null){
+ 					 	byte[] data=act_vo.getAct_pic3();
+  						StringBuilder sb = new StringBuilder();
+  						sb.append("data:image/png;base64,");
+  						sb.append(com.sun.org.apache.xerces.internal.impl.dv.util.Base64.encode(data));
+  						act_pic3 = sb.toString();
+  						}else{
+  							act_pic3="";
+  						}
+ 						%>	
+ 					 	<img  class="memory" src="<%=act_pic3 %>">
  					 	</output>
   						</div>
   						
@@ -91,7 +155,7 @@ text-decoration: none;
     <div class="form-group">
                 <label for="dtp_input1" class="col-md-2 control-label  ">活動開始時間</label>
                 <div class="input-group date form_datetime col-md-5" data-date="" data-date-format="yyyy-mm-dd HH:ii:ss" data-link-field="dtp_input1">
-                    <input class="form-control  test" size="16" type="text"  name="act_op_date"    value=""  ">
+                    <input class="form-control  test act_op_date" size="16" type="text"  name="act_op_date"    value="${(act_vo==null)?"":act_op_date }">
                     <span class="input-group-addon"><span class="glyphicon glyphicon-remove"></span></span>
 					<span class="input-group-addon"><span class="glyphicon glyphicon-th"></span></span>
                 </div>
@@ -99,7 +163,7 @@ text-decoration: none;
           
                 <label for="dtp_input1" class="col-md-2 control-label ">活動結束時間</label>
                 <div class="input-group date form_datetime col-md-5" data-date="" data-date-format="yyyy-mm-dd HH:ii:ss" data-link-field="dtp_input1">
-                    <input class="form-control  test" size="16" type="text"  name="act_ed_date"    value="" >
+                    <input class="form-control  test act_ed_date" size="16" type="text"  name="act_ed_date"    value="${(act_vo==null)?"":act_ed_date }" >
                     <div class="input-group-addon "><span class="glyphicon glyphicon-remove"></span></div>
 					<span class="input-group-addon"><span class="glyphicon glyphicon-th"></span></span>
                 </div>
@@ -107,11 +171,11 @@ text-decoration: none;
             </div>  
             <div class="host">
           <h2>主辦單位簡介</h2>
-          <textarea class="form-control host_cont" rows="2" cols="20" wrap="hard" placeholder="留言"   name="org_cont"></textarea>
+          <textarea class="form-control host_cont" rows="2" cols="20" wrap="hard" placeholder="介紹一下你自己吧~"   name="org_cont">${(act_vo==null)?"":act_vo.org_cont }</textarea>
         </div>
     <div class="introduce">
           <h2>活動介紹:</h2>
-          <textarea class="form-control  introduct" rows="2" cols="20" wrap="hard" placeholder="留言"  name="act_cont"></textarea>
+          <textarea class="form-control  introduct" rows="2" cols="20" wrap="hard" placeholder="說明一下這個精彩絕倫的活動~"  name="act_cont">${(act_vo==null)?"":act_vo.act_cont }</textarea>
         </div>
     
     
@@ -131,6 +195,37 @@ text-decoration: none;
  <script type="text/javascript"  src="<%=request.getContextPath()%>/BackEnd/res/js/bootstrap-datetimepicker.fr.js"></script>
  
  <script>
+ for(var i=0;i<$(".memory").length;i++){
+	 if($(".memory").eq(i).attr("src")=="data:image/png;base64,null"){
+		 $(".memory").eq(i).css("display","none");
+	 }
+ }
+ 
+ 
+ 
+ <%-- 修正日曆會選取到秒數 強制將秒數設成0 --%>
+ $(".act_op_date").change(function(){
+ var de=$(".act_op_date").val();
+ new_time=  de.substring(0,17)+"00";
+ $(".act_op_date").val(new_time);
+ })
+ 
+ <%-- 修正日期會跑出秒數以下的部分 --%>
+ var act_op_date= $(".act_op_date").val().substring(0,19);
+ $(".act_op_date").val(act_op_date);
+ 
+ <%-- 修正日曆會選取到秒數 強制將秒數設成0 --%>
+ $(".act_ed_date").change(function(){
+ var de=$(".act_ed_date").val();
+ new_time=  de.substring(0,17)+"00";
+ $(".act_ed_date").val(new_time);
+ })
+ 
+ <%-- 修正日期會跑出秒數以下的部分 --%>
+ var act_ed_date= $(".act_ed_date").val().substring(0,19);
+ $(".act_ed_date").val(act_ed_date);
+ 
+ 
  <%--Date picker--%>
  $('.form_datetime').datetimepicker({
      //language:  'fr',

@@ -51,6 +51,327 @@ public class Act_managementServlet extends HttpServlet{
 		
 		String action = req.getParameter("action");
 		
+		if("response_comm".equals(action)){
+			System.out.println("track1");
+			try{
+				String comm_reply_cont=req.getParameter("comm_reply_cont");
+				System.out.println("comm_reply_cont= "+comm_reply_cont);
+				System.out.println("track2");
+				String comm_no=req.getParameter("comm_no");
+				System.out.println("comm_no= "+comm_no);
+				System.out.println("track3");
+				Act_commService act_commSvc=new Act_commService();
+				java.sql.Date comm_reply_date=new java.sql.Date(new Date().getTime());
+				System.out.println("track4");
+				act_commSvc.update_response(comm_reply_cont,comm_reply_date,comm_no);
+				System.out.println("track5");
+				String url=req.getParameter("act_detail.jsp");
+				RequestDispatcher successView=req.getRequestDispatcher(url);
+				successView.forward(req, res);
+				
+			}catch(Exception e){
+				System.out.println("track error");
+				String url=req.getParameter("act_detail.jsp");
+				RequestDispatcher failureView=req.getRequestDispatcher(url);
+				failureView.forward(req, res);
+			}
+			
+			
+			
+		}
+		
+		
+		
+		
+		
+		
+		
+		if("insert_comm".equals(action)){
+			System.out.println("track 1");
+			HttpSession session=req.getSession();
+			List<String> errorMsgs = new LinkedList<String>();
+			  req.setAttribute("errorMsgs", errorMsgs);
+			try{
+				System.out.println("track 2");
+				String comm_cont=req.getParameter("comm_cont");
+				System.out.println("comm_cont= "+comm_cont);
+				if(comm_cont.length()==0){
+					  errorMsgs.add("請輸入留言");
+				}
+				System.out.println("track 3");
+				if (!errorMsgs.isEmpty()) {
+					
+					String url=req.getParameter("act_detail.jsp");
+					RequestDispatcher failureView = req
+							.getRequestDispatcher(url);
+					failureView.forward(req, res);
+					return;
+				}
+				
+				System.out.println("track 4");
+				String act_no=req.getParameter("act_no");
+				System.out.println("track 5");
+				String mem_ac=req.getParameter("mem_ac");
+				System.out.println("track 6");
+				java.sql.Date comm_date=new java.sql.Date(new Date().getTime());
+				System.out.println("track 7");
+				Act_commService act_commSvc=new Act_commService();
+				act_commSvc.addAct_comm(act_no,mem_ac,comm_cont,comm_date,null,null);
+				System.out.println("track 8");
+				String url=req.getParameter("act_detail.jsp");
+				RequestDispatcher successView = req
+						.getRequestDispatcher(url);
+				successView.forward(req, res);
+				
+				
+				
+			}catch(Exception e){
+				String url=req.getParameter("act_detail.jsp");
+				RequestDispatcher failureView = req
+						.getRequestDispatcher(url);
+				failureView.forward(req, res);
+				return;
+			}
+			
+			
+			
+			
+		}
+		
+		
+		
+		
+		
+		
+		
+		
+		if("start_act_complete".equals(action)){
+			HttpSession session=req.getSession();
+			List<String> errorMsgs = new LinkedList<String>();
+			  req.setAttribute("errorMsgs", errorMsgs);
+			try{
+				ActVO act_vo=(ActVO)session.getAttribute("act_vo");
+				ActService actSvc=new ActService();
+				actSvc.addAct(act_vo);
+				
+				session.removeAttribute("act_vo");
+				session.removeAttribute("act_op_date");
+				session.removeAttribute("act_ed_date");
+				session.removeAttribute("dl_date");
+				String url="/FrontEnd/act/act.jsp";
+				RequestDispatcher successView = req
+						.getRequestDispatcher(url);
+				successView.forward(req, res);
+				
+				
+				
+			}catch(Exception e){
+				String url=req.getParameter("start_act3.jsp");
+				errorMsgs.add(e.getMessage());
+				errorMsgs.add("系統錯誤");
+				RequestDispatcher failureView = req
+						.getRequestDispatcher(url);
+				failureView.forward(req, res);
+			}
+			
+		}
+		
+		
+		
+	
+		if("start_act_to_pg3".equals(action)){
+			HttpSession session=req.getSession();
+			List<String> errorMsgs = new LinkedList<String>();
+			  req.setAttribute("errorMsgs", errorMsgs);
+		try{	  
+	
+			
+			
+		
+//		InputStream is1=req.getPart("act_pic1").getInputStream(); 
+		  InputStream is1= req.getPart("act_pic1").getInputStream(); 
+		
+		
+		byte[] act_pic1=null;
+		if(!req.getPart("act_pic1").getContentType().contains("image")){
+		
+			ActVO act_vo=(ActVO) session.getAttribute("act_vo");
+			
+			try{
+			act_pic1=act_vo.getAct_pic1();
+	
+			
+			}catch(Exception e){
+				errorMsgs.add("請上傳活動照片1");
+			
+				
+			}
+		
+			}else{
+				
+				ByteArrayOutputStream buffer=new ByteArrayOutputStream();
+				
+				int nRead;
+				byte[] pic1=new byte[16384];
+				while((nRead=is1.read(pic1))!=-1){
+					buffer.write(pic1,0,nRead);
+				}
+				act_pic1=buffer.toByteArray();
+			
+			}
+	
+			InputStream is2=req.getPart("act_pic2").getInputStream();
+			byte[] act_pic2=null;
+			if(!req.getPart("act_pic2").getContentType().contains("image")){
+				
+				
+				try{
+				act_pic2=((ActVO) session.getAttribute("act_vo")).getAct_pic2();
+				}catch(Exception e){
+					act_pic2=null;
+				}
+			}else{
+					
+					ByteArrayOutputStream buffer=new ByteArrayOutputStream();
+					
+					int nRead;
+					byte[] pic2=new byte[16384];
+					while((nRead=is2.read(pic2))!=-1){
+						buffer.write(pic2,0,nRead);
+					}
+					act_pic2=buffer.toByteArray();
+					
+				}
+			
+			InputStream is3=req.getPart("act_pic3").getInputStream();
+			byte[] act_pic3=null;
+			if(!req.getPart("act_pic3").getContentType().contains("image")){
+				try{
+				act_pic3=((ActVO) session.getAttribute("act_vo")).getAct_pic3();
+				}catch(Exception e){
+					act_pic3=null;
+				}
+			}else{
+					
+					ByteArrayOutputStream buffer=new ByteArrayOutputStream();
+					
+					int nRead;
+					byte[] pic3=new byte[16384];
+					while((nRead=is3.read(pic3))!=-1){
+						buffer.write(pic3,0,nRead);
+					}
+					act_pic3=buffer.toByteArray();
+					
+				}
+			
+			
+		
+			java.sql.Timestamp timestamp_op_date;
+			java.sql.Date act_op_date;
+			try{		
+				timestamp_op_date=java.sql.Timestamp.valueOf(req.getParameter("act_op_date"));
+				session.setAttribute("act_op_date", timestamp_op_date);
+				act_op_date=timestampToDate(timestamp_op_date);
+			}catch(IllegalArgumentException e){
+				timestamp_op_date=new java.sql.Timestamp(System.currentTimeMillis());
+				act_op_date=timestampToDate(timestamp_op_date);
+				errorMsgs.add("請輸入活動開始時間!");
+			}	
+		
+			java.sql.Timestamp timestamp_ed_date;
+			java.sql.Date act_ed_date;
+			try{		
+				timestamp_ed_date=java.sql.Timestamp.valueOf(req.getParameter("act_ed_date"));
+				session.setAttribute("act_ed_date", timestamp_ed_date);
+				act_ed_date=timestampToDate(timestamp_ed_date);
+			}catch(IllegalArgumentException e){
+				timestamp_ed_date=new java.sql.Timestamp(System.currentTimeMillis());
+				act_ed_date=timestampToDate(timestamp_ed_date);
+				errorMsgs.add("請輸入活動結束時間!");
+			}	
+			
+			if((act_ed_date.getTime()-act_op_date.getTime())<0){
+				errorMsgs.add("結束時間需晚於開始時間");
+			}
+			
+			
+			String org_cont=req.getParameter("org_cont");
+			if(org_cont.length()==0){
+				errorMsgs.add("請輸入主辦單位簡介");
+			}
+		
+			String act_cont=req.getParameter("act_cont");
+			if(act_cont.length()==0){
+				errorMsgs.add("請輸入活動介紹");
+			}
+		
+		ActVO act_vo=(ActVO) session.getAttribute("act_vo");
+	
+
+	
+			act_vo.setAct_pic1(act_pic1);
+		
+			
+		
+	
+			act_vo.setAct_pic2(act_pic2);
+			act_vo.setAct_pic3(act_pic3);
+		
+			
+		
+		
+			act_vo.setAct_op_date(act_op_date);
+			act_vo.setAct_ed_date(act_ed_date);
+		
+		
+			act_vo.setOrg_cont(org_cont);
+			act_vo.setAct_cont(act_cont);
+		
+			act_vo.setMem_count(0);
+		java.util.Date util_fd_date=new java.util.Date();
+		java.sql.Date fd_date=new java.sql.Date(util_fd_date.getTime());
+		   act_vo.setFd_date(fd_date);
+		
+			String act_stat="待審核";
+			act_vo.setAct_stat(act_stat);
+			java.util.Date util_review_ed_date=new java.util.Date();
+			java.sql.Date review_ed_date=new java.sql.Date(util_review_ed_date.getTime());
+		
+			act_vo.setReview_ed_date(review_ed_date);
+		
+			session.setAttribute("act_vo", act_vo);
+		
+			if (!errorMsgs.isEmpty()) {
+			
+				String url=req.getParameter("start_act2.jsp");
+				RequestDispatcher failureView = req
+						.getRequestDispatcher(url);
+				failureView.forward(req, res);
+				return;
+			}
+			
+		
+			
+			
+			
+			String url="/FrontEnd/act/start_act3.jsp";
+			RequestDispatcher successView=req.getRequestDispatcher(url);
+			successView.forward(req, res);
+			
+			
+		}catch(Exception e){
+	
+			String url=req.getParameter("start_act2.jsp");
+			errorMsgs.add(e.getMessage());
+			errorMsgs.add("系統錯誤");
+			RequestDispatcher failureView = req
+					.getRequestDispatcher(url);
+			failureView.forward(req, res);
+		
+		}
+		}	
+		
+		
 		if("start_act_to_pg2".equals(action)){
 			List<String> errorMsgs = new LinkedList<String>();
 			  req.setAttribute("errorMsgs", errorMsgs);
@@ -115,6 +436,14 @@ public class Act_managementServlet extends HttpServlet{
 		if(pay_way==null){
 			errorMsgs.add("請選擇繳費方式");
 		}
+		String act_add_lat=req.getParameter("act_add_lat");
+		if(act_add_lat.equals("")){
+			errorMsgs.add("請輸入有效的地址");
+		}
+		
+		
+		String act_add_lon=req.getParameter("act_add_lon");
+		String mem_ac= req.getParameter("mem_ac");
 		
 		ActVO act_vo=new ActVO();
 		act_vo.setAct_name(act_name);
@@ -125,8 +454,11 @@ public class Act_managementServlet extends HttpServlet{
 		act_vo.setMax_mem(max_mem);
 		act_vo.setDl_date(dl_date);
 		act_vo.setPay_way(pay_way);
+		act_vo.setAct_add_lat(act_add_lat);
+		act_vo.setAct_add_lon(act_add_lon);
+		act_vo.setMem_ac(mem_ac);
 		HttpSession session=req.getSession();
-		System.out.println(dateToTimestamp(dl_date));	
+	
 		session.setAttribute("dl_date",dateToTimestamp(dl_date));
 		session.setAttribute("act_vo",act_vo);
 		if (!errorMsgs.isEmpty()) {
@@ -220,33 +552,33 @@ public class Act_managementServlet extends HttpServlet{
 		if ("goto_act_detail".equals(action)) {
 			try{
 		String act_no=req.getParameter("act_no");
-		System.out.println("act_no= "+act_no);
+	
 		ActService actSvc=new ActService();
 		ActVO act_vo= actSvc.getOneAct(act_no);
 		String mem_ac=act_vo.getMem_ac();
-		System.out.println("mem_ac= "+mem_ac);
+	
 		MemService memSvc=new MemService();
-		System.out.println("track1");
+	
 		MemVO mem_vo= memSvc.getOneProd(mem_ac);
 	
 		Set<Act_commVO> act_comm_set= actSvc.getAct_commByAct_no(act_no);
 		
 		
 		
-		System.out.println("mem_vo.getMem_email()= "+mem_vo.getMem_email());
+	
 		
 		HttpSession session=req.getSession();
 		session.setAttribute("mem_vo",mem_vo);
 		session.setAttribute("act_vo", act_vo);
 		session.setAttribute("act_comm_set", act_comm_set);
 		String url="/FrontEnd/act/act_detail.jsp";
-		System.out.println(url);
+		
 		RequestDispatcher dispatcher=req.getRequestDispatcher(url);
 		dispatcher.forward(req, res);
 		
 		
 			}catch(Exception e){
-				System.out.println("gotoDetail error");
+			
 				String url=req.getParameter("act.jsp");
 				RequestDispatcher dispatcher=req.getRequestDispatcher(url);
 				dispatcher.forward(req, res);
@@ -637,7 +969,12 @@ public class Act_managementServlet extends HttpServlet{
 	
 	
 	
+		
+		
+		
+		
+	}
 	
 	
 	
-}
+

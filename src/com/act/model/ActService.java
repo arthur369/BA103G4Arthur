@@ -18,7 +18,10 @@ public class ActService {
 	public ActService(){
 		dao= new ActJNDIDAO();
 	}
-	
+	public ActVO addAct(ActVO act_vo){
+		dao.insert(act_vo);
+		return act_vo;
+	}
 	public ActVO addAct(String act_no,String mem_ac,String org_cont,String act_name, int min_mem,int max_mem,int mem_count,Date act_op_date,Date act_ed_date,Date dl_date,Date fd_date,String act_add,String act_add_lat,String act_add_lon,String act_cont,String act_tag,int act_fee,String pay_way,byte[] act_pic1,byte[] act_pic2,byte[] act_pic3,String act_stat,String re_cont,Date review_ed_date){
 		
 		
