@@ -17,7 +17,13 @@
   .next .previous:hover{
   text-decoration: none;
   }
-  
+  .next  form .end {
+  position: absolute;
+  right: 20%;
+  top: 30px;
+  padding: 8px 10px;
+
+}
   
   </style>
   

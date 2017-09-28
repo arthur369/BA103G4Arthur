@@ -34,6 +34,14 @@ public class ActVO implements Serializable{
 	private String re_cont;
 	private Date review_ed_date;
 //	private Timestamp review_ed_date;
+	
+	private String act_atm_info;
+	public String getAct_atm_info() {
+		return act_atm_info;
+	}
+	public void setAct_atm_info(String act_atm_info) {
+		this.act_atm_info = act_atm_info;
+	}
 	public ActVO() {
 		
 		super();

@@ -24,8 +24,10 @@ import com.act.model.ActService;
 import com.act.model.ActVO;
 import com.act_comm.model.Act_commService;
 import com.act_comm.model.Act_commVO;
+import com.act_pair.model.Act_pairService;
 import com.convert_gift.model.Convert_giftService;
 import com.convert_gift.model.Convert_giftVO;
+import com.fo_act.model.Fo_actService;
 import com.gift_data.model.Gift_dataJDBCDAO;
 import com.gift_data.model.Gift_dataJNDIDAO;
 import com.gift_data.model.Gift_dataService;
@@ -50,6 +52,92 @@ public class Act_managementServlet extends HttpServlet{
 		req.setCharacterEncoding("UTF-8");
 		
 		String action = req.getParameter("action");
+		
+		
+		
+		if("confirm_buy".equals(action)){
+			HttpSession session=req.getSession();
+			ActVO act_vo=(ActVO)session.getAttribute("act_vo");
+			String mem_ac=req.getParameter("mem_ac");
+			String act_no=act_vo.getAct_no();
+			java.sql.Date apply_date=new java.sql.Date(new Date().getTime());
+			String pay_state="未繳費";
+			String chk_state="未報到";
+			
+			
+			
+			Act_pairService act_pairSvc=new Act_pairService();
+			act_pairSvc.add
+			
+		}
+		
+		
+		if("buy_add".equals(action)){
+			
+		try{	
+			String act_no=req.getParameter("act_no");
+			ActService actSvc=new ActService();
+			ActVO act_vo= actSvc.getOneAct(act_no);
+			HttpSession session=req.getSession();
+			session.setAttribute("act_vo",act_vo);
+			String url="/FrontEnd/act/buy_act.jsp";
+			RequestDispatcher successView=req.getRequestDispatcher(url);
+			successView.forward(req, res);
+			
+		}catch(Exception e){
+			String url=req.getParameter("act_detail.jsp");
+			RequestDispatcher failView=req.getRequestDispatcher(url);
+			failView.forward(req, res);
+		}
+			
+		}
+		
+		
+		if("add_favorite".equals(action)){
+			
+	try{		
+			String mem_ac=req.getParameter("mem_ac");
+			System.out.println("mem_ac= "+mem_ac);
+		    String act_no=req.getParameter("act_no");
+		    System.out.println("act_no= "+act_no);
+		    
+		    java.sql.Date fo_act_date=new java.sql.Date(new Date().getTime());
+		    System.out.println("fo_act_date= "+fo_act_date);
+		    Fo_actService fo_actSvc=new Fo_actService();
+		    fo_actSvc.addFo_act(mem_ac, act_no, fo_act_date);
+		    
+		    List<String> openModal=new LinkedList<String>();
+			openModal.add("baba");
+			req.setAttribute("openModal", openModal);
+		    
+		    
+		    String url=req.getParameter("act_detail.jsp");
+		    RequestDispatcher successView=req.getRequestDispatcher(url);
+		    successView.forward(req, res);
+		    
+		    
+		    
+		    
+		    
+		    
+	}catch(Exception e){
+		 String url=req.getParameter("act_detail.jsp");
+		    RequestDispatcher successView=req.getRequestDispatcher(url);
+		    successView.forward(req, res);
+		
+		
+	}
+			
+			
+			
+		}
+		
+		
+		
+		
+		
+		
+		
 		
 		if("response_comm".equals(action)){
 			System.out.println("track1");

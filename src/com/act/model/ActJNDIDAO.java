@@ -40,11 +40,11 @@ public class ActJNDIDAO implements ActDAO_interface{
 		
 	}
 	
-	private static final String INSERT_STMT ="insert into act values('A' || act_no_seq.nextval,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?)";
+	private static final String INSERT_STMT ="insert into act values('A' || act_no_seq.nextval,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?)";
 	private static final String GET_ALL_STMT ="select * from act";
 	private static final String GET_ONE_STMT="select * from act where ACT_NO=?";
 	private static final String DELETE_ACT= "delete from act where act_no=?";
-	private static final String UPDATE ="update act set MEM_AC=?,ORG_CONT=?,ACT_NAME=?,MIN_MEM=?,MAX_MEM=?,MEM_COUNT=?,ACT_OP_DATE=?,ACT_ED_DATE=?,DL_DATE=?,FD_DATE=?,ACT_ADD=?, ACT_ADD_LAT=?,ACT_ADD_LON=?,ACT_CONT=?,ACT_TAG=?,ACT_FEE=?,PAY_WAY=?,ACT_PIC1=?,ACT_PIC2=?,ACT_PIC3=?,ACT_STAT=?,RE_CONT=?,REVIEW_ED_DATE=?where act_no=?";
+	private static final String UPDATE ="update act set MEM_AC=?,ORG_CONT=?,ACT_NAME=?,MIN_MEM=?,MAX_MEM=?,MEM_COUNT=?,ACT_OP_DATE=?,ACT_ED_DATE=?,DL_DATE=?,FD_DATE=?,ACT_ADD=?, ACT_ADD_LAT=?,ACT_ADD_LON=?,ACT_CONT=?,ACT_TAG=?,ACT_FEE=?,PAY_WAY=?,ACT_PIC1=?,ACT_PIC2=?,ACT_PIC3=?,ACT_STAT=?,RE_CONT=?,REVIEW_ED_DATE=?,ACT_ATM_INFO=? where act_no=?";
 	
 	private static final String DELETE_ACT_COMM="delete from act_comm where act_no=?";
 	private static final String DELETE_ACT_PAIR="delete from act_pair where act_no=?";
@@ -105,6 +105,7 @@ public class ActJNDIDAO implements ActDAO_interface{
 			pstmt.setString(22,act_VO.getRe_cont());
 			pstmt.setTimestamp(23,dateToTimestamp(act_VO.getReview_ed_date()));
 //			pstmt.setTimestamp(23,act_VO.getReview_ed_date());
+			pstmt.setString(24,act_VO.getAct_atm_info());
 			pstmt.executeUpdate();
 			
 			
@@ -182,7 +183,8 @@ public class ActJNDIDAO implements ActDAO_interface{
 			pstmt.setString(22,act_VO.getRe_cont());
 			pstmt.setTimestamp(23,dateToTimestamp(act_VO.getReview_ed_date()));
 //			pstmt.setTimestamp(23,act_VO.getReview_ed_date());
-			pstmt.setString(24,act_VO.getAct_no());
+			pstmt.setString(24,act_VO.getAct_atm_info());
+			pstmt.setString(25,act_VO.getAct_no());
 			pstmt.executeUpdate();
 			
 		} catch (SQLException e) {
@@ -322,6 +324,7 @@ public class ActJNDIDAO implements ActDAO_interface{
 			act_vo.setRe_cont(rs.getString("RE_CONT"));
 			act_vo.setReview_ed_date(timestampToDate(rs.getTimestamp("REVIEW_ED_DATE")));
 //			act_vo.setReview_ed_date(rs.getTimestamp("REVIEW_ED_DATE"));
+			act_vo.setAct_atm_info(rs.getString("ACT_ATM_INFO"));
 			
 		}
 		} catch (SQLException e) {
@@ -400,7 +403,7 @@ public class ActJNDIDAO implements ActDAO_interface{
 				act_vo.setRe_cont(rs.getString("RE_CONT"));
 				act_vo.setReview_ed_date(timestampToDate(rs.getTimestamp("REVIEW_ED_DATE")));
 //				act_vo.setReview_ed_date(rs.getTimestamp("REVIEW_ED_DATE"));
-				
+				act_vo.setAct_atm_info(rs.getString("ACT_ATM_INFO"));
 				list.add(act_vo);
 			}
 			
@@ -640,7 +643,7 @@ public class ActJNDIDAO implements ActDAO_interface{
 				act_vo.setRe_cont(rs.getString("RE_CONT"));
 				act_vo.setReview_ed_date(timestampToDate(rs.getTimestamp("REVIEW_ED_DATE")));
 //				act_vo.setReview_ed_date(rs.getTimestamp("REVIEW_ED_DATE"));
-				
+				act_vo.setAct_atm_info(rs.getString("ACT_ATM_INFO"));
 				list.add(act_vo);
 			}
 			

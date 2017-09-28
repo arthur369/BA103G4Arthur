@@ -32,11 +32,11 @@ public class ActJDBCDAO implements ActDAO_interface{
 	String userid="ba103g4";
 	String password="123456";
 	
-	private static final String INSERT_STMT ="insert into act values('A' || act_no_seq.nextval,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?)";
+	private static final String INSERT_STMT ="insert into act values('A' || act_no_seq.nextval,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?)";
 	private static final String GET_ALL_STMT ="select * from act";
 	private static final String GET_ONE_STMT="select * from act where ACT_NO=?";
 	private static final String DELETE_ACT = "delete from act where act_no=?";
-	private static final String UPDATE ="update act set MEM_AC=?,ORG_CONT=?,ACT_NAME=?,MIN_MEM=?,MAX_MEM=?,MEM_COUNT=?,ACT_OP_DATE=?,ACT_ED_DATE=?,DL_DATE=?,FD_DATE=?,ACT_ADD=?, ACT_ADD_LAT=?,ACT_ADD_LON=?,ACT_CONT=?,ACT_TAG=?,ACT_FEE=?,PAY_WAY=?,ACT_PIC1=?,ACT_PIC2=?,ACT_PIC3=?,ACT_STAT=?,RE_CONT=?,REVIEW_ED_DATE=?where act_no=?";
+	private static final String UPDATE ="update act set MEM_AC=?,ORG_CONT=?,ACT_NAME=?,MIN_MEM=?,MAX_MEM=?,MEM_COUNT=?,ACT_OP_DATE=?,ACT_ED_DATE=?,DL_DATE=?,FD_DATE=?,ACT_ADD=?, ACT_ADD_LAT=?,ACT_ADD_LON=?,ACT_CONT=?,ACT_TAG=?,ACT_FEE=?,PAY_WAY=?,ACT_PIC1=?,ACT_PIC2=?,ACT_PIC3=?,ACT_STAT=?,RE_CONT=?,REVIEW_ED_DATE=?,ACT_ATM_INFO=? where act_no=?";
 	
 	private static final String DELETE_ACT_COMM="delete from act_comm where act_no=?";
 	private static final String DELETE_ACT_PAIR="delete from act_pair where act_no=?";
@@ -98,6 +98,7 @@ public class ActJDBCDAO implements ActDAO_interface{
 				pstmt.setString(22,act_VO.getRe_cont());
 				pstmt.setTimestamp(23,dateToTimestamp(act_VO.getReview_ed_date()));
 //				pstmt.setTimestamp(23,act_VO.getReview_ed_date());
+				pstmt.setString(24,act_VO.getAct_atm_info());
 				pstmt.executeUpdate();
 				
 			} catch (SQLException e) {
@@ -179,7 +180,9 @@ public class ActJDBCDAO implements ActDAO_interface{
 				pstmt.setString(22,act_VO.getRe_cont());
 				pstmt.setTimestamp(23,dateToTimestamp(act_VO.getReview_ed_date()));
 //				pstmt.setTimestamp(23,act_VO.getReview_ed_date());
-				pstmt.setString(24,act_VO.getAct_no());
+				pstmt.setString(24,act_VO.getAct_atm_info());
+				pstmt.setString(25,act_VO.getAct_no());
+				
 				pstmt.executeUpdate();
 				
 				
@@ -333,7 +336,7 @@ public class ActJDBCDAO implements ActDAO_interface{
 				act_vo.setRe_cont(rs.getString("RE_CONT"));
 				act_vo.setReview_ed_date(timestampToDate(rs.getTimestamp("REVIEW_ED_DATE")));
 //				act_vo.setReview_ed_date(rs.getTimestamp("REVIEW_ED_DATE"));
-				
+				act_vo.setAct_atm_info(rs.getString("ACT_ATM_INFO"));
 			}
 				
 				
@@ -422,7 +425,7 @@ public class ActJDBCDAO implements ActDAO_interface{
 					act_vo.setRe_cont(rs.getString("RE_CONT"));
 					act_vo.setReview_ed_date(timestampToDate(rs.getTimestamp("REVIEW_ED_DATE")));
 //					act_vo.setReview_ed_date(rs.getTimestamp("REVIEW_ED_DATE"));
-					
+					act_vo.setAct_atm_info(rs.getString("ACT_ATM_INFO"));
 					list.add(act_vo);
 				}
 				
@@ -700,7 +703,7 @@ public class ActJDBCDAO implements ActDAO_interface{
 					act_vo.setRe_cont(rs.getString("RE_CONT"));
 					act_vo.setReview_ed_date(timestampToDate(rs.getTimestamp("REVIEW_ED_DATE")));
 //					act_vo.setReview_ed_date(rs.getTimestamp("REVIEW_ED_DATE"));
-					
+					act_vo.setAct_atm_info(rs.getString("ACT_ATM_INFO"));
 					list.add(act_vo);
 				}
 				
@@ -843,8 +846,8 @@ ActJDBCDAO dao=new ActJDBCDAO();
 
 //ActVO act_vo1=new ActVO();
 //	act_vo1.setMem_ac("camacoffee");
-//	act_vo1.setOrg_cont("arthur我xxact_op_date test主辦人~~baba0925cc");
-//	act_vo1.setAct_name("arthur我是活動baba0925555ggkk");
+//	act_vo1.setOrg_cont("arthur我xxact_op_date test主辦人~~baba0928cc");
+//	act_vo1.setAct_name("arthur我是活動0928");
 //	act_vo1.setMin_mem(6);
 //	act_vo1.setMax_mem(10);
 //	act_vo1.setMem_count(5);
@@ -877,6 +880,7 @@ ActJDBCDAO dao=new ActJDBCDAO();
 //	java.sql.Date test_date=new java.sql.Date(test_timestamp.getTime());
 //	act_vo1.setReview_ed_date(  test_date);
 ////	act_vo1.setReview_ed_date(java.sql.Timestamp.valueOf("2017-09-01 15:00:00"));
+//	act_vo1.setAct_atm_info("but test");
 //	dao.insert(act_vo1);
 	
 //	ActVO act_vo2=new ActVO();
@@ -909,16 +913,17 @@ ActJDBCDAO dao=new ActJDBCDAO();
 //	act_vo2.setRe_cont(null);
 ////	act_vo2.setReview_ed_date(java.sql.Date.valueOf("2017-09-01"));
 //	act_vo2.setReview_ed_date(timestampToDate(java.sql.Timestamp.valueOf("2017-09-01 16:00:00")));
-//	act_vo2.setAct_no("A1000000005");
+//	act_vo2.setAct_atm_info("不爽不要付");
+//	act_vo2.setAct_no("A1000000017");
 //	dao.update(act_vo2);
 	
 //	dao.delete("A1000000037");
 	
-//ActVO act_vo3=dao.findByPrimaryKey("A1000000036");
-//System.out.print(act_vo3.getMem_ac());
-//System.out.print(act_vo3.getOrg_cont());
-//System.out.println(new java.sql.Timestamp(act_vo3.getAct_op_date().getTime()));
-
+ActVO act_vo3=dao.findByPrimaryKey("A1000000017");
+System.out.print(act_vo3.getMem_ac());
+System.out.print(act_vo3.getOrg_cont());
+System.out.println(new java.sql.Timestamp(act_vo3.getAct_op_date().getTime()));
+System.out.print(act_vo3.getAct_atm_info());
 //	List<ActVO>list=dao.getAll();
 //	for(ActVO act_vo4:list){
 //		System.out.print(act_vo4.getMem_ac()+",");

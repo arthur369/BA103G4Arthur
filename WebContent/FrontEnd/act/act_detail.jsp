@@ -75,7 +75,7 @@ width: 100%;
 height: 200px;
 
 }
-.message_button{
+.message_button,.response_button{
 float: right;
 }
 
@@ -85,10 +85,10 @@ height: 200px;
 border: solid 1px #7A3D0B;
 padding: 10px;
 }
-.message_button{
+.message_button,.response_button{
 cursor: pointer;
 }
-.message_button:hover{
+.message_button:hover,.response_button:hover{
 text-decoration: none;
 }
 .response_message{
@@ -188,7 +188,16 @@ pageContext.setAttribute("act_comm_set",act_comm_set);
               <div class="time"></div>
             </h2>
             <h2 class="price">NT$ ${act_vo.act_fee }<br/>
-              <div class="button  doit_instance">立即報名</div>
+            <form  method="post"  action="<%=request.getContextPath() %>/act_management/act_managementServlet" >
+              <div class="button  doit_instance">立即報名 </div>
+              <input type="hidden"  name="action" value="buy_add">
+              
+               <input type="hidden"  name="mem_ac" value="${(mem_ac==null)? "mamabeak":mem_ac}">
+             <input type="hidden" name="act_no" value="${act_vo.act_no }">
+               
+                   <input type="hidden"  name="act_detail.jsp" value="<%=request.getServletPath()%>">
+              
+              </form>
             </h2>
           </div>
         </div>
@@ -230,7 +239,7 @@ pageContext.setAttribute("act_comm_set",act_comm_set);
                 
                  <input type="hidden" name="act_detail.jsp" value="<%=request.getServletPath()%>">
             <br>
-            <button class="btn-default  message_button"  type="submit">留言</button>
+            <button class="btn-default  response_button"  type="submit">留言</button>
             </form>
           </div>
           </div>
@@ -285,8 +294,14 @@ pageContext.setAttribute("act_comm_set",act_comm_set);
     </div>
   </div>
 </div>
-<div class="bookMarks fa fa-bookmark-o"></div>
+ <form  method="post"  action="<%=request.getContextPath() %>/act_management/act_managementServlet" >
+<div class="bookMarks fa fa-bookmark-o" title="追蹤活動"></div>
+<input type="hidden"  name="action" value="add_favorite">
+<input type="hidden"  name="act_detail.jsp" value="<%=request.getServletPath()%>">
+<input type="hidden"  name="mem_ac" value="${(mem_ac==null)? "mamabeak":mem_ac}">
+<input type="hidden"  name="act_no" value="${act_vo.act_no }">
 
+</form>
 
 <%--主辦單位回復modal --%>
 <div class="modal fade" id="modal-id">
@@ -313,6 +328,24 @@ pageContext.setAttribute("act_comm_set",act_comm_set);
 			</div>
 		</div>
 
+<%--追蹤活動確認modal --%>
+<div class="modal fade" id="modal-actTrace">
+			<div class="modal-dialog">
+				<div class="modal-content">
+					<div class="modal-header">
+						<button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button>
+						<h4 class="modal-title">活動追蹤成功</h4>
+					</div>
+					<div class="modal-body">
+						您可以在活動追蹤頁面查看您所追蹤的活動
+					</div>
+					<div class="modal-footer">
+						<button type="button" class="btn btn-default" data-dismiss="modal">關閉</button>
+						
+					</div>
+				</div>
+			</div>
+		</div>
 
   <script src='https://cdnjs.cloudflare.com/ajax/libs/jquery/3.2.1/jquery.min.js'></script>
 <script src="https://cdnjs.cloudflare.com/ajax/libs/twitter-bootstrap/3.3.7/js/bootstrap.min.js"></script>
@@ -323,6 +356,28 @@ pageContext.setAttribute("act_comm_set",act_comm_set);
  
  
  <script>
+ $(".doit_instance").click(function(){
+$(this).parent().submit();
+	 
+	 
+ })
+ 
+ 
+ 
+ $(".bookMarks").click(function(){
+
+	 $(".bookMarks").parent().submit();
+	 
+ })
+ 
+ 
+ 
+ 
+	if(${not empty openModal}){
+		 $("#modal-actTrace").modal({show: true});
+		}
+ 
+ 
  if("${act_vo.mem_ac}"!=$(".acount").val()){
 	 $(".message_button").css("display","none");
 	 
