@@ -122,7 +122,9 @@ right: 0%
   transition: 0.5s;
   cursor: pointer;
 }
-
+.bar{
+overflow: hidden;
+}
 </style>
 <%
 List<ActVO> list=null;
@@ -180,7 +182,7 @@ pageContext.setAttribute("mylist",list);
     <div class="form-group">
     <div class="form-group">
                 <label for="dtp_input1" class="col-md-2 control-label">開始時間</label>
-                <div class="input-group date form_datetime col-md-5" data-date="" data-date-format="yyyy-mm-dd HH:ii:ss" data-link-field="dtp_input1">
+                <div class="input-group date form_datetime col-md-5" data-date="" data-date-format="yyyy-mm-dd hh:ii:00" data-link-field="dtp_input1">
                     <input class="form-control  test  myop_date" size="16" type="text"  name="act_op_date"    value=""  ">
                     <span class="input-group-addon"><span class="glyphicon glyphicon-remove"></span></span>
 					<span class="input-group-addon"><span class="glyphicon glyphicon-th"></span></span>
@@ -188,7 +190,7 @@ pageContext.setAttribute("mylist",list);
 				<input type="hidden" id="dtp_input1" value="" /><br/>
           
                 <label for="dtp_input1" class="col-md-2 control-label">結束時間</label>
-                <div class="input-group date form_datetime col-md-5" data-date="" data-date-format="yyyy-mm-dd HH:ii:ss" data-link-field="dtp_input1">
+                <div class="input-group date form_datetime col-md-5" data-date="" data-date-format="yyyy-mm-dd hh:ii:00" data-link-field="dtp_input1">
                     <input class="form-control  test  myed_date" size="16" type="text"  name="act_ed_date"    value="" >
                     <div class="input-group-addon "><span class="glyphicon glyphicon-remove"></span></div>
 					<span class="input-group-addon"><span class="glyphicon glyphicon-th"></span></span>

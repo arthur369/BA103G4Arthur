@@ -154,7 +154,7 @@ transform: translate(-100%,0);
         <div class="endTime form-group">
           
            <span class="col-md-2 control-label  deadline">報名截止日期:</span>
-                <div class="input-group date form_datetime " data-date="" data-date-format="yyyy-mm-dd HH:ii:ss" data-link-field="dtp_input1">
+                <div class="input-group date form_datetime " data-date="" data-date-format="yyyy-mm-dd hh:ii:00" data-link-field="dtp_input1">
                     <input class="form-control  test" size="16" type="text"  name="dl_date"    value="${(act_vo==null)?"":dl_date }">
                     <span class="input-group-addon"><span class="glyphicon glyphicon-remove"></span></span>
 					<span class="input-group-addon"><span class="glyphicon glyphicon-th"></span></span>

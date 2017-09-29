@@ -87,6 +87,7 @@
 				<button class="btn btn-success" >確定購買</button>
 				<input type="hidden"  name="mem_ac"  value="${(mem_ac==null)? "mamabeak":mem_ac}">
 				<input type="hidden"  name="action"  value="confirm_buy">
+				<input type="hidden"  name="buy_act.jsp"  value="<%=request.getServletPath()%>">
 				</form>
 			</div>
 
@@ -100,14 +101,13 @@
 				<div class="modal-content">
 					<div class="modal-header">
 						<button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button>
-						<h4 class="modal-title">標題</h4>
+						<h4 class="modal-title">購買成功!!</h4>
 					</div>
-					<div class="modal-body">
-						內容
-					</div>
+					
 					<div class="modal-footer">
-						<button type="button" class="btn btn-default" data-dismiss="modal">關閉</button>
-						<button type="button" class="btn btn-primary">Save changes</button>
+					<%session.removeAttribute("add_date_query");%>
+						<a type="button" class="btn btn-default"  href="<%=request.getContextPath()%>/FrontEnd/act/act.jsp">回活動列表</a>
+						
 					</div>
 				</div>
 			</div>
@@ -143,7 +143,9 @@
 			$(".other").show();
 		}
 		
-		
+		if(${not empty openModal}){
+			 $("#modal-id").modal({show: true});
+			}
 		
 		</script>
 		

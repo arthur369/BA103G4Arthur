@@ -56,6 +56,11 @@ public class Act_managementServlet extends HttpServlet{
 		
 		
 		if("confirm_buy".equals(action)){
+			  List<String> openModal=new LinkedList<String>();
+				openModal.add("baba");
+				req.setAttribute("openModal", openModal);
+			
+			
 			HttpSession session=req.getSession();
 			ActVO act_vo=(ActVO)session.getAttribute("act_vo");
 			String mem_ac=req.getParameter("mem_ac");
@@ -67,7 +72,13 @@ public class Act_managementServlet extends HttpServlet{
 			
 			
 			Act_pairService act_pairSvc=new Act_pairService();
-			act_pairSvc.add
+			act_pairSvc.addAct_pair(act_no,mem_ac,apply_date,pay_state,chk_state);
+			ActService actSvc=new ActService();
+			actSvc.update_mem_count(act_no);
+			
+			String url=req.getParameter("buy_act.jsp");
+			RequestDispatcher successView=req.getRequestDispatcher(url);
+			successView.forward(req, res);
 			
 		}
 		

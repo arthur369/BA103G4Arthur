@@ -96,6 +96,22 @@ width: 100%;
 height: 300px;
 
 }
+.section_header .backgroundImg .row .picAndDetail .titleInfo .minJoin .bar .joinNumber {
+  height: 100%;
+
+
+ background-color: #b8fe26;
+ 
+  border: solid 1px black;
+}
+.section_header .backgroundImg .row .picAndDetail .titleInfo .minJoin .bar {
+margin-top: 5px;
+  height: 20px;
+  width: 300px;
+  border-radius: 10px;
+  border: solid 1px black;
+  overflow: hidden;
+}
 </style>
 
 

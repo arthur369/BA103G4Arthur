@@ -154,7 +154,7 @@ left: 45%;
         </div>
     <div class="form-group">
                 <label for="dtp_input1" class="col-md-2 control-label  ">活動開始時間</label>
-                <div class="input-group date form_datetime col-md-5" data-date="" data-date-format="yyyy-mm-dd HH:ii:ss" data-link-field="dtp_input1">
+                <div class="input-group date form_datetime col-md-5" data-date="" data-date-format="yyyy-mm-dd hh:ii:00" data-link-field="dtp_input1">
                     <input class="form-control  test act_op_date" size="16" type="text"  name="act_op_date"    value="${(act_vo==null)?"":act_op_date }">
                     <span class="input-group-addon"><span class="glyphicon glyphicon-remove"></span></span>
 					<span class="input-group-addon"><span class="glyphicon glyphicon-th"></span></span>
@@ -162,7 +162,7 @@ left: 45%;
 				<input type="hidden" id="dtp_input1" value="" /><br/>
           
                 <label for="dtp_input1" class="col-md-2 control-label ">活動結束時間</label>
-                <div class="input-group date form_datetime col-md-5" data-date="" data-date-format="yyyy-mm-dd HH:ii:ss" data-link-field="dtp_input1">
+                <div class="input-group date form_datetime col-md-5" data-date="" data-date-format="yyyy-mm-dd hh:ii:00" data-link-field="dtp_input1">
                     <input class="form-control  test act_ed_date" size="16" type="text"  name="act_ed_date"    value="${(act_vo==null)?"":act_ed_date }" >
                     <div class="input-group-addon "><span class="glyphicon glyphicon-remove"></span></div>
 					<span class="input-group-addon"><span class="glyphicon glyphicon-th"></span></span>

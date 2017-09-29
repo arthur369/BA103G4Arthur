@@ -76,20 +76,8 @@ h3 {
   text-align: center;
   margin-bottom: 5px;
 }
-.section_header .backgroundImg .row .picAndDetail .titleInfo .minJoin .bar {
-  margin-top: 5px;
-  height: 20px;
-  width: 300px;
-  border-radius: 10px;
-  border: solid 1px black;
-}
-.section_header .backgroundImg .row .picAndDetail .titleInfo .minJoin .bar .joinNumber {
-  height: 100%;
-  width: 100px;
-  background-color: #b8fe26;
-  border-radius: 10px 0 0 10px;
-  border: solid 1px black;
-}
+
+
 .section_header .backgroundImg .row .picAndDetail .titleInfo .date {
   padding: 0;
 }

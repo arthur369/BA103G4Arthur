@@ -45,6 +45,8 @@ public class ActJDBCDAO implements ActDAO_interface{
 	private static final String GET_ACT_PAIR_ByAct_no_STMT="SELECT * FROM ACT_PAIR WHERE ACT_NO=? ORDER BY ACT_NO";
 	private static final String GET_FO_ACT_ByAct_no_STMT="SELECT * FROM FO_ACT WHERE ACT_NO=? ORDER BY ACT_NO";
 	
+	private static final String FIND_MEM_COUNT_BY_ACT_NO="SELECT MEM_COUNT FROM ACT WHERE ACT_NO=?";
+	private static final String ADD_ONE_TO_MEM_COUNT="update act set MEM_COUNT=? where act_no=?";
 	
 	@Override
 	public void insert(ActVO act_VO) {
@@ -837,12 +839,71 @@ public class ActJDBCDAO implements ActDAO_interface{
 		
 	}
 	
+	@Override
+	public void update_mem_count(String ACT_NO) {
+		// TODO Auto-generated method stub
 	
+		Connection con = null;
+		PreparedStatement pstmt = null;
+		PreparedStatement pstmt2 = null;
+		ResultSet rs = null;
+		Integer mem_count=null;
+		try {
+			Class.forName(driver);
+
+				con = DriverManager.getConnection(url, userid, password);
+				pstmt=con.prepareStatement(FIND_MEM_COUNT_BY_ACT_NO);
+				pstmt.setString(1, ACT_NO);
+				rs=pstmt.executeQuery();
+				while(rs.next()){
+					mem_count=rs.getInt("MEM_COUNT");
+				}
+				pstmt2=con.prepareStatement(ADD_ONE_TO_MEM_COUNT);
+				pstmt2.setInt(1,mem_count+1);
+			
+				pstmt2.setString(2, ACT_NO);
+				pstmt2.executeUpdate();
+				
+				
+			} catch (SQLException e) {
+				// TODO Auto-generated catch block
+				e.printStackTrace();
+			
+		} catch (ClassNotFoundException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}finally {
+			if (pstmt != null) {
+				try {
+					pstmt.close();
+				} catch (SQLException se) {
+					se.printStackTrace(System.err);
+				}
+			}
+			if (pstmt2 != null) {
+				try {
+					pstmt2.close();
+				} catch (SQLException se) {
+					se.printStackTrace(System.err);
+				}
+			}
+			if (con != null) {
+				try {
+					con.close();
+				} catch (Exception e) {
+					e.printStackTrace(System.err);
+				}
+			}
+		}
+		
+		
+	}
 	
 	
 	public static void main(String[] args) throws IOException {
 		// TODO Auto-generated method stub
 ActJDBCDAO dao=new ActJDBCDAO();
+
 
 //ActVO act_vo1=new ActVO();
 //	act_vo1.setMem_ac("camacoffee");
@@ -919,11 +980,11 @@ ActJDBCDAO dao=new ActJDBCDAO();
 	
 //	dao.delete("A1000000037");
 	
-ActVO act_vo3=dao.findByPrimaryKey("A1000000017");
-System.out.print(act_vo3.getMem_ac());
-System.out.print(act_vo3.getOrg_cont());
-System.out.println(new java.sql.Timestamp(act_vo3.getAct_op_date().getTime()));
-System.out.print(act_vo3.getAct_atm_info());
+//ActVO act_vo3=dao.findByPrimaryKey("A1000000017");
+//System.out.print(act_vo3.getMem_ac());
+//System.out.print(act_vo3.getOrg_cont());
+//System.out.println(new java.sql.Timestamp(act_vo3.getAct_op_date().getTime()));
+//System.out.print(act_vo3.getAct_atm_info());
 //	List<ActVO>list=dao.getAll();
 //	for(ActVO act_vo4:list){
 //		System.out.print(act_vo4.getMem_ac()+",");
@@ -985,6 +1046,9 @@ System.out.print(act_vo3.getAct_atm_info());
 //
 //}
 	
+dao.update_mem_count("A1000000018");
+
+
 	
 	}
 	
@@ -1011,6 +1075,8 @@ System.out.print(act_vo3.getAct_atm_info());
 		return timestamp;
 		
 	}
+
+	
 
 	
 	
