@@ -127,7 +127,7 @@ String act_no=act_vo.getAct_no();
 ActService actSvc=new ActService();
 Set<Act_commVO> act_comm_set= actSvc.getAct_commByAct_no(act_no);
 pageContext.setAttribute("act_comm_set",act_comm_set);
-	pageContext.setAttribute("act_vo",act_vo);
+pageContext.setAttribute("act_vo",act_vo);
 	
 	%>
 
@@ -311,7 +311,7 @@ pageContext.setAttribute("act_comm_set",act_comm_set);
   </div>
 </div>
  <form  method="post"  action="<%=request.getContextPath() %>/act_management/act_managementServlet" >
-<div class="bookMarks fa fa-bookmark-o" title="追蹤活動"></div>
+<div class="bookMarks fa fa-bookmark-o" title="收藏活動"></div>
 <input type="hidden"  name="action" value="add_favorite">
 <input type="hidden"  name="act_detail.jsp" value="<%=request.getServletPath()%>">
 <input type="hidden"  name="mem_ac" value="${(mem_ac==null)? "mamabeak":mem_ac}">

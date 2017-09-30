@@ -840,7 +840,7 @@ public class ActJDBCDAO implements ActDAO_interface{
 	}
 	
 	@Override
-	public void update_mem_count(String ACT_NO) {
+	public void update_mem_count(String ACT_NO,Integer number) {
 		// TODO Auto-generated method stub
 	
 		Connection con = null;
@@ -859,7 +859,7 @@ public class ActJDBCDAO implements ActDAO_interface{
 					mem_count=rs.getInt("MEM_COUNT");
 				}
 				pstmt2=con.prepareStatement(ADD_ONE_TO_MEM_COUNT);
-				pstmt2.setInt(1,mem_count+1);
+				pstmt2.setInt(1,mem_count+number);
 			
 				pstmt2.setString(2, ACT_NO);
 				pstmt2.executeUpdate();
@@ -1046,7 +1046,7 @@ ActJDBCDAO dao=new ActJDBCDAO();
 //
 //}
 	
-dao.update_mem_count("A1000000018");
+dao.update_mem_count("A1000000018",-1);
 
 
 	

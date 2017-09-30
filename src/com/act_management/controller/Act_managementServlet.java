@@ -6,6 +6,7 @@ import java.io.IOException;
 import java.io.InputStream;
 import java.io.PrintWriter;
 import java.io.UnsupportedEncodingException;
+import java.util.ArrayList;
 import java.util.Date;
 import java.util.LinkedList;
 import java.util.List;
@@ -25,6 +26,7 @@ import com.act.model.ActVO;
 import com.act_comm.model.Act_commService;
 import com.act_comm.model.Act_commVO;
 import com.act_pair.model.Act_pairService;
+import com.act_pair.model.Act_pairVO;
 import com.convert_gift.model.Convert_giftService;
 import com.convert_gift.model.Convert_giftVO;
 import com.fo_act.model.Fo_actService;
@@ -39,6 +41,7 @@ import com.mem.model.MemVO;
 import org.apache.tomcat.util.http.fileupload.IOUtils;
 import org.json.JSONArray;
 import org.json.JSONObject;
+import com.sys_msg.model.*;
 
 @MultipartConfig(fileSizeThreshold = 1024 * 1024, maxFileSize = 500 * 1024 * 1024, maxRequestSize = 500* 5 * 1024 * 1024)
 public class Act_managementServlet extends HttpServlet{
@@ -52,6 +55,165 @@ public class Act_managementServlet extends HttpServlet{
 		req.setCharacterEncoding("UTF-8");
 		
 		String action = req.getParameter("action");
+		
+		
+		if("delete_fo_act".equals(action)){
+			 List<String> openTab3=new LinkedList<String>();
+			 openTab3.add("baba");
+				req.setAttribute("openTab3", openTab3);
+			try{
+				String act_no=req.getParameter("act_no");
+				String mem_ac=req.getParameter("mem_ac");
+				Fo_actService fo_actSvc=new Fo_actService();
+				fo_actSvc.deleteFo_act(mem_ac, act_no);
+				 String url=req.getParameter("my_act.jsp");
+				 RequestDispatcher dispatcher=req.getRequestDispatcher(url);
+				 dispatcher.forward(req, res);
+			}catch(Exception e){
+				System.out.println("刪除追蹤活動失敗");
+				 String url=req.getParameter("my_act.jsp");
+				 RequestDispatcher dispatcher=req.getRequestDispatcher(url);
+				 dispatcher.forward(req, res);
+			}
+				
+		}
+		
+		
+		if("delete_act".equals(action)){
+			 List<String> openTab2=new LinkedList<String>();
+			 openTab2.add("baba");
+				req.setAttribute("openTab2", openTab2);
+				System.out.println("track1");
+		try{
+			String act_no=req.getParameter("act_no");
+			ActService actSvc=new ActService();
+			actSvc.deleteAct(act_no);
+			String[] mem_ac_array=req.getParameterValues("mem_ac");
+			System.out.println(mem_ac_array==null);
+			System.out.println("track2");
+			if(mem_ac_array!=null){
+			for(int i=0;i<mem_ac_array.length;i++){
+				String mem_ac=mem_ac_array[i];
+				System.out.println("track2.1");
+				String msg_cont="活動編號"+act_no+"已被取消，系統已自動退款，歡迎再次參加活動!!";
+				java.sql.Date msg_send_date=new java.sql.Date(new Date().getTime());
+				Sys_msgService sys_msgSvc=new Sys_msgService();
+				Sys_msgVO sys_msg_vo=new Sys_msgVO();
+				System.out.println("track2.2");
+				 sys_msg_vo.setMem_ac(mem_ac);
+				 System.out.println("track2.3");
+				 sys_msg_vo.setMsg_cont(msg_cont);
+				 System.out.println("track2.4");
+				 sys_msg_vo.setMsg_send_date(msg_send_date);
+				 System.out.println("track2.5");
+				 sys_msgSvc.addSys_msg(sys_msg_vo);
+				 System.out.println("track2.6");
+			}
+			}
+			System.out.println("track3");
+			 String url=req.getParameter("my_act.jsp");
+			 RequestDispatcher dispatcher=req.getRequestDispatcher(url);
+			 dispatcher.forward(req, res);
+		}catch(Exception e){
+		System.out.println("刪除活動失敗");
+		 String url=req.getParameter("my_act.jsp");
+		 RequestDispatcher dispatcher=req.getRequestDispatcher(url);
+		 dispatcher.forward(req, res);
+				
+				
+			}
+		}
+		
+		
+		
+		
+		
+		
+		
+		
+		if("cancel_join".equals(action)){
+			try{
+			String mem_ac=req.getParameter("mem_ac");
+			String act_no=req.getParameter("act_no");
+			Act_pairService act_pairSvc=new Act_pairService();
+			act_pairSvc.deleteAct_pair(act_no, mem_ac);
+			ActService actSvc=new ActService();
+			actSvc.reduce_mem_count(act_no);
+			String msg_cont="活動編號"+act_no+"已完成退款!!";
+			java.sql.Date msg_send_date=new java.sql.Date(new Date().getTime());
+			Sys_msgService sys_msgSvc=new Sys_msgService();
+			Sys_msgVO sys_msg_vo=new Sys_msgVO();
+			 sys_msg_vo.setMem_ac(mem_ac);
+			 sys_msg_vo.setMsg_cont(msg_cont);
+			 sys_msg_vo.setMsg_send_date(msg_send_date);
+			 sys_msgSvc.addSys_msg(sys_msg_vo);
+			
+			 String url=req.getParameter("my_act.jsp");
+			 RequestDispatcher dispatcher=req.getRequestDispatcher(url);
+			 dispatcher.forward(req, res);
+			}catch(Exception e){
+				System.out.println("something wrong!");
+				 String url=req.getParameter("my_act.jsp");
+				 RequestDispatcher dispatcher=req.getRequestDispatcher(url);
+				 dispatcher.forward(req, res);
+			}
+			 
+			
+		}
+		
+		
+		
+		if("display_act_pair".equals(action)){
+			 List<String> openModal=new LinkedList<String>();
+				openModal.add("baba");
+				req.setAttribute("openModal", openModal);
+				
+				 List<String> openTab2=new LinkedList<String>();
+				 openTab2.add("baba");
+					req.setAttribute("openTab2", openTab2);
+			
+	try{				
+					System.out.println("track1");
+			String[] act_no_array=req.getParameterValues("act_no");
+			System.out.println("track2");
+			System.out.println("act_no_array= "+act_no_array);
+			String[] mem_ac_array=req.getParameterValues("mem_ac");
+			System.out.println("mem_ac_array= "+mem_ac_array);
+			List<Act_pairVO> list=new ArrayList<Act_pairVO>();
+			Act_pairService act_pairSvc=new Act_pairService();
+			if(act_no_array.length==mem_ac_array.length && act_no_array.length!=0){
+				for(int i=0;i<act_no_array.length;i++){
+					System.out.println("act_no_array[i]= "+act_no_array[i]);
+					System.out.println("mem_ac_array[i]= "+mem_ac_array[i]);
+					Act_pairVO act_pair_vo=act_pairSvc.getOneAct_pair(act_no_array[i], mem_ac_array[i]);
+					System.out.println("success "+i);
+					list.add(act_pair_vo);
+				}
+			}
+			System.out.println("successful");
+			req.setAttribute("act_pair_vo_list", list);
+			System.out.println("go back");
+			String url= req.getParameter("my_act.jsp");
+			System.out.println("url= "+url);
+			RequestDispatcher successView=req.getRequestDispatcher(url);
+			successView.forward(req, res);
+			
+	}catch(Exception e){
+		System.out.println("something wrong!");
+		String url= req.getParameter("my_act.jsp");
+		RequestDispatcher errorView=req.getRequestDispatcher(url);
+		errorView.forward(req, res);
+	}
+			
+			
+			
+		}
+		
+		
+		
+		
+		
+		
 		
 		
 		

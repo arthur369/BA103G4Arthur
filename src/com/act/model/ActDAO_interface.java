@@ -28,7 +28,8 @@ public interface ActDAO_interface {
      public List<ActVO> getSort(String sort); 
      
      //參與人數增加時加1使用
-     public void update_mem_count(String ACT_NO);
+     //增減人數使用(20170930修改)
+     public void update_mem_count(String ACT_NO,Integer number);
      
      
 }
