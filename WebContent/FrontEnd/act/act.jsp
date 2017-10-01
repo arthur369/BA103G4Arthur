@@ -281,9 +281,9 @@ pageContext.setAttribute("mylist",list);
       <h4>售價: <span>NT$ ${act_vo.act_fee }元 </span><span>招募剩餘<span class="remain_date"></span>天</span></h4>
       <input type="hidden" class="dl_date"  value="${act_vo.dl_date }">
       <div class="bar">
-        <div class="joinNumber"  style="width: calc(${act_vo.mem_count }% *  100 /  ${act_vo.max_mem })"></div>
+        <div class="joinNumber"  style="width: calc(${act_vo.mem_count }% *  100 /  ${act_vo.min_mem })"></div>
       </div>
-      <h3>已招募<span  class="mem_cont">${act_vo.mem_count }</span><span>/</span><span  class="max_mem">${act_vo.max_mem }</span><span>人</span></h3>
+      <h3>已招募<span  class="mem_cont">${act_vo.mem_count }</span><span>/</span><span  class="max_mem">${act_vo.min_mem }</span><span>人</span></h3>
       <p class="dataLocation"><span class="act_op_date">${act_vo.act_op_date }<span>舉辦</span> </span><span class="act_add">${act_vo.act_add }</span></p>
       <form  method="post" action="<%=request.getContextPath() %>/act_management/act_managementServlet">
       <a class="info">詳細資訊</a>

@@ -55,7 +55,7 @@ public class Act_managementServlet extends HttpServlet{
 		req.setCharacterEncoding("UTF-8");
 		
 		String action = req.getParameter("action");
-		
+		System.out.println("action= "+action);
 		
 		if("delete_fo_act".equals(action)){
 			 List<String> openTab3=new LinkedList<String>();
@@ -99,15 +99,15 @@ public class Act_managementServlet extends HttpServlet{
 				java.sql.Date msg_send_date=new java.sql.Date(new Date().getTime());
 				Sys_msgService sys_msgSvc=new Sys_msgService();
 				Sys_msgVO sys_msg_vo=new Sys_msgVO();
-				System.out.println("track2.2");
+			
 				 sys_msg_vo.setMem_ac(mem_ac);
-				 System.out.println("track2.3");
+				
 				 sys_msg_vo.setMsg_cont(msg_cont);
-				 System.out.println("track2.4");
+				
 				 sys_msg_vo.setMsg_send_date(msg_send_date);
-				 System.out.println("track2.5");
+				
 				 sys_msgSvc.addSys_msg(sys_msg_vo);
-				 System.out.println("track2.6");
+				
 			}
 			}
 			System.out.println("track3");
@@ -236,6 +236,38 @@ public class Act_managementServlet extends HttpServlet{
 			Act_pairService act_pairSvc=new Act_pairService();
 			act_pairSvc.addAct_pair(act_no,mem_ac,apply_date,pay_state,chk_state);
 			ActService actSvc=new ActService();
+			Integer mem_count=new Integer(act_vo.getMem_count());
+			Integer min_mem=new Integer(act_vo.getMin_mem());
+			String act_stat=act_vo.getAct_stat();
+			if(act_stat.equals("可報名") && mem_count>=min_mem){
+				act_stat="已成團";
+				act_vo.setAct_stat(act_stat);
+				actSvc.updateAct(act_vo);
+
+	List<Act_pairVO> act_pair_list=  act_pairSvc.getAll();
+
+	for(int i=0;i<act_pair_list.size();i++){
+		System.out.println("act_pair_list.get(i).getAct_no()= "+act_pair_list.get(i).getAct_no());
+		System.out.println("act_no= "+act_no);
+		System.out.println("true or false= "+(act_pair_list.get(i).getAct_no().equals(act_no)));
+		if(act_pair_list.get(i).getAct_no().equals(act_no)){		
+				String msg_cont="活動編號"+act_no+"已成團，請準時參加活動!!";
+				java.sql.Date msg_send_date=new java.sql.Date(new Date().getTime());
+				Sys_msgService sys_msgSvc=new Sys_msgService();
+				Sys_msgVO sys_msg_vo=new Sys_msgVO();
+			System.out.println("msg_send_date= "+msg_send_date);
+			System.out.println("msg_cont = "+msg_cont);
+			System.out.println("Mem_ac= "+act_pair_list.get(i).getMem_ac());
+				 sys_msg_vo.setMem_ac(act_pair_list.get(i).getMem_ac());
+				 sys_msg_vo.setMsg_cont(msg_cont);
+				 sys_msg_vo.setMsg_send_date(msg_send_date);
+				 sys_msgSvc.addSys_msg(sys_msg_vo);
+		}
+	}
+			}
+			
+			
+			
 			actSvc.update_mem_count(act_no);
 			
 			String url=req.getParameter("buy_act.jsp");

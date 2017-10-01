@@ -214,11 +214,11 @@ pageContext.setAttribute("act_pair_list",act_pair_list);
 					     		</form>
 					     		</td>
 					     		<td>${act_vo.act_name }</td>
-					     		<td>${act_vo.min_mem }</td>
+					     		<td class="host_min_mem">${act_vo.min_mem }</td>
 					     		<td>${act_vo.max_mem }</td>
 					     		<td>
 					     		<form  method="post"  action="<%=request.getContextPath() %>/act_management/act_managementServlet" >
-					     		<a class="display_act_pair">${act_vo.mem_count }</a>
+					     		<a class="display_act_pair host_mem_count">${act_vo.mem_count }</a>
 					     		<c:forEach var="act_pair_vo" items="${act_pair_list}"  >
 					     		<c:if test="${act_vo.act_no==act_pair_vo.act_no}">
 					     		<input type="hidden"  name="act_no" value="${act_pair_vo.act_no}">
@@ -237,9 +237,9 @@ pageContext.setAttribute("act_pair_list",act_pair_list);
 					     		<td>${act_vo.act_stat }</td>
 					     		<td>${(act_vo.re_cont==null)?"無":act_vo.re_cont }</td>
 					     		<td>${act_vo.review_ed_date }</td>
-					     		<td>
+					     		<td class="cancel_action">
 					     		<form  method="post"  action="<%=request.getContextPath() %>/act_management/act_managementServlet" >
-					     		<button class="btn btn-danger">取消活動</button>
+					     		<button class="btn btn-danger  dismiss_act">取消活動</button>
 					     		<input type="hidden"  name="action" value="delete_act">
 					     		<input type="hidden"  name="my_act.jsp" value="<%=request.getServletPath() %>">
 					     		<input type="hidden"  name="act_no" value="${act_vo.act_no}">
@@ -391,6 +391,11 @@ pageContext.setAttribute("act_pair_list",act_pair_list);
 		$(".goto_detail").click(function(){
 			$(this).parent().submit();
 		})
+		
+		if($(".host_mem_count").text()>=$(".host_min_mem").text()){
+			$(".dismiss_act").css("display","none");
+			$(".cancel_action").text("成團無法取消");
+		}
 		
 		
 		</script>

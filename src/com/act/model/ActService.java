@@ -89,6 +89,13 @@ public ActVO updateAct(String act_no,String mem_ac,String org_cont,String act_na
 		return act_VO;
 	}
 	
+public ActVO updateAct(ActVO act_vo){
+	dao.update(act_vo);
+	return act_vo;
+}
+
+
+
 public void deleteAct(String act_no){
 	dao.delete(act_no);
 }

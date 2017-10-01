@@ -196,7 +196,7 @@ pageContext.setAttribute("act_vo",act_vo);
             <h1 class="titleText">活動招募中</h1>
             <h3 class="minJoin">最低參加人數
               <div class="bar">
-                <div class="joinNumber"  style="width: calc(${act_vo.mem_count }% *  100 /  ${act_vo.max_mem })"></div>
+                <div class="joinNumber"  style="width: calc(${act_vo.mem_count }% *  100 /  ${act_vo.min_mem })"></div>
               </div>
             </h3>
             <h2 class="date">報名期限到數
@@ -210,7 +210,7 @@ pageContext.setAttribute("act_vo",act_vo);
               
                <input type="hidden"  name="mem_ac" value="${(mem_ac==null)? "mamabeak":mem_ac}">
              <input type="hidden" name="act_no" value="${act_vo.act_no }">
-               
+                
                    <input type="hidden"  name="act_detail.jsp" value="<%=request.getServletPath()%>">
               
               </form>
@@ -372,6 +372,15 @@ pageContext.setAttribute("act_vo",act_vo);
  
  
  <script>
+ if(${act_vo.mem_count>=act_vo.max_mem}){
+		$(".doit_instance").attr("disabled", true);
+		$(".doit_instance").css("display","none");
+		$(".time").text("報名已截止");
+		$(".titleText").text("已滿團");
+	}
+ 
+ 
+ 
  $(".doit_instance").click(function(){
 $(this).parent().submit();
 	 
@@ -474,6 +483,10 @@ function initMap() {
           map: map
         });
       }
+
+
+
+
 
 <%--由地圖查經緯度--%>
 <%--
