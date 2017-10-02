@@ -15,14 +15,15 @@ public class Convert_giftService {
 		
 	}
 	
-	public Convert_giftVO addConvert_gift(String apply_no,String mem_ac,String apply_name,String apply_phone,String gift_no,Date apply_date,String apply_stat,String apply_add,Date send_date,String send_no){
+	public Convert_giftVO addConvert_gift(String mem_ac,String apply_name,String apply_phone,String gift_no,Integer gift_amount,Date apply_date,String apply_stat,String apply_add,Date send_date,String send_no){
 		
 		Convert_giftVO convert_gift_VO=new Convert_giftVO();
-		convert_gift_VO.setApply_no(apply_no);
+//		convert_gift_VO.setApply_no(apply_no);
 		convert_gift_VO.setMem_ac(mem_ac);
 		convert_gift_VO.setApply_name(apply_name);
 		convert_gift_VO.setApply_phone(apply_phone);
 		convert_gift_VO.setGift_no(gift_no);
+		convert_gift_VO.setGift_amount(gift_amount);
 		convert_gift_VO.setApply_date(apply_date);
 		convert_gift_VO.setApply_stat(apply_stat);
 		convert_gift_VO.setApply_add(apply_add);
@@ -31,7 +32,7 @@ public class Convert_giftService {
 		dao.insert(convert_gift_VO);
 		return convert_gift_VO;
 	}
-	public Convert_giftVO updateConvert_gift(String apply_no,String mem_ac,String apply_name,String apply_phone,String gift_no,Date apply_date,String apply_stat,String apply_add,Date send_date,String send_no){
+	public Convert_giftVO updateConvert_gift(String apply_no,String mem_ac,String apply_name,String apply_phone,String gift_no,Integer gift_amount,Date apply_date,String apply_stat,String apply_add,Date send_date,String send_no){
 		
 		Convert_giftVO convert_gift_VO=new Convert_giftVO();
 		convert_gift_VO.setApply_no(apply_no);
@@ -39,6 +40,7 @@ public class Convert_giftService {
 		convert_gift_VO.setApply_name(apply_name);
 		convert_gift_VO.setApply_phone(apply_phone);
 		convert_gift_VO.setGift_no(gift_no);
+		convert_gift_VO.setGift_amount(gift_amount);
 		convert_gift_VO.setApply_date(apply_date);
 		convert_gift_VO.setApply_stat(apply_stat);
 		convert_gift_VO.setApply_add(apply_add);

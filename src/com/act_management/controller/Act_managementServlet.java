@@ -57,6 +57,36 @@ public class Act_managementServlet extends HttpServlet{
 		String action = req.getParameter("action");
 		System.out.println("action= "+action);
 		
+		
+		if("action_check_pass".equals(action)){
+			String act_no=req.getParameter("act_no");
+			ActService actSvc=new ActService();
+			ActVO act_vo= actSvc.getOneAct(act_no);
+			String act_stat=act_vo.getAct_stat();
+			act_stat="可報名";
+			act_vo.setAct_stat(act_stat);
+			actSvc.updateAct(act_vo);
+			String mem_ac=act_vo.getMem_ac();
+			String msg_cont="活動編號"+act_no+"已審核通過，將開始受理報名，謝謝!!";
+			java.sql.Date msg_send_date=new java.sql.Date(new Date().getTime());
+			Sys_msgService sys_msgSvc=new Sys_msgService();
+			Sys_msgVO sys_msg_vo=new Sys_msgVO();
+		
+			 sys_msg_vo.setMem_ac(mem_ac);
+			
+			 sys_msg_vo.setMsg_cont(msg_cont);
+			
+			 sys_msg_vo.setMsg_send_date(msg_send_date);
+			
+			 sys_msgSvc.addSys_msg(sys_msg_vo);
+			String url=req.getParameter("action_check.jsp");
+			RequestDispatcher dispatcher=req.getRequestDispatcher(url);
+			dispatcher.forward(req, res);
+			
+		}
+		
+		
+		
 		if("delete_fo_act".equals(action)){
 			 List<String> openTab3=new LinkedList<String>();
 			 openTab3.add("baba");
@@ -94,7 +124,7 @@ public class Act_managementServlet extends HttpServlet{
 			if(mem_ac_array!=null){
 			for(int i=0;i<mem_ac_array.length;i++){
 				String mem_ac=mem_ac_array[i];
-				System.out.println("track2.1");
+			
 				String msg_cont="活動編號"+act_no+"已被取消，系統已自動退款，歡迎再次參加活動!!";
 				java.sql.Date msg_send_date=new java.sql.Date(new Date().getTime());
 				Sys_msgService sys_msgSvc=new Sys_msgService();
@@ -108,9 +138,25 @@ public class Act_managementServlet extends HttpServlet{
 				
 				 sys_msgSvc.addSys_msg(sys_msg_vo);
 				
+				 MemService memSvc=new MemService();
+					MemVO mem_vo=memSvc.getOneProd(mem_ac);
+				Integer mem_pt=	mem_vo.getMem_pt();
+					mem_pt=mem_pt-5;
+					mem_vo.setMem_pt(mem_pt);
+					memSvc.updateMem(mem_vo);
+				 
+				 
+				 
+				 
 			}
 			}
 			System.out.println("track3");
+			
+			
+			
+			
+			
+			
 			 String url=req.getParameter("my_act.jsp");
 			 RequestDispatcher dispatcher=req.getRequestDispatcher(url);
 			 dispatcher.forward(req, res);
@@ -148,6 +194,16 @@ public class Act_managementServlet extends HttpServlet{
 			 sys_msg_vo.setMsg_send_date(msg_send_date);
 			 sys_msgSvc.addSys_msg(sys_msg_vo);
 			
+			 MemService memSvc=new MemService();
+				MemVO mem_vo=memSvc.getOneProd(mem_ac);
+			Integer mem_pt=	mem_vo.getMem_pt();
+				mem_pt=mem_pt-5;
+				mem_vo.setMem_pt(mem_pt);
+				memSvc.updateMem(mem_vo);
+			 
+			 
+			 
+			 
 			 String url=req.getParameter("my_act.jsp");
 			 RequestDispatcher dispatcher=req.getRequestDispatcher(url);
 			 dispatcher.forward(req, res);
@@ -269,6 +325,16 @@ public class Act_managementServlet extends HttpServlet{
 			
 			
 			actSvc.update_mem_count(act_no);
+			
+			MemService memSvc=new MemService();
+			MemVO mem_vo=memSvc.getOneProd(mem_ac);
+		Integer mem_pt=	mem_vo.getMem_pt();
+			mem_pt=mem_pt+5;
+			mem_vo.setMem_pt(mem_pt);
+			memSvc.updateMem(mem_vo);
+			
+			
+			
 			
 			String url=req.getParameter("buy_act.jsp");
 			RequestDispatcher successView=req.getRequestDispatcher(url);
@@ -446,6 +512,15 @@ public class Act_managementServlet extends HttpServlet{
 				ActVO act_vo=(ActVO)session.getAttribute("act_vo");
 				ActService actSvc=new ActService();
 				actSvc.addAct(act_vo);
+				
+				String mem_ac=act_vo.getMem_ac();
+				MemService memSvc=new MemService();
+				MemVO mem_vo=memSvc.getOneProd(mem_ac);
+			Integer mem_pt=	mem_vo.getMem_pt();
+				mem_pt=mem_pt+5;
+				mem_vo.setMem_pt(mem_pt);
+				memSvc.updateMem(mem_vo);
+				
 				
 				session.removeAttribute("act_vo");
 				session.removeAttribute("act_op_date");

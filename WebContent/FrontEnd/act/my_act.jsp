@@ -394,7 +394,7 @@ pageContext.setAttribute("act_pair_list",act_pair_list);
 		
 		if($(".host_mem_count").text()>=$(".host_min_mem").text()){
 			$(".dismiss_act").css("display","none");
-			$(".cancel_action").text("成團無法取消");
+			$(".cancel_action").text("達成團標準無法取消");
 		}
 		
 		

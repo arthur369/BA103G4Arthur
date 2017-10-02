@@ -36,12 +36,12 @@ public class Convert_giftJNDIDAO implements Convert_giftDAO_interface{
 		
 	}
 	
-	private static final String INSERT_STMT ="insert into convert_gift values('V' || apply_no_seq.nextval,?,?,?,?,?,?,?,?,?)";
+	private static final String INSERT_STMT ="insert into convert_gift values('V' || apply_no_seq.nextval,?,?,?,?,?,?,?,?,?,?)";
 	private static final String GET_ALL_STMT ="select * from convert_gift";
 	private static final String GET_ONE_STMT="select * from convert_gift where APPLY_NO=?";
 	private static final String DELETE = "delete from convert_gift where APPLY_NO=?";
-	private static final String UPDATE ="update convert_gift set MEM_AC=?,APPLY_NAME=?,APPLY_PHONE=?,GIFT_NO=?,APPLY_DATE=?,APPLY_STAT=?,APPLY_ADD=?,SEND_DATE=?,SEND_NO=? where APPLY_NO=?";
-	
+	private static final String UPDATE ="update convert_gift set MEM_AC=?,APPLY_NAME=?,APPLY_PHONE=?,GIFT_NO=?,GIFT_AMOUNT=?,APPLY_DATE=?,APPLY_STAT=?,APPLY_ADD=?,SEND_DATE=?,SEND_NO=? where APPLY_NO=?";
+	//  依主鍵改變兌換申請狀態
 	private static final String UPDATE_STATUS="update convert_gift set apply_stat=?,send_no=?,send_date =?where apply_no=?";
 	
 	@Override
@@ -58,11 +58,12 @@ public class Convert_giftJNDIDAO implements Convert_giftDAO_interface{
 			pstmt.setString(2, convert_gift_VO.getApply_name());
 			pstmt.setString(3, convert_gift_VO.getApply_phone());
 			pstmt.setString(4, convert_gift_VO.getGift_no());
-			pstmt.setDate(5, convert_gift_VO.getApply_date());
-			pstmt.setString(6, convert_gift_VO.getApply_stat());
-			pstmt.setString(7, convert_gift_VO.getApply_add());
-			pstmt.setDate(8, convert_gift_VO.getSend_date());
-			pstmt.setString(9, convert_gift_VO.getSend_no());
+			pstmt.setInt(5, convert_gift_VO.getGift_amount());
+			pstmt.setDate(6, convert_gift_VO.getApply_date());
+			pstmt.setString(7, convert_gift_VO.getApply_stat());
+			pstmt.setString(8, convert_gift_VO.getApply_add());
+			pstmt.setDate(9, convert_gift_VO.getSend_date());
+			pstmt.setString(10, convert_gift_VO.getSend_no());
 			pstmt.executeUpdate();
 			
 			
@@ -108,12 +109,13 @@ public class Convert_giftJNDIDAO implements Convert_giftDAO_interface{
 			pstmt.setString(2, convert_gift_VO.getApply_name());
 			pstmt.setString(3, convert_gift_VO.getApply_phone());
 			pstmt.setString(4, convert_gift_VO.getGift_no());
-			pstmt.setDate(5, convert_gift_VO.getApply_date());
-			pstmt.setString(6, convert_gift_VO.getApply_stat());
-			pstmt.setString(7, convert_gift_VO.getApply_add());
-			pstmt.setDate(8, convert_gift_VO.getSend_date());
-			pstmt.setString(9, convert_gift_VO.getSend_no());
-			pstmt.setString(10, convert_gift_VO.getApply_no());
+			pstmt.setInt(5, convert_gift_VO.getGift_amount());
+			pstmt.setDate(6, convert_gift_VO.getApply_date());
+			pstmt.setString(7, convert_gift_VO.getApply_stat());
+			pstmt.setString(8, convert_gift_VO.getApply_add());
+			pstmt.setDate(9, convert_gift_VO.getSend_date());
+			pstmt.setString(10, convert_gift_VO.getSend_no());
+			pstmt.setString(11, convert_gift_VO.getApply_no());
 			pstmt.executeUpdate();
 			
 			
@@ -200,6 +202,7 @@ public class Convert_giftJNDIDAO implements Convert_giftDAO_interface{
 				 convert_gift_vo.setApply_name(rs.getString("APPLY_NAME"));
 				 convert_gift_vo.setApply_phone(rs.getString("APPLY_PHONE"));
 				 convert_gift_vo.setGift_no(rs.getString("GIFT_NO"));
+				 convert_gift_vo.setGift_amount(rs.getInt("GIFT_AMOUNT"));
 				 convert_gift_vo.setApply_date(rs.getDate("APPLY_DATE"));
 				 convert_gift_vo.setApply_stat(rs.getString("APPLY_STAT"));
 				 convert_gift_vo.setApply_add(rs.getString("APPLY_ADD"));
@@ -265,6 +268,7 @@ public class Convert_giftJNDIDAO implements Convert_giftDAO_interface{
 					 convert_gift_vo.setApply_name(rs.getString("APPLY_NAME"));
 					 convert_gift_vo.setApply_phone(rs.getString("APPLY_PHONE"));
 					 convert_gift_vo.setGift_no(rs.getString("GIFT_NO"));
+					 convert_gift_vo.setGift_amount(rs.getInt("GIFT_AMOUNT"));
 					 convert_gift_vo.setApply_date(rs.getDate("APPLY_DATE"));
 					 convert_gift_vo.setApply_stat(rs.getString("APPLY_STAT"));
 					 convert_gift_vo.setApply_add(rs.getString("APPLY_ADD"));
@@ -357,6 +361,7 @@ public class Convert_giftJNDIDAO implements Convert_giftDAO_interface{
 				 convert_gift_vo.setApply_name(rs.getString("APPLY_NAME"));
 				 convert_gift_vo.setApply_phone(rs.getString("APPLY_PHONE"));
 				 convert_gift_vo.setGift_no(rs.getString("GIFT_NO"));
+				 convert_gift_vo.setGift_amount(rs.getInt("GIFT_AMOUNT"));
 				 convert_gift_vo.setApply_date(rs.getDate("APPLY_DATE"));
 				 convert_gift_vo.setApply_stat(rs.getString("APPLY_STAT"));
 				 convert_gift_vo.setApply_add(rs.getString("APPLY_ADD"));

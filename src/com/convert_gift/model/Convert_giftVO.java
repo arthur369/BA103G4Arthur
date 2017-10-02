@@ -9,10 +9,14 @@ public class Convert_giftVO implements Serializable{
 	private String apply_name;
 	private String apply_phone;
 	private String gift_no;
+	
+	private Integer gift_amount;
+	
 	private Date apply_date;
 	private String apply_stat;
 	private String apply_add;
 	private Date send_date;
+	
 	private String send_no;
 	public Convert_giftVO() {
 		
@@ -48,6 +52,15 @@ public class Convert_giftVO implements Serializable{
 	public void setGift_no(String gIFT_NO) {
 		gift_no = gIFT_NO;
 	}
+	public Integer getGift_amount() {
+		return gift_amount;
+	}
+	public void setGift_amount(Integer gift_amount) {
+		this.gift_amount = gift_amount;
+	}
+	
+	
+	
 	public Date getApply_date() {
 		return apply_date;
 	}

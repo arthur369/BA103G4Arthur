@@ -34,6 +34,7 @@
 	<div class="row">
 		<div class="col-md-12">
 			<h1 class="buy_title">參與活動--付款資訊</h1>
+			<h4>購買活動即可獲得5積分喔~</h4>
 			<table class="table table-striped">
 			
 			
@@ -82,8 +83,9 @@
 			
 			</table>
 			<div class="col-md-offset-9">
-				<a class="btn btn-danger"   type="submit"  href="<%=request.getContextPath()%>/FrontEnd/act/act_detail.jsp">取消購買</a>
-				<form  method="post"  action="<%=request.getContextPath() %>/act_management/act_managementServlet" >
+			<form  method="post"  action="<%=request.getContextPath() %>/act_management/act_managementServlet" >
+				<a class="btn btn-danger"  href="<%=request.getContextPath()%>/FrontEnd/act/act_detail.jsp">取消購買</a>
+				
 				<button class="btn btn-success" >確定購買</button>
 				<input type="hidden"  name="mem_ac"  value="${(mem_ac==null)? "mamabeak":mem_ac}">
 				<input type="hidden"  name="action"  value="confirm_buy">

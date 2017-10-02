@@ -6,6 +6,9 @@ import java.io.IOException;
 import java.io.InputStream;
 import java.io.PrintWriter;
 import java.io.UnsupportedEncodingException;
+import java.text.DateFormat;
+import java.text.SimpleDateFormat;
+import java.util.Date;
 import java.util.LinkedList;
 import java.util.List;
 
@@ -15,12 +18,17 @@ import javax.servlet.annotation.MultipartConfig;
 import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
+import javax.servlet.http.HttpSession;
 
+import com.convert_gift.model.Convert_giftService;
+import com.convert_gift.model.Convert_giftVO;
 import com.gift_data.model.Gift_dataJDBCDAO;
 import com.gift_data.model.Gift_dataJNDIDAO;
 import com.gift_data.model.Gift_dataService;
 import com.gift_data.model.Gift_dataVO;
 import com.google.gson.Gson;
+import com.mem.model.MemService;
+import com.mem.model.MemVO;
 
 import org.apache.tomcat.util.http.fileupload.IOUtils;
 import org.json.JSONArray;
@@ -38,6 +46,141 @@ public class Gift_managementServlet extends HttpServlet{
 		req.setCharacterEncoding("UTF-8");
 		
 		String action = req.getParameter("action");
+		
+		
+		if("buy_gift_confirm".equals(action)){
+			  List<String> errorMsgs = new LinkedList<String>();
+			  req.setAttribute("errorMsgs", errorMsgs);
+	try{		  
+		Integer gift_amount=new Integer(req.getParameter("gift_amount"));
+			String mem_ac=req.getParameter("mem_ac").trim();
+			java.sql.Date apply_date=new java.sql.Date(new Date().getTime());
+			String gift_no=req.getParameter("gift_no");
+			String apply_name =req.getParameter("apply_name");
+			if(apply_name.length()==0){
+				errorMsgs.add("請輸入收件人姓名");
+			}
+			
+	
+				  String apply_phone=req.getParameter("apply_phone").trim();
+				  try{
+				if(apply_phone.trim().length()!=10){
+					errorMsgs.add("電話格式錯誤");
+				}else if(!apply_phone.trim().substring(0,2).equals("09")){
+					errorMsgs.add("電話格式錯誤");
+				}
+				  }catch(Exception e){
+					  errorMsgs.add("電話格式錯誤");
+				  }
+				
+				
+				String apply_add =req.getParameter("apply_add").trim();
+				if(apply_add.trim().length()==0){
+					errorMsgs.add("請輸入收件人地址");
+				}
+				
+				String apply_stat="待出貨";
+				
+			Convert_giftVO convert_gift_vo=new Convert_giftVO();
+			convert_gift_vo.setApply_name(apply_name);
+			convert_gift_vo.setApply_phone(apply_phone);
+			convert_gift_vo.setApply_add(apply_add);
+			req.setAttribute("convert_gift_vo", convert_gift_vo);
+			req.setAttribute("apply_date", apply_date);
+			req.setAttribute("gift_amount", gift_amount);
+	if (!errorMsgs.isEmpty()) {
+	
+					String url=req.getParameter("buy_gift.jsp");
+					RequestDispatcher failureView = req
+							.getRequestDispatcher(url);
+					failureView.forward(req, res);
+					return;
+				}
+	Convert_giftService convert_giftSvc=new Convert_giftService();
+	convert_giftSvc.addConvert_gift(mem_ac, apply_name, apply_phone, gift_no,gift_amount, apply_date, apply_stat, apply_add, null, null);
+	HttpSession session=req.getSession();
+	Gift_dataVO gift_data_vo=(Gift_dataVO) session.getAttribute("gift_data_vo");
+	Integer gift_pt=gift_data_vo.getGift_pt();
+	MemService memSvc=new MemService();
+	MemVO mem_vo= memSvc.getOneProd(mem_ac);
+	Integer mem_pt=  mem_vo.getMem_pt();
+	mem_pt=mem_pt-(gift_amount*gift_pt);
+	mem_vo.setMem_pt(mem_pt);
+	memSvc.updateMem(mem_vo);
+	Integer gift_remain=gift_data_vo.getGift_remain();
+	gift_remain =gift_remain-gift_amount;
+	gift_data_vo.setGift_remain(gift_remain);
+	Gift_dataService gift_dataSvc=new Gift_dataService();
+	gift_dataSvc.updateGift_data(gift_data_vo.getGift_no(), gift_data_vo.getGift_name(),gift_data_vo.getGift_remain(),gift_data_vo.getGift_cont(),gift_data_vo.getGift_img(),gift_data_vo.getGift_pt(),gift_data_vo.getGift_launch_date());
+	
+	
+	
+	
+	
+	session.removeAttribute("gift_data_vo");
+	
+	
+	
+	
+	String url="/FrontEnd/gift/gift_data_frontEnd.jsp";
+	RequestDispatcher successView = req
+			.getRequestDispatcher(url);
+	successView.forward(req, res);
+	return;
+	
+	
+	
+	}catch(Exception e){
+		
+					String url=req.getParameter("buy_gift.jsp");
+					RequestDispatcher failureView = req
+							.getRequestDispatcher(url);
+					failureView.forward(req, res);
+					return;
+				}
+			
+			
+		}
+		
+		
+		
+		if("buy_gift".equals(action)){
+			
+		try{	
+			String gift_no=req.getParameter("gift_no");
+			Gift_dataService gift_dataSvc=new Gift_dataService();
+			Gift_dataVO gift_data_vo= gift_dataSvc.getOneGift_data(gift_no);
+			DateFormat df=new SimpleDateFormat("yyyy-MM-dd");
+		String apply_date=df.format(new Date());
+			
+		Integer gift_amount=new Integer(req.getParameter("gift_amount"));
+		if(gift_amount==null || gift_amount==0){
+			String url=req.getParameter("gift_data_frontEnd.jsp");
+			RequestDispatcher dispatcher=req.getRequestDispatcher(url);
+			dispatcher.forward(req, res);
+		}
+		
+		req.setAttribute("gift_amount", gift_amount);
+			
+			HttpSession session=req.getSession();
+			session.setAttribute("gift_data_vo", gift_data_vo);
+			req.setAttribute("apply_date", apply_date);
+			String url="/FrontEnd/gift/buy_gift.jsp";
+			RequestDispatcher dispatcher=req.getRequestDispatcher(url);
+			dispatcher.forward(req, res);
+		}catch(Exception e){
+			String url=req.getParameter("gift_data_frontEnd.jsp");
+			RequestDispatcher dispatcher=req.getRequestDispatcher(url);
+			dispatcher.forward(req, res);
+		}
+			
+			
+		}
+		
+		
+		
+		
+		
 		
 		if ("getOne_For_Display".equals(action)) {
 		
