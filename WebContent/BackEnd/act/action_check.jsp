@@ -81,10 +81,12 @@ text-decoration: none;
   width:120px;
   height: 80px;
   left: 50%;
-  transform: translate(-50%,0%);
+  transform: translate(-50%,0%);，
   }
   
-  
+  .action_success_form,.action_fail{
+  display: inline-block;
+  }
   
   </style>
 <%
@@ -157,13 +159,14 @@ pageContext.setAttribute("list",list);
             <td>NT$${act_vo.act_fee }</td>
             <td>${act_vo.act_stat }</td>
             <td><img class="img-responsive  action_pic" src="<%=request.getContextPath()%>/ActImg.do?act_no=${act_vo.act_no}&index=1" > </td>
-            <td> 
-            <form  method="post" action="<%=request.getContextPath() %>/act_management/act_managementServlet">
-              <button class="btn btn-danger">退回</button>
-               </form>
-              <form  method="post" action="<%=request.getContextPath() %>/act_management/act_managementServlet">
+            <td>  
+           
+              <a class="btn btn-danger  action_fail" href='#modal-id' data-toggle="modal">退回</a>
+         
+              <form   class="action_success_form"  method="post" action="<%=request.getContextPath() %>/act_management/act_managementServlet">
+                <input type="hidden" name=act_no   class="act_no"  value="${act_vo.act_no }" >
                <input type="hidden" name=action  value="action_check_pass" >
-                <input type="hidden" name=act_no  value="${act_vo.act_no }" >
+              
                 <input type="hidden" name=action_check.jsp  value="<%=request.getServletPath() %>" >
               <button class="btn btn-success">通過</button>
               </form>
@@ -183,7 +186,39 @@ pageContext.setAttribute("list",list);
     
     
     
-    
+    <div class="modal fade" id="modal-id">
+			<div class="modal-dialog">
+			<form  method="post" action="<%=request.getContextPath() %>/act_management/act_managementServlet">
+				<div class="modal-content">
+					<div class="modal-header">
+						<button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button>
+						<h4 class="modal-title">審核不通過原因</h4>
+					</div>
+					<div class="modal-body">
+					<c:if test="${not empty errorMsgs}">
+	<font color='red'  >請修正以下錯誤:
+	<ul>
+		<c:forEach var="message" items="${errorMsgs} ">
+			<li>${message}</li>
+		</c:forEach>
+	</ul>
+	</font>
+</c:if>
+						<textarea name="re_cont" class="form-control" rows="3"></textarea>
+					</div>
+
+					<div class="modal-footer">
+						<button type="button" class="btn btn-default" data-dismiss="modal">關閉</button>
+						
+						<button type="submit" class="btn btn-primary">Save changes</button>
+						<input type="hidden"  name="action"  value="action_fail">
+						<input type="hidden"  name="action_check.jsp"  value="<%=request.getServletPath()%>">
+						<input type="hidden"  class="act_no_submit" name="act_no" value="">
+					</div>
+				</div>
+				</form>
+			</div>
+		</div>
     
     
     
@@ -205,7 +240,22 @@ pageContext.setAttribute("list",list);
  <script type="text/javascript"  src="<%=request.getContextPath()%>/BackEnd/res/js/bootstrap-datetimepicker.fr.js"></script>
   
 
+  <script>
   
+  $(".action_fail").click(function(){
+var act_no=	$(this).next().children().val();
+	  $(".act_no_submit").val(act_no);
+	  
+	  
+	  
+  })
+  
+  if(${not empty openModal}){
+		 $("#modal-id").modal({show: true});
+		}
+  
+  
+  </script>
     		
     	   
     

@@ -55,7 +55,187 @@ public class Act_managementServlet extends HttpServlet{
 		req.setCharacterEncoding("UTF-8");
 		
 		String action = req.getParameter("action");
-		System.out.println("action= "+action);
+	
+		
+if("confirm_mem_pay".equals(action)){
+	
+	 List<String> openTab2=new LinkedList<String>();
+	 openTab2.add("baba");
+		req.setAttribute("openTab2", openTab2);
+	
+	
+	
+	String act_no=req.getParameter("act_no");
+	String mem_ac=req.getParameter("mem_ac");
+	Act_pairService act_pairSvc=new Act_pairService();
+	Act_pairVO act_pair_vo= act_pairSvc.getOneAct_pair(act_no, mem_ac);
+	String pay_state="已繳費";
+	act_pair_vo.setPay_state(pay_state);
+	act_pairSvc.updateAct_pair(act_pair_vo.getAct_no(), act_pair_vo.getMem_ac(), act_pair_vo.getApply_date(),act_pair_vo.getPay_state(),act_pair_vo.getChk_state());
+	
+	String url=req.getParameter("my_act.jsp");
+	RequestDispatcher dispatcher=req.getRequestDispatcher(url);
+	dispatcher.forward(req, res);
+		}
+		
+		
+		
+		
+		if("notice_pay".equals(action)){
+			String act_no=req.getParameter("act_no");
+			String mem_ac=req.getParameter("mem_ac");
+			Act_pairService act_pairSvc=new Act_pairService();
+			Act_pairVO act_pair_vo= act_pairSvc.getOneAct_pair(act_no, mem_ac);
+			String pay_state=req.getParameter("pay_state");
+			if(pay_state.trim().equals("未繳費")){
+		    pay_state="未繳費(會員通知已繳費)";
+			act_pair_vo.setPay_state(pay_state);
+			act_pairSvc.updateAct_pair(act_pair_vo.getAct_no(), act_pair_vo.getMem_ac(), act_pair_vo.getApply_date(),act_pair_vo.getPay_state(),act_pair_vo.getChk_state());
+			}
+			String url=req.getParameter("my_act.jsp");
+			RequestDispatcher dispatcher=req.getRequestDispatcher(url);
+			dispatcher.forward(req, res);
+			
+			
+		}
+		
+		
+		
+		
+		
+		if("modify_act".equals(action)){
+			HttpSession session=req.getSession();
+			
+		String	 act_no=req.getParameter("act_no");
+		ActService actSvc=new ActService();
+		ActVO act_vo= actSvc.getOneAct(act_no);
+			session.setAttribute("act_vo",act_vo);
+			java.sql.Timestamp dl_date=dateToTimestamp(act_vo.getDl_date());
+			session.setAttribute("dl_date", dl_date);
+			java.sql.Timestamp act_op_date=dateToTimestamp(act_vo.getAct_op_date());
+			session.setAttribute("act_op_date", act_op_date);
+			java.sql.Timestamp act_ed_date=dateToTimestamp(act_vo.getAct_ed_date());
+			session.setAttribute("act_ed_date", act_ed_date);
+			
+			String url="/FrontEnd/act/start_act.jsp";
+			RequestDispatcher dispatcher=req.getRequestDispatcher(url);
+			dispatcher.forward(req, res);
+			
+			
+			
+		}
+		
+		
+		
+		
+		
+		if("action_fail".equals(action)){
+		
+			List<String> errorMsgs = new LinkedList<String>();
+			  req.setAttribute("errorMsgs", errorMsgs);
+			
+			  List<String> openModal=new LinkedList<String>();
+				openModal.add("baba");
+				HttpSession session=req.getSession();
+			  
+			  
+			try{
+				
+				String act_no=(String)session.getAttribute("act_no");
+				if(act_no==null){
+				 act_no=req.getParameter("act_no");
+				}
+				
+				
+				
+				
+				String re_cont=req.getParameter("re_cont");
+				if(re_cont.trim().length()==0){
+					errorMsgs.add("請輸入不通過原因!!");
+				}
+				if (!errorMsgs.isEmpty()) {
+				
+					session.setAttribute("act_no",act_no);
+					
+			
+					req.setAttribute("openModal", openModal);
+					String url=req.getParameter("action_check.jsp");
+					
+				
+					RequestDispatcher dispatcher=req.getRequestDispatcher(url);
+					dispatcher.forward(req, res);
+					return;
+				}
+				
+				
+			
+			
+		
+			ActService actSvc=new ActService();
+			ActVO act_vo= actSvc.getOneAct(act_no);
+	
+			String act_stat="不通過審核";
+			act_vo.setAct_stat(act_stat);
+		
+			java.sql.Date review_ed_date=new java.sql.Date(new Date().getTime());
+		
+			
+			
+			
+			
+			
+			act_vo.setReview_ed_date(review_ed_date);
+			act_vo.setRe_cont(re_cont);
+			actSvc.updateAct(act_vo);
+			
+		
+			String mem_ac=act_vo.getMem_ac();
+			String msg_cont="活動編號"+act_no+"，活動名稱"+act_vo.getAct_name()+"    審核失敗，不通過原因為: "+re_cont+"，請至個人活動頁面修正，修正後將重新審核，謝謝!!";
+			java.sql.Date msg_send_date=new java.sql.Date(new Date().getTime());
+			Sys_msgService sys_msgSvc=new Sys_msgService();
+			Sys_msgVO sys_msg_vo=new Sys_msgVO();
+			 sys_msg_vo.setMem_ac(mem_ac);	
+			 sys_msg_vo.setMsg_cont(msg_cont);	
+			 sys_msg_vo.setMsg_send_date(msg_send_date);
+			 sys_msgSvc.addSys_msg(sys_msg_vo);
+			
+		
+			
+			
+			
+			
+			session.removeAttribute("act_no");
+			
+		
+			
+			String url=req.getParameter("action_check.jsp");
+		
+			
+			RequestDispatcher dispatcher=req.getRequestDispatcher(url);
+			dispatcher.forward(req, res);
+			
+			
+			
+			
+			}catch(Exception e){
+				String act_no=(String)session.getAttribute("act_no");
+				if(act_no==null){
+				 act_no=req.getParameter("act_no");
+				}
+				
+				
+				session.setAttribute("act_no",act_no);
+			
+				req.setAttribute("openModal", openModal);
+				String url=req.getParameter("action_check.jsp");
+				RequestDispatcher dispatcher=req.getRequestDispatcher(url);
+				dispatcher.forward(req, res);
+				return;
+			}
+		}
+		
+		
+		
 		
 		
 		if("action_check_pass".equals(action)){
@@ -67,7 +247,7 @@ public class Act_managementServlet extends HttpServlet{
 			act_vo.setAct_stat(act_stat);
 			actSvc.updateAct(act_vo);
 			String mem_ac=act_vo.getMem_ac();
-			String msg_cont="活動編號"+act_no+"已審核通過，將開始受理報名，謝謝!!";
+			String msg_cont="活動編號"+act_no+"，活動名稱"+act_vo.getAct_name()+"    已審核通過，將開始受理報名，謝謝!!";
 			java.sql.Date msg_send_date=new java.sql.Date(new Date().getTime());
 			Sys_msgService sys_msgSvc=new Sys_msgService();
 			Sys_msgVO sys_msg_vo=new Sys_msgVO();
@@ -100,7 +280,7 @@ public class Act_managementServlet extends HttpServlet{
 				 RequestDispatcher dispatcher=req.getRequestDispatcher(url);
 				 dispatcher.forward(req, res);
 			}catch(Exception e){
-				System.out.println("刪除追蹤活動失敗");
+		
 				 String url=req.getParameter("my_act.jsp");
 				 RequestDispatcher dispatcher=req.getRequestDispatcher(url);
 				 dispatcher.forward(req, res);
@@ -110,26 +290,49 @@ public class Act_managementServlet extends HttpServlet{
 		
 		
 		if("delete_act".equals(action)){
+			System.out.println("track1");
 			 List<String> openTab2=new LinkedList<String>();
 			 openTab2.add("baba");
 				req.setAttribute("openTab2", openTab2);
-				System.out.println("track1");
+			
 		try{
 			String act_no=req.getParameter("act_no");
-			ActService actSvc=new ActService();
-			actSvc.deleteAct(act_no);
-			String[] mem_ac_array=req.getParameterValues("mem_ac");
-			System.out.println(mem_ac_array==null);
 			System.out.println("track2");
+			ActService actSvc=new ActService();
+			String act_name=actSvc.getOneAct(act_no).getAct_name();
+			System.out.println("track3");
+			
+			System.out.println("track4");
+			String[] mem_ac_array=req.getParameterValues("mem_ac");
+			System.out.println("track5");
+			System.out.println("mem_ac_array.length= "+mem_ac_array.length);
+			System.out.println("mem_ac_array "+mem_ac_array);
+	Act_pairService act_pairSvc=new Act_pairService();
+	
+	System.out.println("track6");
 			if(mem_ac_array!=null){
 			for(int i=0;i<mem_ac_array.length;i++){
+				System.out.println("track7");
 				String mem_ac=mem_ac_array[i];
-			
-				String msg_cont="活動編號"+act_no+"已被取消，系統已自動退款，歡迎再次參加活動!!";
+				System.out.println("track7.1");
+				System.out.println("act_no= "+act_no);
+				System.out.println("mem_ac= "+mem_ac);
+			Act_pairVO act_pair_vo=act_pairSvc.getOneAct_pair(act_no, mem_ac);
+			System.out.println("track7.2");
+			String pay_state=act_pair_vo.getPay_state();
+			System.out.println("track3");
+			String msg_cont;
+			System.out.println("pay_state= "+pay_state);
+			if(pay_state.equals("已繳費")){
+					
+				 msg_cont="活動編號"+act_no+"，活動名稱"+act_name+"     已被取消，系統已自動退款，歡迎再次參加活動!!";
+			}else{
+				 msg_cont="活動編號"+act_no+"，活動名稱"+act_name+"     已被取消，歡迎再次參加活動!!";
+			}
 				java.sql.Date msg_send_date=new java.sql.Date(new Date().getTime());
 				Sys_msgService sys_msgSvc=new Sys_msgService();
 				Sys_msgVO sys_msg_vo=new Sys_msgVO();
-			
+				System.out.println("track8");
 				 sys_msg_vo.setMem_ac(mem_ac);
 				
 				 sys_msg_vo.setMsg_cont(msg_cont);
@@ -144,24 +347,24 @@ public class Act_managementServlet extends HttpServlet{
 					mem_pt=mem_pt-5;
 					mem_vo.setMem_pt(mem_pt);
 					memSvc.updateMem(mem_vo);
-				 
+					System.out.println("track9");
 				 
 				 
 				 
 			}
 			}
-			System.out.println("track3");
+		
 			
 			
+			actSvc.deleteAct(act_no);
 			
-			
-			
+			System.out.println("track10");
 			
 			 String url=req.getParameter("my_act.jsp");
 			 RequestDispatcher dispatcher=req.getRequestDispatcher(url);
 			 dispatcher.forward(req, res);
 		}catch(Exception e){
-		System.out.println("刪除活動失敗");
+	
 		 String url=req.getParameter("my_act.jsp");
 		 RequestDispatcher dispatcher=req.getRequestDispatcher(url);
 		 dispatcher.forward(req, res);
@@ -184,8 +387,9 @@ public class Act_managementServlet extends HttpServlet{
 			Act_pairService act_pairSvc=new Act_pairService();
 			act_pairSvc.deleteAct_pair(act_no, mem_ac);
 			ActService actSvc=new ActService();
+			ActVO act_vo= actSvc.getOneAct(act_no);
 			actSvc.reduce_mem_count(act_no);
-			String msg_cont="活動編號"+act_no+"已完成退款!!";
+			String msg_cont="活動編號"+act_no+"，活動名稱"+act_vo.getAct_name()+"  已完成退款!!";
 			java.sql.Date msg_send_date=new java.sql.Date(new Date().getTime());
 			Sys_msgService sys_msgSvc=new Sys_msgService();
 			Sys_msgVO sys_msg_vo=new Sys_msgVO();
@@ -208,7 +412,7 @@ public class Act_managementServlet extends HttpServlet{
 			 RequestDispatcher dispatcher=req.getRequestDispatcher(url);
 			 dispatcher.forward(req, res);
 			}catch(Exception e){
-				System.out.println("something wrong!");
+		
 				 String url=req.getParameter("my_act.jsp");
 				 RequestDispatcher dispatcher=req.getRequestDispatcher(url);
 				 dispatcher.forward(req, res);
@@ -229,33 +433,32 @@ public class Act_managementServlet extends HttpServlet{
 					req.setAttribute("openTab2", openTab2);
 			
 	try{				
-					System.out.println("track1");
+				
 			String[] act_no_array=req.getParameterValues("act_no");
-			System.out.println("track2");
-			System.out.println("act_no_array= "+act_no_array);
+		
+		
 			String[] mem_ac_array=req.getParameterValues("mem_ac");
-			System.out.println("mem_ac_array= "+mem_ac_array);
+	
 			List<Act_pairVO> list=new ArrayList<Act_pairVO>();
 			Act_pairService act_pairSvc=new Act_pairService();
 			if(act_no_array.length==mem_ac_array.length && act_no_array.length!=0){
 				for(int i=0;i<act_no_array.length;i++){
-					System.out.println("act_no_array[i]= "+act_no_array[i]);
-					System.out.println("mem_ac_array[i]= "+mem_ac_array[i]);
+				
 					Act_pairVO act_pair_vo=act_pairSvc.getOneAct_pair(act_no_array[i], mem_ac_array[i]);
-					System.out.println("success "+i);
+				
 					list.add(act_pair_vo);
 				}
 			}
-			System.out.println("successful");
+		
 			req.setAttribute("act_pair_vo_list", list);
-			System.out.println("go back");
+		
 			String url= req.getParameter("my_act.jsp");
-			System.out.println("url= "+url);
+	
 			RequestDispatcher successView=req.getRequestDispatcher(url);
 			successView.forward(req, res);
 			
 	}catch(Exception e){
-		System.out.println("something wrong!");
+	
 		String url= req.getParameter("my_act.jsp");
 		RequestDispatcher errorView=req.getRequestDispatcher(url);
 		errorView.forward(req, res);
@@ -294,6 +497,7 @@ public class Act_managementServlet extends HttpServlet{
 			ActService actSvc=new ActService();
 			Integer mem_count=new Integer(act_vo.getMem_count());
 			Integer min_mem=new Integer(act_vo.getMin_mem());
+			Integer max_mem=new Integer(act_vo.getMax_mem());
 			String act_stat=act_vo.getAct_stat();
 			if(act_stat.equals("可報名") && mem_count>=min_mem){
 				act_stat="已成團";
@@ -303,17 +507,13 @@ public class Act_managementServlet extends HttpServlet{
 	List<Act_pairVO> act_pair_list=  act_pairSvc.getAll();
 
 	for(int i=0;i<act_pair_list.size();i++){
-		System.out.println("act_pair_list.get(i).getAct_no()= "+act_pair_list.get(i).getAct_no());
-		System.out.println("act_no= "+act_no);
-		System.out.println("true or false= "+(act_pair_list.get(i).getAct_no().equals(act_no)));
+	
 		if(act_pair_list.get(i).getAct_no().equals(act_no)){		
-				String msg_cont="活動編號"+act_no+"已成團，請準時參加活動!!";
+				String msg_cont="活動編號"+act_no+"，活動名稱"+act_vo.getAct_name()+"     已成團，請準時參加活動!!";
 				java.sql.Date msg_send_date=new java.sql.Date(new Date().getTime());
 				Sys_msgService sys_msgSvc=new Sys_msgService();
 				Sys_msgVO sys_msg_vo=new Sys_msgVO();
-			System.out.println("msg_send_date= "+msg_send_date);
-			System.out.println("msg_cont = "+msg_cont);
-			System.out.println("Mem_ac= "+act_pair_list.get(i).getMem_ac());
+		
 				 sys_msg_vo.setMem_ac(act_pair_list.get(i).getMem_ac());
 				 sys_msg_vo.setMsg_cont(msg_cont);
 				 sys_msg_vo.setMsg_send_date(msg_send_date);
@@ -321,9 +521,25 @@ public class Act_managementServlet extends HttpServlet{
 		}
 	}
 			}
-			
-			
-			
+			System.out.println("mem_count= "+(mem_count+1));
+			System.out.println("max_mem= "+max_mem);
+			System.out.println("mem_count>=max_mem?="+((mem_count+1)>=max_mem));
+		
+			if((mem_count+1)>=max_mem){
+				act_stat="已滿團";
+				act_vo.setAct_stat(act_stat);
+				actSvc.updateAct(act_vo);
+		String host_mem_ac=act_vo.getMem_ac();
+		String msg_cont="恭喜，活動編號"+act_no+"，活動名稱"+act_vo.getAct_name()+"     已滿團囉!!";
+		java.sql.Date msg_send_date=new java.sql.Date(new Date().getTime());
+		Sys_msgService sys_msgSvc=new Sys_msgService();
+		Sys_msgVO sys_msg_vo=new Sys_msgVO();
+		sys_msg_vo.setMem_ac(host_mem_ac);
+		 sys_msg_vo.setMsg_cont(msg_cont);
+		 sys_msg_vo.setMsg_send_date(msg_send_date);
+		 sys_msgSvc.addSys_msg(sys_msg_vo);
+				
+			}		
 			actSvc.update_mem_count(act_no);
 			
 			MemService memSvc=new MemService();
@@ -368,12 +584,12 @@ public class Act_managementServlet extends HttpServlet{
 			
 	try{		
 			String mem_ac=req.getParameter("mem_ac");
-			System.out.println("mem_ac= "+mem_ac);
+			
 		    String act_no=req.getParameter("act_no");
-		    System.out.println("act_no= "+act_no);
+		 
 		    
 		    java.sql.Date fo_act_date=new java.sql.Date(new Date().getTime());
-		    System.out.println("fo_act_date= "+fo_act_date);
+		
 		    Fo_actService fo_actSvc=new Fo_actService();
 		    fo_actSvc.addFo_act(mem_ac, act_no, fo_act_date);
 		    
@@ -411,25 +627,25 @@ public class Act_managementServlet extends HttpServlet{
 		
 		
 		if("response_comm".equals(action)){
-			System.out.println("track1");
+		
 			try{
 				String comm_reply_cont=req.getParameter("comm_reply_cont");
-				System.out.println("comm_reply_cont= "+comm_reply_cont);
-				System.out.println("track2");
+			
+			
 				String comm_no=req.getParameter("comm_no");
-				System.out.println("comm_no= "+comm_no);
-				System.out.println("track3");
+			
+			
 				Act_commService act_commSvc=new Act_commService();
 				java.sql.Date comm_reply_date=new java.sql.Date(new Date().getTime());
-				System.out.println("track4");
+			
 				act_commSvc.update_response(comm_reply_cont,comm_reply_date,comm_no);
-				System.out.println("track5");
+			
 				String url=req.getParameter("act_detail.jsp");
 				RequestDispatcher successView=req.getRequestDispatcher(url);
 				successView.forward(req, res);
 				
 			}catch(Exception e){
-				System.out.println("track error");
+			
 				String url=req.getParameter("act_detail.jsp");
 				RequestDispatcher failureView=req.getRequestDispatcher(url);
 				failureView.forward(req, res);
@@ -446,18 +662,18 @@ public class Act_managementServlet extends HttpServlet{
 		
 		
 		if("insert_comm".equals(action)){
-			System.out.println("track 1");
+		
 			HttpSession session=req.getSession();
 			List<String> errorMsgs = new LinkedList<String>();
 			  req.setAttribute("errorMsgs", errorMsgs);
 			try{
-				System.out.println("track 2");
+		
 				String comm_cont=req.getParameter("comm_cont");
-				System.out.println("comm_cont= "+comm_cont);
+			
 				if(comm_cont.length()==0){
 					  errorMsgs.add("請輸入留言");
 				}
-				System.out.println("track 3");
+			
 				if (!errorMsgs.isEmpty()) {
 					
 					String url=req.getParameter("act_detail.jsp");
@@ -467,16 +683,16 @@ public class Act_managementServlet extends HttpServlet{
 					return;
 				}
 				
-				System.out.println("track 4");
+			
 				String act_no=req.getParameter("act_no");
-				System.out.println("track 5");
+			
 				String mem_ac=req.getParameter("mem_ac");
-				System.out.println("track 6");
+			
 				java.sql.Date comm_date=new java.sql.Date(new Date().getTime());
-				System.out.println("track 7");
+			
 				Act_commService act_commSvc=new Act_commService();
 				act_commSvc.addAct_comm(act_no,mem_ac,comm_cont,comm_date,null,null);
-				System.out.println("track 8");
+			
 				String url=req.getParameter("act_detail.jsp");
 				RequestDispatcher successView = req
 						.getRequestDispatcher(url);
@@ -510,6 +726,19 @@ public class Act_managementServlet extends HttpServlet{
 			  req.setAttribute("errorMsgs", errorMsgs);
 			try{
 				ActVO act_vo=(ActVO)session.getAttribute("act_vo");
+				
+				String act_no=act_vo.getAct_no();
+			
+				
+				if(act_no!=null){
+					ActService actSvc=new ActService();
+					
+					String re_cont="無";
+					act_vo.setRe_cont(re_cont);
+					actSvc.updateAct(act_vo);	
+					
+				}else{
+				
 				ActService actSvc=new ActService();
 				actSvc.addAct(act_vo);
 				
@@ -520,7 +749,7 @@ public class Act_managementServlet extends HttpServlet{
 				mem_pt=mem_pt+5;
 				mem_vo.setMem_pt(mem_pt);
 				memSvc.updateMem(mem_vo);
-				
+				}
 				
 				session.removeAttribute("act_vo");
 				session.removeAttribute("act_op_date");
@@ -789,6 +1018,10 @@ public class Act_managementServlet extends HttpServlet{
 		}
 		
 		
+		
+		
+		
+		
 		java.sql.Timestamp timestamp_dl_date;
 		java.sql.Date dl_date;
 		try{		
@@ -804,6 +1037,16 @@ public class Act_managementServlet extends HttpServlet{
 		if(pay_way==null){
 			errorMsgs.add("請選擇繳費方式");
 		}
+		String act_atm_info="";
+		if(pay_way.equals("ATM")){
+			act_atm_info=req.getParameter("act_atm_info");
+			if(act_atm_info.trim().equals("")){
+				errorMsgs.add("請輸入繳費方式");
+			}
+			
+		}
+		
+		
 		String act_add_lat=req.getParameter("act_add_lat");
 		if(act_add_lat.equals("")){
 			errorMsgs.add("請輸入有效的地址");
@@ -812,8 +1055,11 @@ public class Act_managementServlet extends HttpServlet{
 		
 		String act_add_lon=req.getParameter("act_add_lon");
 		String mem_ac= req.getParameter("mem_ac");
-		
-		ActVO act_vo=new ActVO();
+		HttpSession session=req.getSession();
+		ActVO act_vo=(ActVO) session.getAttribute("act_vo");
+		if(act_vo==null){
+			act_vo=new ActVO();
+		}
 		act_vo.setAct_name(act_name);
 		act_vo.setAct_add(act_add);
 		act_vo.setAct_fee(act_fee);
@@ -825,7 +1071,7 @@ public class Act_managementServlet extends HttpServlet{
 		act_vo.setAct_add_lat(act_add_lat);
 		act_vo.setAct_add_lon(act_add_lon);
 		act_vo.setMem_ac(mem_ac);
-		HttpSession session=req.getSession();
+		act_vo.setAct_atm_info(act_atm_info);
 	
 		session.setAttribute("dl_date",dateToTimestamp(dl_date));
 		session.setAttribute("act_vo",act_vo);

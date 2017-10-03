@@ -58,6 +58,11 @@ left: 45%;
 transform: translate(-100%,0);
 }
 
+.payWay_info{
+display: none;
+}
+
+
 </style>
   
 </head>
@@ -167,6 +172,10 @@ transform: translate(-100%,0);
           <input type="radio"  class="payWay" name="pay_way"  value="ATM"/><span>ATM</span>
           <input type="radio"  class="payWay"  name="pay_way"  value="信用卡"/><span>信用卡</span>
           <input type="radio"  class="payWay"  name="pay_way"  value="現場繳費"/><span>現場繳費</span>
+          <div class="payWay_info">
+          <h3>繳費資訊:</h3>
+          <textarea class="form-control  introduct" rows="2" cols="20" wrap="hard" placeholder="匯款銀行：彰化銀行 蘆洲分行 戶名：陳建儒 銀行代碼：009 銀行帳號：9832-51-326845-00"  name="act_atm_info">${(act_vo==null)?"":((act_vo.act_atm_info==null)?"":act_vo.act_atm_info)}</textarea>
+          </div>
         </div>
         
       </div>
@@ -292,7 +301,16 @@ $(".next_step").mouseenter(function(){
 	 
  })
  
- 
+ $(".payWay").change(function(){
+	 
+	 if($("input[name='pay_way']:checked").val()=="ATM"){
+		 $(".payWay_info").css("display","block");
+	 }else{
+		 $(".payWay_info").css("display","none");
+	 }
+	 
+	 
+ })
 
  
 			</script>

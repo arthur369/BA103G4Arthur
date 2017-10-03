@@ -35,10 +35,10 @@
 }
 .myJoin>tbody>tr>th{
 	text-align: center;
-width: 8%;
+width: 6%;
 }
 .myJoin>tbody>tr>.large{
-	width: 10%;
+	width: 8%;
 }
 
 .myHeld>tbody>tr>td{
@@ -59,7 +59,7 @@ width: calc(100% / 11);
 }
 .myCollection>tbody>tr>th{
 	text-align: center;
-width: 8%;
+width: 10%;
 }
 .myCollection>tbody>tr>.large{
 	width: 10%;
@@ -67,6 +67,15 @@ width: 8%;
 .goto_detail,.display_act_pair{
 cursor: pointer;
 }
+
+.modify_act{
+display: none;
+}
+.my_act_all{
+width: 110%;
+
+}
+
 
 
 
@@ -99,7 +108,7 @@ pageContext.setAttribute("act_pair_list",act_pair_list);
 		
 		<div class="container">
 			<div class="row">
-				<div class="col-md-12">
+				<div class="col-md-12  my_act_all">
 					<h1 class="myAction">個人活動
 					<input type="hidden" value=${mem_ac }>
 					</h1>
@@ -133,7 +142,9 @@ pageContext.setAttribute("act_pair_list",act_pair_list);
 					     		<th>活動費用</th>
 					     		<th class=large>活動照片</th>
 					     		<th>活動狀態</th>
+					     		<th>繳費狀態</th>
 					     		<th>編輯</th>
+					     		<th>通知已繳費</th>
 					     	</tr>
 					     	
 					     	
@@ -161,15 +172,27 @@ pageContext.setAttribute("act_pair_list",act_pair_list);
 					     		
 					     		<td>${act_vo.act_fee }</td>
 					     		<td><img class="img-responsive" src="<%=request.getContextPath()%>/ActImg.do?act_no=${act_vo.act_no}&index=1" ></td>
-					     		<td>${act_vo.act_stat }</td>
+					     		<td class="join_stat">${act_vo.act_stat }</td>
+					     		<td>${act_pair_vo.pay_state }</td>
 					     		<td>
+					     		<div class="full_notice"></div>
 					     		<form  method="post" action="<%=request.getContextPath() %>/act_management/act_managementServlet">
-					     		<button class="btn btn-danger">取消報名</button>
+					     		<button class="btn btn-danger  cancel_join_thisAction">取消報名</button>
 					     		 <input type="hidden" name=action  value="cancel_join" >
      							 <input type="hidden"  name="act_no"  value="${act_vo.act_no }">
       							<input type="hidden"  name="my_act.jsp" value="<%=request.getServletPath() %>">
       							<input type="hidden"  name="mem_ac"  value="${mem_ac }">
 					     		</form>
+					     		</td>
+					     		<td>
+					     		<form  method="post" action="<%=request.getContextPath() %>/act_management/act_managementServlet">
+					     		<button class="btn btn-success">通知已繳費</button>
+					     		<input type="hidden" name=action  value="notice_pay" >
+					     		 <input type="hidden"  name="act_no"  value="${act_vo.act_no }">
+      							<input type="hidden"  name="my_act.jsp" value="<%=request.getServletPath() %>">
+      							<input type="hidden"  name="mem_ac"  value="${mem_ac }">
+      							<input type="hidden"  name="pay_state"  value="${act_pair_vo.pay_state}">
+      									</form>
 					     		</td>
 					     	</tr>
 					     	</c:if>
@@ -198,7 +221,8 @@ pageContext.setAttribute("act_pair_list",act_pair_list);
 					     		<th>活動狀態</th>
 					     		<th>審核不通過原因</th>
 					     		<th>更改審核狀態日期</th>
-								<th>編輯</th>
+								<th class="edit">編輯</th>
+								
 					     	</tr>
 					     	<c:forEach var="act_vo" items="${act_list}"  >
 					     	<c:if test="${act_vo.mem_ac==mem_ac}">
@@ -234,10 +258,11 @@ pageContext.setAttribute("act_pair_list",act_pair_list);
 					     		</td>
 					     		<td>${act_vo.act_op_date }</td>
 					     		<td>${act_vo.act_ed_date }</td>
-					     		<td>${act_vo.act_stat }</td>
+					     		<td  class="act_stat">${act_vo.act_stat }</td>
 					     		<td>${(act_vo.re_cont==null)?"無":act_vo.re_cont }</td>
 					     		<td>${act_vo.review_ed_date }</td>
-					     		<td class="cancel_action">
+					     		<td >
+					     		<div class="cancel_action"></div>
 					     		<form  method="post"  action="<%=request.getContextPath() %>/act_management/act_managementServlet" >
 					     		<button class="btn btn-danger  dismiss_act">取消活動</button>
 					     		<input type="hidden"  name="action" value="delete_act">
@@ -253,7 +278,14 @@ pageContext.setAttribute("act_pair_list",act_pair_list);
 					     		</c:if>
 					     		</c:forEach>
 					     		</form>
+					     		<form  method="post"  action="<%=request.getContextPath() %>/act_management/act_managementServlet" >
+					     		<button class="btn btn-success modify_act">修正活動</button>
+					     		<input type="hidden"  name="action" value="modify_act">
+					     		<input type="hidden"  name="my_act.jsp" value="<%=request.getServletPath() %>">
+					     		<input type="hidden"  name="act_no" value="${act_vo.act_no}">
+					     		</form>
 					     		</td>
+					     		
 					     	</tr>
 					     	</c:if>
 </c:forEach>
@@ -350,6 +382,7 @@ pageContext.setAttribute("act_pair_list",act_pair_list);
 								<th>報名時間</th>
 								<th>繳費狀態</th>
 								<th>報到狀態</th>
+								<th>確認會員已繳費</th>
 							</tr>
 						
 						<c:forEach var="act_pair_vo" items="${act_pair_vo_list}"  >	
@@ -358,6 +391,17 @@ pageContext.setAttribute("act_pair_list",act_pair_list);
 								<td>${act_pair_vo.apply_date }</td>
 								<td>${act_pair_vo.pay_state }</td>
 								<td>${act_pair_vo.chk_state }</td>
+								<td>
+								<form  method="post" action="<%=request.getContextPath() %>/act_management/act_managementServlet">
+					     		<button class="btn btn-success" >確認會員已繳費</button>
+					     		<input type="hidden" name=action  value="confirm_mem_pay" >
+					     		 <input type="hidden"  name="act_no"  value="${act_pair_vo.act_no }">
+      							<input type="hidden"  name="my_act.jsp" value="<%=request.getServletPath() %>">
+      							<input type="hidden"  name="mem_ac"  value="${act_pair_vo.mem_ac }">
+      									</form>
+								
+								
+								</td>
 							</tr>
 							</c:forEach>
 						</table>
@@ -391,10 +435,27 @@ pageContext.setAttribute("act_pair_list",act_pair_list);
 		$(".goto_detail").click(function(){
 			$(this).parent().submit();
 		})
+	for(var i=0;i<$(".host_mem_count").length;i++){	
+		if(parseInt($(".host_mem_count").eq(i).text())>=parseInt($(".host_min_mem").eq(i).text())){
+			$(".dismiss_act").eq(i).css("display","none");
+			$(".cancel_action").eq(i).text("達成團標準無法取消");
+		}
+	}
+		for(var i=0;i<$(".act_stat").length;i++){
+		if($(".act_stat").eq(i).text()=="不通過審核"){
+			$(".dismiss_act").eq(i).css("display","none");
+			$(".modify_act").eq(i).css("display","block");
+		}
+		}
 		
-		if($(".host_mem_count").text()>=$(".host_min_mem").text()){
-			$(".dismiss_act").css("display","none");
-			$(".cancel_action").text("達成團標準無法取消");
+		for(var i=0;i<$(".join_stat").length;i++){
+			if(($(".join_stat").eq(i).text()=="已成團") || ($(".join_stat").eq(i).text()=="已滿團")){
+				$(".cancel_join_thisAction").eq(i).css("display","none");
+				$(".full_notice").eq(i).text("已成團無法取消");
+			}
+			
+			
+			
 		}
 		
 		

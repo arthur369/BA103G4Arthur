@@ -78,8 +78,8 @@ text-align: center;
 }	
 
 .show_gift_pic{
-width: 80%;
-height: auto
+width: 100px;
+height: 80px;
 }
 
 .large_bold{
@@ -221,7 +221,7 @@ List<Gift_dataVO> list=gift_dataSvc.getAll();
 								<td>${convert_gift_vo.apply_stat }</td>
 								<td>${convert_gift_vo.apply_add }</td>
 								<td>${(convert_gift_vo.send_date==null)?"無": convert_gift_vo.send_date}</td>
-								<td><img class="img-responsive  show_gift_pic"src="<%=request.getContextPath()%>/GiftImg.do?gift_no=${gift_data_vo.gift_no }" ></td>
+								<td  class="gift_image"><img class="img-responsive  show_gift_pic"src="<%=request.getContextPath()%>/GiftImg.do?gift_no=${gift_data_vo.gift_no }" ></td>
 							</tr>
 							</c:if>
 							</c:forEach>

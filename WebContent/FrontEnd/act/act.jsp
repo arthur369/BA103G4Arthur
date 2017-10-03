@@ -127,15 +127,27 @@ overflow: hidden;
 }
 </style>
 <%
-List<ActVO> list=null;
+session.removeAttribute("act_vo");
+
+List<ActVO> my_act_list=null;
 System.out.println(session.getAttribute("add_date_query")!=null);
 if(session.getAttribute("add_date_query")!=null){
-	list=(List<ActVO>) session.getAttribute("add_date_query");
+	my_act_list=(List<ActVO>) session.getAttribute("add_date_query");
 	
 }else{
 ActService actSvc=new ActService();
- list=  actSvc.getAll();
+my_act_list=  actSvc.getAll();
 }
+List<ActVO> list=new ArrayList();
+for(int i=0;i<my_act_list.size();i++){
+	String act_stat=my_act_list.get(i).getAct_stat();
+	if(act_stat.equals("可報名")|| act_stat.equals("已成團")){
+		list.add(my_act_list.get(i));
+	}
+}
+
+
+
 pageContext.setAttribute("list",list);
 
 ActService myActSvc=new ActService();

@@ -62,11 +62,11 @@
 <label>卡號:</label>
 
 
-<input type="text" name="cc_no1" size="4" maxlength="4" />
-<input type="text" name="cc_no2" size="4" maxlength="4" />
-<input type="text" name="cc_no3" size="4" maxlength="4" />
-<input type="text" name="cc_no4" size="4" maxlength="4" />
-<input type="text" name="cc_no4" size="3" maxlength="3"  placeholder="檢核碼" />
+<input type="text"  class="cc_no1"   name="cc_no1" size="4" maxlength="4" />
+<input type="text"  class="cc_no2" name="cc_no2" size="4" maxlength="4" />
+<input type="text"  class="cc_no3" name="cc_no3" size="4" maxlength="4" />
+<input type="text"  class="cc_no4" name="cc_no4" size="4" maxlength="4" />
+<input type="text"  class="cc_no5" name="cc_no5" size="3" maxlength="3"  placeholder="檢核碼" />
 </div>
 <div>
 <label>到期日:</label>
@@ -86,7 +86,7 @@
 			<form  method="post"  action="<%=request.getContextPath() %>/act_management/act_managementServlet" >
 				<a class="btn btn-danger"  href="<%=request.getContextPath()%>/FrontEnd/act/act_detail.jsp">取消購買</a>
 				
-				<button class="btn btn-success" >確定購買</button>
+				<button class="btn btn-success  confirm_buy_button"   type="button">確定購買</button>
 				<input type="hidden"  name="mem_ac"  value="${(mem_ac==null)? "mamabeak":mem_ac}">
 				<input type="hidden"  name="action"  value="confirm_buy">
 				<input type="hidden"  name="buy_act.jsp"  value="<%=request.getServletPath()%>">
@@ -119,12 +119,15 @@
 		
 		<script src="https://code.jquery.com/jquery.js"></script>
 		<script src="https://cdnjs.cloudflare.com/ajax/libs/twitter-bootstrap/3.3.7/js/bootstrap.min.js"></script>
+		<%--較漂亮的alert --%>
+		<script src="https://unpkg.com/sweetalert/dist/sweetalert.min.js"></script>
+		
 		<script>
 		for(var i=1;i<=12;i++){
 		$(".month").append("<option value="+i+">"+i);
 		}
 		
-		for(var i=1991;i<=2030;i++){
+		for(var i=2017;i<=2040;i++){
 			$(".year").append("<option value="+i+">"+i);
 			}
 		
@@ -148,6 +151,41 @@
 		if(${not empty openModal}){
 			 $("#modal-id").modal({show: true});
 			}
+		
+		$(".confirm_buy_button").click(function(){
+			if(pay_way=="信用卡"){
+				if($(".cc_no1").val().length==0 || $(".cc_no1").val().length<4){
+					sweetAlert("Oops!", "請填入正確的信用卡卡號", "error");
+					return;
+				}
+				if($(".cc_no2").val().length==0  || $(".cc_no2").val().length<4){
+					sweetAlert("Oops!", "請填入正確的信用卡卡號", "error");
+					return;
+				}
+				if($(".cc_no3").val().length==0  || $(".cc_no3").val().length<4){
+					sweetAlert("Oops!", "請填入正確的信用卡卡號", "error");
+					return;
+				}
+				if($(".cc_no4").val().length==0  || $(".cc_no4").val().length<4){
+					sweetAlert("Oops!", "請填入正確的信用卡卡號", "error");
+					return;
+				}
+				if($(".cc_no5").val().length==0  || $(".cc_no5").val().length<3){
+					sweetAlert("Oops!", "請填入正確的信用卡卡號", "error");
+					return;
+				}
+				
+				
+				
+			}
+			
+			$(this).parent().submit();
+			
+			
+		})
+		
+		
+		
 		
 		</script>
 		
