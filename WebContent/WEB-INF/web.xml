@@ -115,4 +115,49 @@
     <url-pattern>/MemImg.do</url-pattern>
   </servlet-mapping>
   
+  
+  
+  
+  <!-- 鈺軒的部分10月04日載入 -->
+  
+  
+  
+  <servlet>
+    <servlet-name>StoreServlet</servlet-name>
+    <servlet-class>com.store.controller.StoreServlet</servlet-class>
+  </servlet>
+  <servlet-mapping>
+    <servlet-name>StoreServlet</servlet-name>
+    <url-pattern>/store/store.do</url-pattern>
+  </servlet-mapping>
+  <servlet>
+    <servlet-name>StoreImg</servlet-name>
+    <servlet-class>com.store.controller.StoreImg</servlet-class>
+  </servlet>
+  <servlet-mapping>
+    <servlet-name>StoreImg</servlet-name>
+    <url-pattern>/store/StoreImg.do</url-pattern>
+  </servlet-mapping>
+  <servlet>
+    <servlet-name>ToStore</servlet-name>
+    <servlet-class>com.store.controller.ToStore</servlet-class>
+  </servlet>
+  <servlet-mapping>
+    <servlet-name>ToStore</servlet-name>
+    <url-pattern>/store/ToStore.do</url-pattern>
+  </servlet-mapping>
+  <servlet>
+    <servlet-name>ProdImg</servlet-name>
+    <servlet-class>com.prod.controller.ProdImg</servlet-class>
+  </servlet>
+  <servlet-mapping>
+    <servlet-name>ProdImg</servlet-name>
+    <url-pattern>/prod/prodImg.do</url-pattern>
+  </servlet-mapping>
+  
+  
+  
+  
+  
+  
 </web-app>

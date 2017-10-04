@@ -47,6 +47,120 @@ public class Gift_managementServlet extends HttpServlet{
 		
 		String action = req.getParameter("action");
 		
+		if("modify_total_pt".equals(action)){
+			 List<String> errorMsgs = new LinkedList<String>();
+			  req.setAttribute("errorMsgs", errorMsgs);
+			  try{		
+				  
+				  String mem_ac=req.getParameter("mem_ac");
+				  Integer mem_total_pt=null;
+					try{
+						mem_total_pt=new Integer(req.getParameter("mem_total_pt").trim());
+					}catch(NumberFormatException e){
+						mem_total_pt=0;
+						errorMsgs.add("積分請填數字");
+					}
+					
+					if(mem_total_pt>99999){
+						errorMsgs.add("積分須小於99999");
+					}
+				  Integer grade_no;
+				  if(mem_total_pt<=100){
+					  grade_no=1;
+				  }else if(mem_total_pt<=200){
+					  grade_no=2;
+				  }else if(mem_total_pt<=300){
+					  grade_no=3;
+				  }else if(mem_total_pt<=400){
+					  grade_no=4;
+				  }else if(mem_total_pt<=500){
+					  grade_no=5;
+				  }else{
+					  grade_no=6;
+				  }
+					
+				  MemService memSvc=new MemService();
+					MemVO mem_vo=memSvc.getOneProd(mem_ac);
+				mem_vo.setMem_total_pt(mem_total_pt);
+				mem_vo.setGrade_no(grade_no);
+				memSvc.updateMem(mem_vo);
+				String url=req.getParameter("mem.jsp");
+				RequestDispatcher successView = req
+						.getRequestDispatcher(url);
+				successView.forward(req, res);
+				return;
+					
+					
+			
+				}catch(Exception e){
+					String url=req.getParameter("mem.jsp");
+					RequestDispatcher failureView = req
+							.getRequestDispatcher(url);
+					failureView.forward(req, res);
+					return;
+				}
+		}
+		
+		
+		
+		if("modify_pt".equals(action)){
+			  List<String> errorMsgs = new LinkedList<String>();
+			  req.setAttribute("errorMsgs", errorMsgs);
+			  
+	try{		  
+			String mem_ac=req.getParameter("mem_ac");
+			
+			Integer mem_pt=null;
+			try{
+			 mem_pt=new Integer(req.getParameter("mem_pt").trim());
+			}catch(NumberFormatException e){
+				mem_pt=0;
+				errorMsgs.add("積分請填數字");
+			}
+			
+			if(mem_pt>99999){
+				errorMsgs.add("積分須小於99999");
+			}
+			
+			
+			
+			if (!errorMsgs.isEmpty()) {
+				
+				String url=req.getParameter("mem.jsp");
+				RequestDispatcher failureView = req
+						.getRequestDispatcher(url);
+				failureView.forward(req, res);
+				return;
+			}
+			
+			
+			MemService memSvc=new MemService();
+			MemVO mem_vo=memSvc.getOneProd(mem_ac);
+			mem_vo.setMem_pt(mem_pt);
+			memSvc.updateMem(mem_vo);
+			String url=req.getParameter("mem.jsp");
+			RequestDispatcher successView = req
+					.getRequestDispatcher(url);
+			successView.forward(req, res);
+			return;
+			
+			
+			
+			
+			
+	}catch(Exception e){
+		String url=req.getParameter("mem.jsp");
+		RequestDispatcher failureView = req
+				.getRequestDispatcher(url);
+		failureView.forward(req, res);
+		return;
+	}
+			
+			
+		}
+		
+		
+		
 		
 		if("buy_gift_confirm".equals(action)){
 			  List<String> errorMsgs = new LinkedList<String>();

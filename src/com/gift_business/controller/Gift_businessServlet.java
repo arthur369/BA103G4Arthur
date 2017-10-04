@@ -18,6 +18,7 @@ import javax.servlet.annotation.MultipartConfig;
 import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
+import javax.servlet.http.HttpSession;
 
 import com.convert_gift.model.Convert_giftService;
 import com.convert_gift.model.Convert_giftVO;
@@ -129,7 +130,11 @@ System.out.println("track1");
 			
 			Convert_giftService convert_giftSvc=new Convert_giftService();
 			List<Convert_giftVO> list=convert_giftSvc.getAll(map);
-			req.setAttribute("showConvert_gift", list);
+			
+			HttpSession session=req.getSession();
+			session.setAttribute("showConvert_gift", list);
+			String my_apply_stat=req.getParameter("APPLY_STAT");
+			session.setAttribute("apply_stat", my_apply_stat);
 			String url=apply_stat;
 			RequestDispatcher successView = req.getRequestDispatcher(url); // 成功轉交listEmps_ByCompositeQuery.jsp
 			successView.forward(req, res);

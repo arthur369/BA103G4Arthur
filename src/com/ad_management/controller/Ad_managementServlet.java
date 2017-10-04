@@ -50,59 +50,36 @@ public class Ad_managementServlet extends HttpServlet{
 			  req.setAttribute("errorMsgs", errorMsgs);
 			  
 			
-			
+			System.out.println("track1");
 			String url=req.getParameter("ad.jsp");
+			System.out.println("track2");
 			  try{
 				  String ad_title=req.getParameter("ad_title").trim();
+				  System.out.println("track3");
 				  if(ad_title.length()==0){
 					  errorMsgs.add("請輸入廣告名稱");
 				  }
-				  
+				  System.out.println("track4");
 				  String prod_no=req.getParameter("prod_no");
+				  System.out.println("track5");
 			if(prod_no.equals("請選擇")){
 				
 				errorMsgs.add("請選擇廣告商品");
 				
 			}
-				 
-				  java.sql.Date ad_op_date=null;
-				 
-				  try{
-					  ad_op_date=java.sql.Date.valueOf(req.getParameter("ad_op_date").trim());
-					 
-				  }catch (IllegalArgumentException e) {		
-//					  ad_op_date=new java.sql.Date(System.currentTimeMillis());
-						errorMsgs.add("請輸入開始日期!");
-					}
-				 
-				  java.sql.Date ad_ed_date=null;
-					 
-				  try{
-					  ad_ed_date=java.sql.Date.valueOf(req.getParameter("ad_ed_date").trim());
-					 
-				  }catch (IllegalArgumentException e) {
-			
-//					  ad_ed_date=new java.sql.Date(System.currentTimeMillis());
-						errorMsgs.add("請輸入結束日期!");
-					}
-				  
-				  
-					long outcome=ad_ed_date.getTime()-ad_op_date.getTime();
-					if(outcome<0){
-						errorMsgs.add("結束日期須比開始日期還晚");
-					}
-				  
+			System.out.println("track6");
+				
 				 
 				 
 
-				 
+					System.out.println("track10");
 				  InputStream  is= req.getPart("ad_img").getInputStream(); 
-				
+				  System.out.println("track11");
 				  byte[] 	ad_img=null;
 				  if(!req.getPart("ad_img").getContentType().contains("image")){   //判斷是否有上傳照片
 					 
 					
-					 
+					  System.out.println("track12");
 					   ad_img= ( byte[]) req.getSession().getAttribute("ad_img");         //抓使用者之前上傳的圖片
 					   if(ad_img==null){                                                                                         //判斷是否曾經上傳過圖片
 						   errorMsgs.add("請上傳贈品圖片");
@@ -111,7 +88,7 @@ public class Ad_managementServlet extends HttpServlet{
 				  
 				
 					 ByteArrayOutputStream buffer = new ByteArrayOutputStream();
-
+					 System.out.println("track13");
 					 int nRead;
 					 byte[] gift = new byte[16384];
 
@@ -120,26 +97,83 @@ public class Ad_managementServlet extends HttpServlet{
 					 }
 
 					 	ad_img=buffer.toByteArray();
+					 	System.out.println("track14");
 				  req.getSession().setAttribute("ad_img",ad_img);  //將ad_img上傳到session上，如果使用者上架失敗可以從session拿到舊圖，使用者不用重新上傳
 				  }
 				  
 				  
+				  
+				  java.sql.Date ad_op_date=null;
+					 
+				  try{
+					  String get_ad_op_date=req.getParameter("ad_op_date");
+					  System.out.println("get_ad_op_date= "+(get_ad_op_date));
+					  System.out.println("get_ad_op_date.equals('')= "+(get_ad_op_date.equals("")));
+					  if(!get_ad_op_date.equals("")){
+						  ad_op_date=java.sql.Date.valueOf(req.getParameter("ad_op_date").trim());
+					  }else{
+						  
+						  errorMsgs.add("請輸入開始日期!");
+					  }
+						  
+					  
+					
+					  System.out.println("track7");
+				  }catch (IllegalArgumentException e) {		
+//					  ad_op_date=new java.sql.Date(System.currentTimeMillis());
+						errorMsgs.add("開始日期格式錯誤!");
+					}
+				 
+				  java.sql.Date ad_ed_date=null;
+					 
+				  try{
+					  String get_ad_ed_date=req.getParameter("ad_ed_date");
+					  if(!get_ad_ed_date.equals("")){
+					  ad_ed_date=java.sql.Date.valueOf(req.getParameter("ad_ed_date").trim());
+					  }else{
+						  
+						  errorMsgs.add("請輸入結束日期!");
+					  }
+						  
+					  System.out.println("track8");
+				  }catch (IllegalArgumentException e) {
+			
+//					  ad_ed_date=new java.sql.Date(System.currentTimeMillis());
+						errorMsgs.add("結束日期格式錯誤!");
+					}
+				  long outcome=0;
+				  if((!req.getParameter("ad_ed_date").equals("")) && (!req.getParameter("ad_op_date").equals("")) ){
+					 outcome=ad_ed_date.getTime()-ad_op_date.getTime();
+				  }
+					
+					System.out.println("track9");
+					if(outcome<0){
+						errorMsgs.add("結束日期須比開始日期還晚");
+					}
+				  
+				  
+				  
+				  
+				  
+				  System.out.println("track15");
 				  AdVO ad_vo=new AdVO();
 				  ad_vo.setProd_no(prod_no);
 				  ad_vo.setAd_title(ad_title);
 				  ad_vo.setAd_op_date(ad_op_date);
 				  ad_vo.setAd_ed_date(ad_ed_date);
 				  ad_vo.setAd_img(ad_img);
-				 System.out.println("track1");
+				  System.out.println("track16");
 					if (!errorMsgs.isEmpty()) {
+						System.out.println("track not empty");
 						req.setAttribute("ad_vo", ad_vo); // 含有輸入格式錯誤的empVO物件,也存入req
-						 System.out.println("track error");
-						 System.out.println(url);
+					
+		
 						RequestDispatcher failureView = req
 								.getRequestDispatcher(url);
 						failureView.forward(req, res);
 						return;
 					}
+					System.out.println("track17");
 					 req.getSession().removeAttribute("ad_img");
 				  AdService adService=new AdService();
 				   ad_vo=adService.addAd(prod_no,ad_title,ad_img,ad_op_date,ad_ed_date);
@@ -156,7 +190,7 @@ public class Ad_managementServlet extends HttpServlet{
 				  successView.forward(req,res);
 				  
 			  }catch (Exception e) {
-				  
+				  System.out.println("track error");
 				  errorMsgs.add(e.getMessage());
 					errorMsgs.add("系統錯誤");
 					RequestDispatcher failureView = req
@@ -193,45 +227,45 @@ public class Ad_managementServlet extends HttpServlet{
 		
 		
 		if ("getOne_For_Display".equals(action)) {
-			System.out.println("track1");
+			
 			List<String> errorMsgsForUpdate = new LinkedList<String>();
 			List<String> openModal=new LinkedList<String>();
 			openModal.add("baba");
 			req.setAttribute("openModal", openModal);
 			
 			req.setAttribute("errorMsgsForUpdate", errorMsgsForUpdate);
-			System.out.println("track2");
+		
 		try{	
 			String str = req.getParameter("ad_no");
-			System.out.println("ad_no="+str);
+			
 			String url=req.getParameter("ad.jsp");
-			System.out.println("whichPage= "+req.getParameter("whichPage"));
+		
 			req.setAttribute("whichPage",req.getParameter("whichPage"));   //取得目前所在的頁數，不管失敗獲成功都會停留在同一頁，不會跑到第一頁
-			System.out.println("track3");
+		
 			if (!errorMsgsForUpdate.isEmpty()) {
 				RequestDispatcher failureView = req
 						.getRequestDispatcher(url);
 				failureView.forward(req, res);
 				return;//程式中斷
 			}
-			System.out.println("track4");
+		
 			String ad_no=str;
 			AdService adSvc=new AdService();
-			System.out.println("ad_no2="+ad_no);
+		
 			AdVO ad_vo=adSvc.getOneAd(ad_no);
-			System.out.println("track5");
+		
 			if ( ad_vo == null) {
-				System.out.println("find nothing");
+			
 				errorMsgsForUpdate.add("查無資料");
 			}
-			System.out.println("track6");
+	
 			if (!errorMsgsForUpdate.isEmpty()) {
 				RequestDispatcher failureView = req
 						.getRequestDispatcher(url);
 				failureView.forward(req, res);
 				return;//程式中斷
 			}
-			System.out.println("track7");
+		
 //			String url =null;
 			
 //			if(req.getParameter("url")!=null){
@@ -243,13 +277,13 @@ public class Ad_managementServlet extends HttpServlet{
 //			}
 			
 			req.setAttribute("ad_VO", ad_vo);
-			System.out.println("track9");
+		
 			RequestDispatcher successView = req.getRequestDispatcher(url);
 			successView.forward(req, res);
 			
 			
 		}catch (Exception e) {
-			System.out.println("error: something wrong");
+	
 			errorMsgsForUpdate.add("無法取得資料:" + e.getMessage());
 			String url=req.getParameter("ad.jsp");
 			RequestDispatcher failureView = req
@@ -269,7 +303,7 @@ public class Ad_managementServlet extends HttpServlet{
 				String ad_no=req.getParameter("ad_no").trim();
 				String prod_no=req.getParameter("prod_no").trim();
 				String ad_title=req.getParameter("ad_title").trim();
-				System.out.println("ad_title="+ad_title);
+			
 				if(ad_title.length()==0){
 					errorMsgsForUpdate.add("請輸入贈品名稱");
 				}

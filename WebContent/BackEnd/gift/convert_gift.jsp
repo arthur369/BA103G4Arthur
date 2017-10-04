@@ -3,6 +3,7 @@
 <%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core"%>
 <%@ page import="java.util.*"%>
 <%@ page import="com.convert_gift.model.*"%>
+<%@ page import="com.act.model.*"%>
 <html>
   <head>
     <meta charset="UTF-8">
@@ -115,11 +116,14 @@ margin-right: 30px;
    float: right;
    display: inline-block;
    margin-top: 20px;
+  right: -30px;
+  margin-right: 30px;
    }    
    .check{
    display: inline-block;
    }
     .dropdown-menu{
+     
     cursor: pointer;
     }
     .mystatus :hover{
@@ -137,17 +141,54 @@ margin-right: 30px;
     font-weight: 800;
     color: #333;
     }
+    
+    .show_query{
+ right:-65%;
+    font-size: 20px;
+    font-weight: 600;
+  
+    }
+    
 </style>
 <%
     Convert_giftService convert_giftSvc = new Convert_giftService();
 List<Convert_giftVO> list=null;
-if(request.getAttribute("showConvert_gift")==null){
+if(session.getAttribute("showConvert_gift")==null){
  list=convert_giftSvc.getAll();
 }else{
-	 list=(List<Convert_giftVO>)request.getAttribute("showConvert_gift");
+	 list=(List<Convert_giftVO>)session.getAttribute("showConvert_gift");
+	
 }
     pageContext.setAttribute("list",list);
 %>
+<%
+    ActService actSvc=new ActService();
+     List<ActVO>act_vo_list= actSvc.getAll();
+    int act_count=0;
+    for(int i=0;i<act_vo_list.size();i++){
+    	if(act_vo_list.get(i).getAct_stat().equals("待審核")){
+    		act_count++;
+    	}
+    }
+    
+    pageContext.setAttribute("act_count",act_count);
+    
+   
+    List<Convert_giftVO> convert_gift_vo_list= convert_giftSvc.getAll();
+    int convert_gift_count=0;
+    for(int i=0;i<convert_gift_vo_list.size();i++){
+    	if(convert_gift_vo_list.get(i).getApply_stat().equals("待出貨")){
+    		convert_gift_count++;
+    	}
+    }
+    
+    pageContext.setAttribute("convert_gift_count",convert_gift_count);
+    
+    
+    %>
+
+
+
 
   </head>
   <body>
@@ -156,11 +197,11 @@ if(request.getAttribute("showConvert_gift")==null){
     <div class="container card">
       <div class="row">
         <div class="col-xs-2 left"><a class="h3 title" href="#action" aria-expanded="false" aria-controls="action" data-toggle="collapse" style="text-decoration: none;">
-            <div class="fa fa-futbol-o"></div><a class="h3" href="act.html"> 活動審核</a></a><a class="h3 title" href="#check" aria-expanded="false" aria-controls="check" data-toggle="collapse" style="text-decoration: none;">
+            <div class="fa fa-futbol-o"></div><a class="h3" href="<%=request.getContextPath()%>/BackEnd/act/action_check.jsp"> 活動審核</a></a><a class="h3 title" href="#check" aria-expanded="false" aria-controls="check" data-toggle="collapse" style="text-decoration: none;">
             <div class="fa fa-check-circle"></div><span class="h3">檢舉管理</span>
             <ul class="collapse" id="check"><a>評論檢舉</a><a>商品檢舉</a><a>討論區檢舉</a></ul></a><a class="h3 title" href="#mem" aria-expanded="false" aria-controls="mem" data-toggle="collapse" style="text-decoration: none;">
             <div class="fa fa-address-card-o"></div><span class="h3">會員管理</span>
-            <ul class="collapse" id="mem"><a>會員資料管理</a><a>廠商店家授權</a><a>積分管理</a></ul></a><a class="h3 title" href="#admin" aria-expanded="false" aria-controls="admin" data-toggle="collapse" style="text-decoration: none;">
+            <ul class="collapse" id="mem"><a>會員資料管理</a><a>廠商店家授權</a><a  href="<%=request.getContextPath()%>/BackEnd/mem/mem.jsp">積分管理</a></ul></a><a class="h3 title" href="#admin" aria-expanded="false" aria-controls="admin" data-toggle="collapse" style="text-decoration: none;">
             <div class="fa fa-user-o"> </div><span class="h3">管理員管理</span>
             <ul class="collapse" id="admin"><a>管理帳戶授權</a><a>帳戶管理</a></ul></a><a class="h3 title" href="#gift" aria-expanded="false" aria-controls="gift" data-toggle="collapse" style="text-decoration: none;">
             <div class="fa fa-gift"> </div><span class="h3">平台業務管理</span>
@@ -181,19 +222,20 @@ if(request.getAttribute("showConvert_gift")==null){
             <h2>你好</h2><a class="fa fa-bell dropdown-toggle" href="#" data-toggle="dropdown"></a>
             <ul class="dropdown-menu">
               <li><a>10項檢舉未處理</a></li>
-              <li><a>10項活動未審核</a></li>
+              <li><a  href="<%=request.getContextPath()%>/BackEnd/act/action_check.jsp">${act_count }項活動未審核</a></li>
               <li><a>10項廠商會員申請未審核</a></li>
-              <li><a href="<%=request.getContextPath()%>/BackEnd/gift/convert_gift.jsp">10項兌換贈品申請</a></li>
+              <li><a href="<%=request.getContextPath()%>/BackEnd/gift/convert_gift.jsp">${convert_gift_count }項兌換贈品申請</a></li>
             </ul>
           </div>
           <div class="col-xs-12 right_middle">
             <div class="col-xs-12">
               <h2 class="check">兌換贈品管理</h2>
              
-              <div class="btn-group selectStatus">
+         <span  class="show_query">目前顯示:${(showConvert_gift==null)?"全顯示":apply_stat }</span>   <div class="btn-group selectStatus">  
   <button class="btn btn-default btn-sm dropdown-toggle  " type="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
     選擇 <span class="caret "></span>
   </button>
+  
   <ul class="dropdown-menu">
     <li>
     <FORM METHOD="post"   ACTION="<%=request.getContextPath() %>/gift_business/gift_businessServlet" name="form1" >
@@ -260,12 +302,11 @@ if(request.getAttribute("showConvert_gift")==null){
                 <td>${convert_gift_vo.apply_date }</td>
                 <td>${convert_gift_vo.apply_add }</td>
                 <td>${convert_gift_vo.send_date }</td>
-                <td><input type="text"  value="${convert_gift_vo.send_no }" class="inputData"></td>     
+                <td><input type="number"  value="${convert_gift_vo.send_no }" class="inputData"></td>     
                 <td class="status">${convert_gift_vo.apply_stat }</td>
-                <td><label class="switch">
-                     <input type="checkbox">
-                     <span class="slider round"></span>
-                     </label></td>
+                <td><button  class="btn btn-info  send_already">修改為已出貨</button>
+                <button  class="btn btn-danger  send_not_yet">修改為待出貨</button>
+                </td>
                 
               </tr>
               
@@ -349,53 +390,80 @@ if(request.getAttribute("showConvert_gift")==null){
     
     <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.1.1/jquery.min.js"></script>
     <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/js/bootstrap.min.js"></script>
+     <script src="https://unpkg.com/sweetalert/dist/sweetalert.min.js"></script>
     <script type="text/javascript">
-    
-    <%-- switch被點擊時觸發 --%>
-      $(".slider").click(function(){
-	$(this).parent().parent().addClass("changeState");
 	
-	<%-- 錯誤處理，若待出貨改成已出貨，則物流編號須有值否則跳出提醒視窗 --%>
-        if($(this).parent().parent().prev().text()=="待出貨"){
-        	if($(this).parent().parent().prev().prev().children().val().length==0){
-        		
-        		alert("請輸入物流編號");
-        		
-        		return;
-        	}
-        <%-- 修改頁面文字，將已出貨改成待出貨，待出貨改成已出貨  --%>
-        	$(this).parent().parent().prev().text("已出貨");
-    }else{
-    	$(this).parent().parent().prev().text("待出貨");
-        }
-        
-        <%-- 得到被點擊的贈品明細資訊(兌換申請編號、出貨狀態、物流編號) 產生input type="hidden" 方便之後送出 --%>
-        var fk=$(this).parent().parent().prev().prev().prev().prev().prev().prev().prev().prev().prev().prev().text();
-     var statusValue=$(this).parent().parent().prev().text();
-     var send_no=$(this).parent().parent().prev().prev().children().val();
-        $(".getFk").append("<input type='hidden' name=primaryKey "+ "value="+fk+">");    	  
-        $(".getFk").append("<input type='hidden' name=statusValue "+ "value="+statusValue+">");
-        $(".getFk").append("<input type='hidden' name=send_no "+ "value="+send_no+">");
-      })
+    
+    for(var i=0;i<$(".send_already").length;i++){
+    	if($(".send_already").eq(i).parent().prev().text()=="待出貨"){
+    		$(".send_already").eq(i).css("display","block");
+    		$(".send_not_yet").eq(i).css("display","none");
+    		
+    		
+    	}else{
+    		$(".send_already").eq(i).css("display","none");
+    		$(".send_not_yet").eq(i).css("display","block");
+    		
+    	}
+    }
+    
+    
+    $(".send_not_yet").click(function(){
+    
+    	
+    $(this).parent().prev().text("待出貨");
+    var fk=$(this).parent().prev().prev().prev().prev().prev().prev().prev().prev().prev().prev().text();
+    var statusValue=$(this).parent().prev().text();
+    var send_no=$(this).parent().prev().prev().children().val();
+       $(".getFk").append("<input type='hidden' name=primaryKey "+ "value="+fk+">");    	  
+       $(".getFk").append("<input type='hidden' name=statusValue "+ "value="+statusValue+">");
+       $(".getFk").append("<input type='hidden' name=send_no "+ "value="+send_no+">");
+    	
+    })
+    
+     $(".send_already").click(function(){
+    if($(this).parent().prev().prev().children().val().length==0 ){
+    	 sweetAlert("Oops!", "請輸入物流編號", "error");
+    	 return;
+    }
+    if($(this).parent().prev().prev().children().val().length<7 || $(this).parent().prev().prev().children().val().length>11  ){
+   	 sweetAlert("Oops!", "物流編號錯誤", "error");
+   	 return;
+   }
+    	
+    $(this).parent().prev().text("已出貨");
+    var fk=$(this).parent().prev().prev().prev().prev().prev().prev().prev().prev().prev().prev().text();
+    var statusValue=$(this).parent().prev().text();
+    var send_no=$(this).parent().prev().prev().children().val();
+       $(".getFk").append("<input type='hidden' name=primaryKey "+ "value="+fk+">");    	  
+       $(".getFk").append("<input type='hidden' name=statusValue "+ "value="+statusValue+">");
+       $(".getFk").append("<input type='hidden' name=send_no "+ "value="+send_no+">");
+    	
+    })
+    
+    
+    
+    
+    
+    
+    
+    
+    
       
-      <%-- 滑鼠移入移出時產生背景顏色和顏色的變化  --%>
-      $(".dropdown-menu").children().children().mouseenter(function(){
-		$(this).css("background-color","#333");
-		$(this).children().css("color","#eee")
-		                                 .css("text-decoration","none");
-	})
-	$(".dropdown-menu").children().children().mouseleave(function(){
-		$(this).css("background-color","#eee");
-		$(this).children().css("color","#333");
-		
-	})
+     
 	
 	<%--  點擊超連結後送出(submit) --%>
 	$(".mystatus").click(function(){
+		
+	
+		
 		$(this).parent().submit();
 		
 		
 	})
+	
+	
+	
 	
 	
 	<%-- 點擊贈品編號，取得相關資訊並產生input type=hidden，在submit將這些資料一併送出 --%>
