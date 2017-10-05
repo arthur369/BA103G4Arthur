@@ -144,7 +144,7 @@ public class StoreServlet extends HttpServlet {
 				 **********************/
 				
 				String store_stat1 =req.getParameter("store_stat1");
-				System.out.println(store_stat1);
+				System.out.println("store_stat1= "+store_stat1);
 //				req.setAttribute("store_stat1", store_stat1);
 				
 				String store_no = req.getParameter("store_no").trim();

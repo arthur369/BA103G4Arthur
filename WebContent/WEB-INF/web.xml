@@ -64,7 +64,14 @@
   </servlet-mapping>
   
   
-  
+  <servlet>
+    <servlet-name>mem_managementServlet</servlet-name>
+    <servlet-class>com.mem_management.controller.Mem_managementServlet</servlet-class>
+  </servlet>
+  <servlet-mapping>
+    <servlet-name>mem_managementServlet</servlet-name>
+    <url-pattern>/mem_management/mem_managementServlet</url-pattern>
+  </servlet-mapping>
   
   
   
@@ -77,6 +84,10 @@
     <servlet-name>gift_businessServlet</servlet-name>
     <url-pattern>/gift_business/gift_businessServlet</url-pattern>
   </servlet-mapping>
+  
+  
+  
+  
   
   <servlet>
     <servlet-name>GiftImg</servlet-name>
@@ -114,6 +125,37 @@
     <servlet-name>MemImg</servlet-name>
     <url-pattern>/MemImg.do</url-pattern>
   </servlet-mapping>
+  
+  
+  
+  
+ <!-- 後端管理員Filter -->
+  <filter>
+    <filter-name>MgrLoginFilter</filter-name>
+    <filter-class>com.mgrlogin.controller.MgrLoginFilter</filter-class>
+  </filter>
+  <filter-mapping>
+    <filter-name>MgrLoginFilter</filter-name>
+    <url-pattern>/BackEnd/act/*</url-pattern>
+    <url-pattern>/BackEnd/ad/*</url-pattern>
+    <url-pattern>/BackEnd/gift/*</url-pattern>
+    <url-pattern>/BackEnd/mem/*</url-pattern>
+    <url-pattern>/BackEnd/reg_store/*</url-pattern>
+    <url-pattern>/BackEnd/main.jsp</url-pattern>
+    <dispatcher>REQUEST</dispatcher>
+    <dispatcher>FORWARD</dispatcher>
+    <dispatcher>INCLUDE</dispatcher>
+    <dispatcher>ERROR</dispatcher>
+  
+  </filter-mapping>
+  
+  
+  
+  
+  
+  
+  
+  
   
   
   

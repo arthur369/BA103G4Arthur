@@ -120,7 +120,7 @@ pageContext.setAttribute("list",list);
             <div class="fa fa-check-circle"></div><span class="h3">檢舉管理</span>
             <ul class="collapse" id="check"><a>評論檢舉</a><a>商品檢舉</a><a>討論區檢舉</a></ul></a><a class="h3 title" href="#mem" aria-expanded="false" aria-controls="mem" data-toggle="collapse" style="text-decoration: none;">
             <div class="fa fa-address-card-o"></div><span class="h3">會員管理</span>
-            <ul class="collapse" id="mem"><a href="<%=request.getContextPath()%>/BackEnd/mem/mem.jsp">會員資料管理</a><a  href="<%=request.getContextPath()%>/BackEnd/reg_store/listAllStore.jsp">廠商店家授權</a><a  href="<%=request.getContextPath()%>/BackEnd/mem/mem_pt.jsp">積分管理</a></ul></a><a class="h3 title" href="#admin" aria-expanded="false" aria-controls="admin" data-toggle="collapse" style="text-decoration: none;">
+            <ul class="collapse" id="mem"><a  href="<%=request.getContextPath()%>/BackEnd/mem/mem.jsp">會員資料管理</a><a  href="<%=request.getContextPath()%>/BackEnd/reg_store/listAllStore.jsp">廠商店家授權</a><a  href="<%=request.getContextPath()%>/BackEnd/mem/mem_pt.jsp">積分管理</a></ul></a><a class="h3 title" href="#admin" aria-expanded="false" aria-controls="admin" data-toggle="collapse" style="text-decoration: none;">
             <div class="fa fa-user-o"> </div><span class="h3">管理員管理</span>
             <ul class="collapse" id="admin"><a>管理帳戶授權</a><a>帳戶管理</a></ul></a><a class="h3 title" href="#gift" aria-expanded="false" aria-controls="gift" data-toggle="collapse" style="text-decoration: none;">
             <div class="fa fa-gift"> </div><span class="h3">平台業務管理</span>
@@ -137,62 +137,70 @@ pageContext.setAttribute("list",list);
           </div>
           <div class="col-xs-12 right_middle">
             <div class="col-xs-12  middle">
-              <h2 class="check">會員管理</h2>
+              <h2 class="check">積分管理</h2>
                
             </div>
           </div>
           <div class="col-xs-12 right_bottom">
-          <%@ include file="mem_page1.file" %> 
+          <%@ include file="mem_pt_page1.file" %> 
             <table class="table table-striped">
               <tr>
                 <th>會員帳號</th>
-                <th>會員編號</th>
-                <th>會員密碼</th>
                 <th>會員姓名</th>
-                <th>會員Email</th>
                 <th>會員手機</th>
                 <th>會員地址</th>
                 <th>會員圖片</th>
-                <th>會員狀態</th>
+                <th>會員總積分</th>
+                <th>會員可用積分</th>
+                <th>會員等級</th>
                 <th>管理</th>
               </tr>
               <c:forEach var="mem_vo"  items="${list}" begin="<%=pageIndex %>" end="<%=pageIndex+rowsPerPage-1%>">
               <tr>
                 <td  valign="middle">${mem_vo.mem_ac }</td>
-                <td>${mem_vo.mem_no }</td>
-                <td>${mem_vo.mem_pwd }</td>
                 <td>${mem_vo.mem_lname }${mem_vo.mem_fname } </td>
-                <td>${mem_vo.mem_email }</td>
                 <td>${mem_vo.mem_phone }</td>
+                <td>${mem_vo.mem_add }</td>
+                <td><img class="mem_pic" src="<%=request.getContextPath()%>/MemImg.do?mem_ac=${mem_vo.mem_ac}"></td>
                 
                 
-                <td>${mem_vo.mem_add }
+                <td><div class="now_total_pt">${mem_vo.mem_total_pt }</div>
+                <div  class="my_total_pt">
+                 <Form  METHOD="post" ACTION="<%=request.getContextPath() %>/gift_management/gift_managementServlet"  class="update">
+                <input type="number"  name="mem_total_pt" class="mem_total_pt"  placeholder="${mem_vo.mem_total_pt }"><button class="btn btn-success"  type="submit">修改</button>
+                <input type="hidden" name="whichPage" value="<%=whichPage %>">
+                     <input type="hidden"  name="mem_pt.jsp"  value="<%=request.getServletPath() %>"> 
+                       <input type="hidden" name="action" value="modify_total_pt">
+                       <input type="hidden" name="mem_ac" value="${mem_vo.mem_ac }">
+                </Form>
+                </div>
                 </td>
                 
                 
                 
-                <td><img class="mem_pic" src="<%=request.getContextPath()%>/MemImg.do?mem_ac=${mem_vo.mem_ac}">
+                <td><div class="now_pt">${mem_vo.mem_pt }</div>
+                <div  class="my_mem_pt">
+                 <Form  METHOD="post" ACTION="<%=request.getContextPath() %>/gift_management/gift_managementServlet"  class="update">
+                <input type="number"  name="mem_pt" class="mem_pt"  placeholder="${mem_vo.mem_pt }"><button class="btn btn-info"  type="submit">修改</button>
+                <input type="hidden" name="whichPage" value="<%=whichPage %>">
+                     <input type="hidden"  name="mem.jsp"  value="<%=request.getServletPath() %>"> 
+                       <input type="hidden" name="action" value="modify_pt">
+                       <input type="hidden" name="mem_ac" value="${mem_vo.mem_ac }">
+                </Form>
+                </div>
                 </td>
-                 <td class="my_mem_stat">${mem_vo.mem_stat }</td>
+                 <td>${mem_vo.grade_no }</td>
                 <td>
                 
                  
-                    <Form  METHOD="post" ACTION="<%=request.getContextPath() %>/mem_management/mem_managementServlet"  class="update">
-                  <button class="btn btn-info  return_power" type="submit">復權</button>
-                  <input type="hidden"  name="mem.jsp"  value="<%=request.getServletPath() %>"> 
-                       <input type="hidden" name="action" value="reverse_mem_stat">
-                       <input type="hidden" name="mem_ac" value="${mem_vo.mem_ac }">
-                  <input type="hidden" name="whichPage" value="<%=whichPage %>">
-                   </Form>
+                   
+                  <button class="btn btn-success  update_mem_total_pt" type="button">修改總積分</button>
+                   
                        
                 
-                  <Form  METHOD="post" ACTION="<%=request.getContextPath() %>/mem_management/mem_managementServlet"  class="update">
-                  <button class="btn btn-danger   stop_power" type="submit">停權</button>
-                   <input type="hidden"  name="mem.jsp"  value="<%=request.getServletPath() %>"> 
-                       <input type="hidden" name="action" value="stop_mem_stat">
-                       <input type="hidden" name="mem_ac" value="${mem_vo.mem_ac }">
-                  <input type="hidden" name="whichPage" value="<%=whichPage %>">
-                    </Form>
+                  
+                  <button class="btn btn-info  update_mem_pt" type="button">修改可用積分</button>
+                   
                   
                 </td>
               </tr>
@@ -200,7 +208,7 @@ pageContext.setAttribute("list",list);
             </table>
           
           </div>
-          <%@ include file="mem_page2.file" %> 
+          <%@ include file="mem_pt_page2.file" %> 
            
         </div>
       </div>
@@ -225,20 +233,22 @@ pageContext.setAttribute("list",list);
     
     <script>
     
-  
-   for(var i=0;i<$(".my_mem_stat").length;i++){
-	   if($(".my_mem_stat").eq(i).text()=="正常"){
-		   $(".return_power").eq(i).css("display","none");
-		   $(".stop_power").eq(i).css("display","block");
-	   }else{
-		   $(".return_power").eq(i).css("display","block");
-		   $(".stop_power").eq(i).css("display","none");
-	   }
+   $(".update_mem_pt").click(function(){
+	   $(this).parent().prev().prev().children().css("display","none");
+	   $(this).parent().prev().prev().children().next().css("display","block");
+	  
 	   
 	   
-   }
-    
-    
+   })
+   
+    $(".update_mem_total_pt").click(function(){
+	   $(this).parent().prev().prev().prev().children().css("display","none");
+	   $(this).parent().prev().prev().prev().children().next().css("display","block");
+	  
+	   
+	   
+   })
+   
    
    if(${not empty errorMsgs}){
 	   sweetAlert("Oops!", <c:forEach var="message" items="${errorMsgs} ">

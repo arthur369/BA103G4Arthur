@@ -12,14 +12,28 @@
         <td><A href="<%=request.getRequestURI()%>?whichPage=<%=pageNumber%>">至最後一頁</A>&nbsp;</td>
     <%}%>
   <%}%>  
+  <%if ( pageNumber > 1) {%>
+  <FORM METHOD="post" ACTION="<%=request.getRequestURI()%>">   
+        <td>
+           <select size="1" name="whichPage">
+        <%for (int i=1; i<=pageNumber; i++){%>
+           <option value="<%=i%>">跳至第<%=i%>頁
+        <%}%> 
+           </select>
+           <input type="submit" value="確定" >  
+        </td>
+   </FORM>
+  <%}%>
+  
+  
  </tr>
 </table>    
+
+<%-- 
 <%if ( pageNumber > 1) {%>
 <table border="0">   
  <tr> 
-        <td>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
-            &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
-        </td>
+       
    <FORM METHOD="post" ACTION="<%=request.getRequestURI()%>">   
         <td>
            <select size="1" name="whichPage">
@@ -33,3 +47,5 @@
  </tr>
 </table>
 <%}%>
+
+--%>

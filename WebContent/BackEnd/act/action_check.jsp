@@ -4,6 +4,7 @@
 <%@ page import="java.util.*"%>
 <%@ page import="com.act.model.*"%>
 <%@ page import="com.convert_gift.model.*"%>
+<%@ page import="com.store.model.*"%>
 
 <html>
   <head>
@@ -130,6 +131,19 @@ pageContext.setAttribute("list",list);
     
     pageContext.setAttribute("convert_gift_count",convert_gift_count);
     
+    StoreService storeSvc=new StoreService();
+    List<StoreVO>store_vo_list= storeSvc.getAll();
+   int store_count=0;
+   for(int i=0;i<store_vo_list.size();i++){
+   	if(store_vo_list.get(i).getStore_stat().equals("待審中")){
+   		store_count++;
+   	}
+   }
+   
+   pageContext.setAttribute("store_count",store_count);
+    
+    
+    
     
     %>
 
@@ -147,7 +161,7 @@ pageContext.setAttribute("list",list);
             <div class="fa fa-check-circle"></div><span class="h3">檢舉管理</span>
             <ul class="collapse" id="check"><a>評論檢舉</a><a>商品檢舉</a><a>討論區檢舉</a></ul></a><a class="h3 title" href="#mem" aria-expanded="false" aria-controls="mem" data-toggle="collapse" style="text-decoration: none;">
             <div class="fa fa-address-card-o"></div><span class="h3">會員管理</span>
-            <ul class="collapse" id="mem"><a>會員資料管理</a><a>廠商店家授權</a><a href="<%=request.getContextPath()%>/BackEnd/mem/mem.jsp">積分管理</a></ul></a><a class="h3 title" href="#admin" aria-expanded="false" aria-controls="admin" data-toggle="collapse" style="text-decoration: none;">
+            <ul class="collapse" id="mem"><a  href="<%=request.getContextPath()%>/BackEnd/mem/mem.jsp">會員資料管理</a><a  href="<%=request.getContextPath()%>/BackEnd/reg_store/listAllStore.jsp">廠商店家授權</a><a href="<%=request.getContextPath()%>/BackEnd/mem/mem_pt.jsp">積分管理</a></ul></a><a class="h3 title" href="#admin" aria-expanded="false" aria-controls="admin" data-toggle="collapse" style="text-decoration: none;">
             <div class="fa fa-user-o"> </div><span class="h3">管理員管理</span>
             <ul class="collapse" id="admin"><a>管理帳戶授權</a><a>帳戶管理</a></ul></a><a class="h3 title" href="#gift" aria-expanded="false" aria-controls="gift" data-toggle="collapse" style="text-decoration: none;">
             <div class="fa fa-gift"> </div><span class="h3">平台業務管理</span>
@@ -158,7 +172,7 @@ pageContext.setAttribute("list",list);
             <ul class="dropdown-menu">
               <li><a>10項檢舉未處理</a></li>
               <li><a href="<%=request.getContextPath()%>/BackEnd/act/action_check.jsp">${act_count }項活動未審核</a></li>
-              <li><a>10項廠商會員申請未審核</a></li>
+              <li><a  href="<%=request.getContextPath()%>/BackEnd/reg_store/listAllStore.jsp">${store_count }項廠商會員申請未審核</a></li>
               <li><a  href="<%=request.getContextPath()%>/BackEnd/gift/convert_gift.jsp">${convert_gift_count }項兌換贈品申請</a></li>
             </ul>
           </div>

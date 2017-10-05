@@ -13,7 +13,7 @@
 <jsp:useBean id="storeSvc" scope="page" class="com.store.model.StoreService" />
 <jsp:useBean id="cart_listSvc" scope="page" class="com.cart_list.model.Cart_listService" />
 
-<c:set var="mem_ac" value="${sessionScope.mem_ac}" scope="page"/>
+<%--   <c:set var="mem_ac" value="${sessionScope.mem_ac}" scope="page"/>  --%>
 
 <c:set var="cart_listSet" value="${cart_listSvc.getVOsByMem(mem_ac)}" scope="page"/>
 

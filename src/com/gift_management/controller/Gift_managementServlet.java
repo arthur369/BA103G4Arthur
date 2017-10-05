@@ -64,6 +64,11 @@ public class Gift_managementServlet extends HttpServlet{
 					if(mem_total_pt>99999){
 						errorMsgs.add("積分須小於99999");
 					}
+					
+					if(mem_total_pt<0){
+						errorMsgs.add("積分不能小於0");
+					}
+					
 				  Integer grade_no;
 				  if(mem_total_pt<=100){
 					  grade_no=1;
@@ -84,7 +89,7 @@ public class Gift_managementServlet extends HttpServlet{
 				mem_vo.setMem_total_pt(mem_total_pt);
 				mem_vo.setGrade_no(grade_no);
 				memSvc.updateMem(mem_vo);
-				String url=req.getParameter("mem.jsp");
+				String url=req.getParameter("mem_pt.jsp");
 				RequestDispatcher successView = req
 						.getRequestDispatcher(url);
 				successView.forward(req, res);
@@ -93,7 +98,7 @@ public class Gift_managementServlet extends HttpServlet{
 					
 			
 				}catch(Exception e){
-					String url=req.getParameter("mem.jsp");
+					String url=req.getParameter("mem_pt.jsp");
 					RequestDispatcher failureView = req
 							.getRequestDispatcher(url);
 					failureView.forward(req, res);
@@ -122,7 +127,9 @@ public class Gift_managementServlet extends HttpServlet{
 				errorMsgs.add("積分須小於99999");
 			}
 			
-			
+			if(mem_pt<0){
+				errorMsgs.add("積分不能小於0");
+			}
 			
 			if (!errorMsgs.isEmpty()) {
 				

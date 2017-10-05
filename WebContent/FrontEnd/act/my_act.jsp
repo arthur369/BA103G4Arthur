@@ -105,7 +105,9 @@ pageContext.setAttribute("act_pair_list",act_pair_list);
 
 	</head>
 	<body>
-		
+
+ 
+		 <%@ include file="/FrontEnd/include/head.jsp" %> 
 		<div class="container">
 			<div class="row">
 				<div class="col-md-12  my_act_all">
