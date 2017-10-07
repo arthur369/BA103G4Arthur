@@ -1,22 +1,109 @@
-<!DOCTYPE html>
+
 <%@ page contentType="text/html; charset=UTF-8" pageEncoding="UTF-8"%>
 <%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core"%>
 <%@ page import="java.util.*"%>
 <%@ page import="com.act.model.*"%>
-<html >
-<head>
-  <meta charset="UTF-8">
-  <title>舉辦活動第一頁面</title>
-  
-  
-  <link rel='stylesheet prefetch' href='https://cdnjs.cloudflare.com/ajax/libs/twitter-bootstrap/3.3.7/css/bootstrap.min.css'>
 
-      <link rel="stylesheet" href="<%=request.getContextPath()%>/FrontEnd/res/css/start_act.css">
+ <jsp:include page="/FrontEnd/include/head.jsp"/> 
+  
+
+
+ 
       
       <%--date picker專用css --%>
     <link rel="stylesheet" href="<%=request.getContextPath()%>/BackEnd/res/css/bootstrap-datetimepicker.min.css" />
       
 <style>
+
+
+
+
+.myrow {
+  border: solid 1px black;
+  padding: 50px;
+  border-radius: 50px;
+}
+
+.first {
+  color: white;
+  background-color: #6F5C60;
+}
+
+.circles {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  height: 100px;
+  width: 100%;
+}
+.circles .circle {
+  width: 50px;
+  height: 50px;
+  border-radius: 50%;
+  border: solid 1px black;
+}
+.circles .circle h2 {
+  position: absolute;
+  left: 50%;
+  top: 50%;
+  transform: translate(-50%, -110%);
+}
+.circles .line {
+  width: 50px;
+  border: solid 5px black;
+}
+
+.title {
+  text-align: center;
+}
+
+.left {
+  text-align: center;
+}
+.left .time h2 {
+  display: flex;
+  justify-content: space-evenly;
+}
+.left .time input {
+  width: 150px;
+}
+.left .introduce textarea {
+  width: 400px;
+  height: 250px;
+  left: 50%;
+  transform: translate(-50%, 0);
+}
+
+.right {
+  text-align: left;
+}
+.right .host textarea {
+  width: 400px;
+  height: 250px;
+  left: 50%;
+  transform: translate(-50%, 0);
+}
+
+h2 {
+  display: inline-block;
+  font-size: 25px;
+}
+
+.next {
+  height: 100px;
+}
+.next button {
+  position: absolute;
+  right: 20%;
+  top: 30%;
+}
+
+
+
+
+
+
+
 .left input , .right  .long{
 width: 60%;
 }
@@ -63,11 +150,18 @@ display: none;
 }
 
 
+.my_area *{
+position: relative;
+}
+.my_area{
+ background-color: #eee8e1;
+ margin-top: 57px;
+}
 </style>
   
-</head>
 
-<body>
+
+<div class="my_area content">
   
 <div class="circles">
   <div class="circle first">
@@ -102,7 +196,7 @@ display: none;
 <input type="hidden" name="start_act.jsp"  value=<%=request.getServletPath() %> >
 <div class="container">
   <div class="info">
-    <div class="row">
+    <div class="row  myrow">
       <div class="col-md-6 left">
       
         <div class="actionName">
@@ -188,9 +282,8 @@ display: none;
  
 </div>
  </form>
-   <script src='https://cdnjs.cloudflare.com/ajax/libs/jquery/3.1.1/jquery.min.js'></script>
-<script src="https://cdnjs.cloudflare.com/ajax/libs/twitter-bootstrap/3.3.7/js/bootstrap.min.js"></script>
-
+ 
+</div>
 <%--date picker專用js --%> 
      <script type="text/javascript"  src="<%=request.getContextPath()%>/BackEnd/res/js/bootstrap-datetimepicker.js"></script> 
  <script type="text/javascript"  src="<%=request.getContextPath()%>/BackEnd/res/js/bootstrap-datetimepicker.fr.js"></script>
@@ -200,6 +293,11 @@ display: none;
     </script>
 
 <script>
+
+	
+	
+	
+
 
 <%-- 修正日曆會選取到秒數 強制將秒數設成0 --%>
 $(".test").change(function(){
@@ -266,11 +364,11 @@ $(".test").val(new_time);
  		if (status == google.maps.GeocoderStatus.OK) { //判斷狀態
  			$lat = results[0].geometry.location.lat();
  			var lat = $lat;
- 			var  lat1 = lat.toFixed(12);
+ 			var  lat1 = lat.toFixed(11);
  			$(".act_add_lat").val(lat1);
  			$lng = results[0].geometry.location.lng();
  			var lng = $lng;
- 			var  lng1 = lng.toFixed(12);
+ 			var  lng1 = lng.toFixed(11);
  			$(".act_add_lon").val(lng1);
 
  		}
@@ -312,7 +410,6 @@ $(".next_step").mouseenter(function(){
 	 
  })
 
- 
+
 			</script>
-</body>
-</html>
+<jsp:include page="/FrontEnd/include/footer.jsp"/>

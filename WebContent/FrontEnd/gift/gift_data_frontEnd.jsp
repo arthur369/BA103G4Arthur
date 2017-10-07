@@ -1,35 +1,91 @@
-<!DOCTYPE html>
+
 <%@ page contentType="text/html; charset=UTF-8" pageEncoding="UTF-8"%>
 <%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core"%>
 <%@ page import="java.util.*"%>
 <%@ page import="com.gift_data.model.*"%>
 <%@ page import="com.mem.model.*"%>
 <%@ page import="com.convert_gift.model.*"%>
-<html >
-<head>
-  <meta charset="UTF-8">
-  <title>積分兌換專區</title>
+
+   <jsp:include page="/FrontEnd/include/head.jsp"/>
+  <%
   
   
-  <link rel='stylesheet prefetch' href='https://cdnjs.cloudflare.com/ajax/libs/twitter-bootstrap/3.3.7/css/bootstrap.min.css'>
+  
+    Gift_dataService gift_dataSvc = new Gift_dataService();
+
+List<Gift_dataVO> list=gift_dataSvc.getAll();
+    request.setAttribute("list",list);
+    
+    String mem_ac=(String)session.getAttribute("mem_ac");
+    if(mem_ac==null){
+    	mem_ac="mamabeak";
+    	}
+    
+   
+    MemService memSvc=new MemService();
+   MemVO mem_vo= memSvc.getOneProd(mem_ac);
+    
+    
+    
+   request.setAttribute("mem_vo",mem_vo);
+    
+    
+   Convert_giftService convert_giftSvc=new Convert_giftService();
+   List<Convert_giftVO> convert_gift_list=convert_giftSvc.getAll();
+   
+   request.setAttribute("convert_gift_list",convert_gift_list);
+   
+    
+    
+    
+    
+%>
+  
  <link rel="stylesheet" href="<%=request.getContextPath()%>/BackEnd/res/font-awesome-4.7.0/css/font-awesome.css">
     <link rel="stylesheet" href="<%=request.getContextPath()%>/BackEnd/res/font-awesome-4.7.0/css/font-awesome.min.css">
-      <link rel="stylesheet" href="<%=request.getContextPath()%>/FrontEnd/res/css/gift_data_frontEnd.css">
+      
       
       
       <style>
       
-      html, body {
-  width: 100%;
-  height: 100%;
-  margin: 0;
-  padding: 0;
- background-color: white;
+     .title {
+  display: flex;
+  justify-content: space-around;
+}
+
+.gift {
+  margin-top: 30px;
+}
+.gift .range {
+  margin-top: 50px;
+}
+
+.gift .card:hover {
+  box-shadow: 5px 5px 60px rgba(0, 0, 0, 0.4);
+  transform: translate(-5px, -5px);
+  overflow: hidden;
+}
+
+.gift .card .info {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  padding: 30px;
+}
+.gift .card .getitem {
+  display: flex;
+}
+.gift .card .getitem button {
+  padding: 10px 20px;
+  border-radius: 10px;
+  margin-right: 15px;
+}
+.gift .card .upTime {
+  display: flex;
+  margin-top: 20px;
 }
       
-      *{
-font-family:"微軟正黑體";
-}
+    
       .card{
       height: 800px;
       }
@@ -88,47 +144,26 @@ font-weight: 900;
 
 }
 
+.my_area{
+ width: 100%;
+  height: 100%;
+  margin: 0;
+  padding: 0;
+ background-color: white;
+ margin-top:57px;
+}
 
-
+.my_area *{
+position: relative;
+}
       </style>
       
       
-<%
-    Gift_dataService gift_dataSvc = new Gift_dataService();
 
-List<Gift_dataVO> list=gift_dataSvc.getAll();
-    request.setAttribute("list",list);
-    
-    String mem_ac=(String)session.getAttribute("mem_ac");
-    if(mem_ac==null){
-    	mem_ac="mamabeak";
-    	}
-    
-    request.setAttribute("mem_ac",mem_ac);
-    MemService memSvc=new MemService();
-   MemVO mem_vo= memSvc.getOneProd(mem_ac);
-    
-    
-    
-   request.setAttribute("mem_vo",mem_vo);
-    
-    
-   Convert_giftService convert_giftSvc=new Convert_giftService();
-   List<Convert_giftVO> convert_gift_list=convert_giftSvc.getAll();
-   
-   request.setAttribute("convert_gift_list",convert_gift_list);
-   
-    
-    
-    
-    
-%>
   
-</head>
-
-<body>
 
 
+<div class="my_area  content">
 
 
   <div class="container">
@@ -272,7 +307,7 @@ List<Gift_dataVO> list=gift_dataSvc.getAll();
   </div>
   </div>
 
-
+</div>
 <%--   積分不足視窗madal --%>
     <div class="modal fade" id="modal-update">
 			<div class="modal-dialog">
@@ -322,8 +357,7 @@ List<Gift_dataVO> list=gift_dataSvc.getAll();
 
 
   
-  <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.1.1/jquery.min.js"></script>
-    <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/js/bootstrap.min.js"></script>
+ 
 <script>
 $(".gift_amount").change(function(){
 	if($(this).val()*$(this).parent().parent().parent().prev().children().text()>${mem_vo.mem_pt }){
@@ -346,5 +380,4 @@ $(".gift_amount").change(function(){
 
 </script>
   
-</body>
-</html>
+<jsp:include page="/FrontEnd/include/footer.jsp"/>

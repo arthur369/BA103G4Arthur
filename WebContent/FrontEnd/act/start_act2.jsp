@@ -1,22 +1,163 @@
-<!DOCTYPE html>
+
 <%@ page contentType="text/html; charset=UTF-8" pageEncoding="UTF-8"%>
 <%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core"%>
 <%@ page import="java.util.*"%>
 <%@ page import="com.act.model.*"%>
-<html >
-<head>
-  <meta charset="UTF-8">
-  <title>舉辦活動第二頁面</title>
-  
-  
-  <link rel='stylesheet prefetch' href='https://cdnjs.cloudflare.com/ajax/libs/twitter-bootstrap/3.3.7/css/bootstrap.min.css'>
 
-     <link rel="stylesheet" href="<%=request.getContextPath()%>/FrontEnd/res/css/start_act2.css">
+  
+  
+  <jsp:include page="/FrontEnd/include/head.jsp"/>
+
+     
 
   <%--date picker專用css --%>
     <link rel="stylesheet" href="<%=request.getContextPath()%>/BackEnd/res/css/bootstrap-datetimepicker.min.css" />
-</head>
+
 <style>
+
+
+
+.second {
+  color: white;
+  background-color: #6F5C60;
+}
+
+.circles {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  height: 100px;
+  width: 100%;
+}
+.circles .circle {
+  width: 50px;
+  height: 50px;
+  border-radius: 50%;
+  border: solid 1px black;
+}
+.circles .circle h2 {
+  position: absolute;
+  left: 50%;
+  top: 50%;
+  transform: translate(-50%, -110%);
+}
+.circles .line {
+  width: 50px;
+  border: solid 5px black;
+}
+
+.title {
+  text-align: center;
+}
+
+h2 {
+  display: inline-block;
+  font-size: 25px;
+}
+
+.next {
+  height: 100px;
+}
+.next .previous {
+  position: absolute;
+  right: 35%;
+  top: 30%;
+}
+.next .end {
+  position: absolute;
+  right: 30%;
+  top: 30%;
+}
+
+.card {
+  width: 70%;
+  height: 350px;
+  border: solid 1px black;
+  padding: 0;
+  margin-bottom: 50px;
+  box-shadow: 0px 0px 35px rgba(0, 0, 0, 0.3);
+  transition: 0.5s;
+  margin-top: 50px;
+}
+.card:hover {
+  box-shadow: 5px 5px 60px rgba(0, 0, 0, 0.4);
+  transform: translate(-5px, -5px);
+}
+.card .row {
+  height: 100%;
+}
+.card .img {
+  height: 100%;
+}
+.card .img .actionImg {
+  width: 100%;
+  height: 100%;
+}
+.card .detail {
+  text-align: center;
+  height: 100%;
+  background-color: #C2DCCE;
+  margin-left: -15px;
+}
+.card .detail .actionTitle {
+  font-weight: bold;
+  margin-top: 30px;
+}
+.card .detail .page {
+  padding: 10px 30px;
+  width: 80%;
+  text-align: left;
+  display: inline-block;
+}
+.card .detail .bar {
+  height: 20px;
+  width: 300px;
+  border-radius: 10px;
+  border: solid 1px black;
+  left: 50%;
+  right: auto;
+  transform: translate(-50%, 0);
+}
+.card .detail .bar .joinNumber {
+  height: 100%;
+  width: 100px;
+  background-color: #6F5C60;
+  border-radius: 10px 0 0 10px;
+  border: solid 1px black;
+}
+.card .detail .dataLocation {
+  width: 100%;
+  display: flex;
+  justify-content: center;
+}
+.card .detail .info {
+  display: inline-block;
+  position: absolute;
+  right: 2%;
+  padding: 10px 25px;
+  text-decoration: none;
+  color: #C8B6A1;
+  font-weight: 900;
+  background-color: #6F5C60;
+  bottom: 2%;
+  transition: 0.5s;
+  cursor: pointer;
+}
+.card .detail .info:hover {
+  color: #111;
+  background-color: #80BD01;
+}
+
+.bottom {
+  position: relative;
+  left: 50%;
+  transform: translate(-50%, 0);
+  font-weight: bold;
+}
+
+
+
+
 textarea.form-control{
 height: 300px;
 
@@ -41,11 +182,25 @@ left: 45%;
 
 
 }
+.my_area{
+ width: 100%;
+  height: 100%;
+  margin: 0;
+  padding: 0;
+  background-color: #eee8e1;
+margin-top: 57px;
+}
+.my_area *{
+ position: relative;
+}
+ body .next .previous{
+  color: #eee;
+  }
 </style>
 
 
+<div class="my_area">
 
-<body>
   
 <div class="circles">
   <div class="circle first">
@@ -187,8 +342,7 @@ left: 45%;
   <button type="submit"  class="btn-success btn-lg end">完成</button>
 </div>
 </form>
-  <script src='https://cdnjs.cloudflare.com/ajax/libs/twitter-bootstrap/4.0.0-alpha.6/js/bootstrap.mi'></script>
-<script src='https://cdnjs.cloudflare.com/ajax/libs/jquery/3.2.1/jquery.min.js'></script>
+ </div>
 
   <%--date picker專用js --%> 
      <script type="text/javascript"  src="<%=request.getContextPath()%>/BackEnd/res/js/bootstrap-datetimepicker.js"></script> 
@@ -354,5 +508,5 @@ left: 45%;
  </script>
  
  
-</body>
-</html>
+
+<jsp:include page="/FrontEnd/include/footer.jsp"/>

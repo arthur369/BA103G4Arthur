@@ -1,21 +1,54 @@
-<!DOCTYPE html>
+
 <%@ page contentType="text/html; charset=UTF-8" pageEncoding="UTF-8"%>
 <%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core"%>
 <%@ page import="java.util.*"%>
 <%@ page import="com.act.model.*"%>
-<html >
-<head>
-  <meta charset="UTF-8">
-  <title>活動頁面</title>
+
   
-  
-  <link rel='stylesheet prefetch' href='https://cdnjs.cloudflare.com/ajax/libs/twitter-bootstrap/3.3.7/css/bootstrap.min.css'>
+  <%
+session.setAttribute("mem_ac","mamabeak");
+
+session.removeAttribute("act_vo");
+
+List<ActVO> my_act_list=null;
+System.out.println(session.getAttribute("add_date_query")!=null);
+if(session.getAttribute("add_date_query")!=null){
+	my_act_list=(List<ActVO>) session.getAttribute("add_date_query");
+	
+}else{
+ActService actSvc=new ActService();
+my_act_list=  actSvc.getAll();
+}
+List<ActVO> list=new ArrayList();
+for(int i=0;i<my_act_list.size();i++){
+	String act_stat=my_act_list.get(i).getAct_stat();
+	if(act_stat.equals("可報名")|| act_stat.equals("已成團")){
+		list.add(my_act_list.get(i));
+	}
+}
+
+
+
+pageContext.setAttribute("list",list);
+
+ActService myActSvc=new ActService();
+List<ActVO> mylist=myActSvc.getAll();
+pageContext.setAttribute("mylist",list);
+
+
+%>
+ 
+ <jsp:include page="/FrontEnd/include/head.jsp"/>
+ 
 <link rel='stylesheet prefetch' href='https://maxcdn.bootstrapcdn.com/font-awesome/4.7.0/css/font-awesome.min.css'>
 
-      <link rel="stylesheet" href="<%=request.getContextPath()%>/FrontEnd/res/css/act.css">
+    
  <%--date picker專用css --%>
     <link rel="stylesheet" href="<%=request.getContextPath()%>/BackEnd/res/css/bootstrap-datetimepicker.min.css" />
 <style type="text/css">
+
+
+
 
   .carousel{
     width: 100%;
@@ -93,13 +126,14 @@ margin-right: -50px;
 margin-left: 0;
 }
 
-.set_action{
+body .titlebar  .set_action{
 margin-left:30px;
 padding: 10px 20px;
 cursor: pointer;
+color: white;
 }
 
-.set_action:hover{
+body    .set_action:hover{
 text-decoration: none;
 
 }
@@ -125,42 +159,158 @@ right: 0%
 .bar{
 overflow: hidden;
 }
-</style>
-<%
-session.removeAttribute("act_vo");
 
-List<ActVO> my_act_list=null;
-System.out.println(session.getAttribute("add_date_query")!=null);
-if(session.getAttribute("add_date_query")!=null){
-	my_act_list=(List<ActVO>) session.getAttribute("add_date_query");
-	
-}else{
-ActService actSvc=new ActService();
-my_act_list=  actSvc.getAll();
+.titlebarForm {
+  display: flex;
+  background-color: #C2DCCE;
+  padding: 10px 50px;
+  height: 60px;
 }
-List<ActVO> list=new ArrayList();
-for(int i=0;i<my_act_list.size();i++){
-	String act_stat=my_act_list.get(i).getAct_stat();
-	if(act_stat.equals("可報名")|| act_stat.equals("已成團")){
-		list.add(my_act_list.get(i));
-	}
+.titlebarForm select {
+  flex: 150px;
+  flex-grow: 0;
+  flex-shrink: 0;
+}
+.titlebarForm .form-group {
+  flex: 6;
+  padding-left: 0%;
+
+width: 100%;
+display: flex;
+ justify-content: center;
+ align-items: center;
+
+}
+.titlebarForm .form-group *{
+
+}
+.titlebarForm input {
+  border-radius: 5px;
+}
+.titlebarForm .button {
+  flex: 3;
+  display: flex;
+  justify-content: space-around;
+}
+.titlebarForm .button button {
+  padding: 10px 20px;
 }
 
+.titleImg {
+  padding: 30px;
+  width: 80%;
+}
+.titleImg img {
+  width: 100%;
+  height: auto;
+}
 
+.actionbar {
+  padding: 0 120px;
+  display: flex;
+  justify-content: space-evenly;
+  align-items: center;
+}
+.actionbar .label {
+  height: 30px;
+  font-size: 20px;
+  font-weight: 100;
+  display: inline-block;
+  color: black;
+  border: solid 1px black;
+  background-color: #C2DCCE;
+  margin-right: 50px;
+  margin-left: 100px;
+}
+.actionbar .time {
+  transform: translate(-10%, 0);
+}
+.actionbar .quene {
+  cursor: pointer;
+  width: 100px;
+  height: 40px;
+}
 
-pageContext.setAttribute("list",list);
-
-ActService myActSvc=new ActService();
-List<ActVO> mylist=myActSvc.getAll();
-pageContext.setAttribute("mylist",list);
-
-
-%>
-
+.card {
+  width: 70%;
+  height: 290px;
+  border: solid 1px black;
+  padding: 0;
+  margin-bottom: 50px;
+  box-shadow: 0px 0px 35px rgba(0, 0, 0, 0.3);
+  transition: 0.5s;
+  margin-top: 50px;
   
-</head>
+}
+.card:hover {
+  box-shadow: 5px 5px 60px rgba(0, 0, 0, 0.4);
+  transform: translate(-5px, -5px);
+} 
+.card .row {
+  height: 100%;
+}
+.card .img {
+  height: 100%;
+}
+.card .img .actionImg {
+  width: 100%;
+  height: 100%;
+}
+.card .detail {
+  text-align: center;
+  height: 100%;
+  background-color: #C2DCCE;
+  margin-left: -15px;
+}
+.card .detail .actionTitle {
+  font-weight: bold;
+  margin-top: 30px;
+}
+.card .detail .page {
+  padding: 10px 30px;
+  width: 80%;
+  text-align: left;
+  display: inline-block;
+}
 
-<body>
+.card .detail .dataLocation {
+  width: 100%;
+  display: flex;
+  justify-content: center;
+}
+
+.card .detail .info:hover {
+  color: #111;
+  background-color: #80BD01;
+}
+
+.fa-search {
+  font-size: 20px;
+  position: relative;
+  left: 2%;
+  top: 5%;
+  background-color: #eee;
+  padding: 5px;
+  cursor: pointer;
+}
+.fa-search:hover {
+  background-color: #80BD01;
+  color: #eee;
+}
+
+.detail  *{
+position: relative;
+}
+
+.my_area{
+ background-color: #C8B6A1;
+ margin-top: 57px;
+}
+</style>
+
+
+  <div class="my_area">
+
   
 <div class="container_fluid titlebar">
   <form class="form-inline titlebarForm"  method="post"  action="<%=request.getContextPath() %>/act_management/act_managementServlet">
@@ -243,7 +393,7 @@ pageContext.setAttribute("mylist",list);
   <%@ include file="act_page1.file" %> 
  <c:forEach var="act_vo"  items="${list}" begin="<%=pageIndex %>" end="<%=pageIndex+rowsPerPage-1%>">
 
-<div class="container card">
+<div class="container card  ">
   <div class="row">
     <div class="col-sm-6 img">
 <div id="${act_vo.act_no }" class="carousel slide" data-ride="carousel">
@@ -309,10 +459,9 @@ pageContext.setAttribute("mylist",list);
   </c:forEach>
 
   <%@ include file="act_page2.file" %> 
+</div>
 
 
-  <script src='https://cdnjs.cloudflare.com/ajax/libs/jquery/3.1.1/jquery.min.js'></script>
-<script src="https://cdnjs.cloudflare.com/ajax/libs/twitter-bootstrap/3.3.7/js/bootstrap.min.js"></script>
  <%--date picker專用js --%> 
      <script type="text/javascript"  src="<%=request.getContextPath()%>/BackEnd/res/js/bootstrap-datetimepicker.js"></script> 
  <script type="text/javascript"  src="<%=request.getContextPath()%>/BackEnd/res/js/bootstrap-datetimepicker.fr.js"></script>
@@ -412,5 +561,5 @@ $(".myed_date").val(new_time);
 
 </script>
   
-</body>
-</html>
+
+<jsp:include page="/FrontEnd/include/footer.jsp"/>

@@ -1,19 +1,84 @@
-<!DOCTYPE html>
+
 <%@ page contentType="text/html; charset=UTF-8" pageEncoding="UTF-8"%>
 <%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core"%>
 <%@ page import="java.util.*"%>
 <%@ page import="com.act.model.*"%>
-<html >
-<head>
-  <meta charset="UTF-8">
-  <title>舉辦活動第三頁面</title>
-  
-  
-  <link rel='stylesheet prefetch' href='https://cdnjs.cloudflare.com/ajax/libs/twitter-bootstrap/3.3.7/css/bootstrap.min.css'>
 
-      <link rel="stylesheet" href="<%=request.getContextPath()%>/FrontEnd/res/css/start_act3.css">
+  
+   <jsp:include page="/FrontEnd/include/head.jsp"/>
+  
+
+      
 
   <style>
+  
+  
+
+
+
+.third {
+  color: white;
+  background-color: #6F5C60;
+}
+
+.circles {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  height: 100px;
+  width: 100%;
+}
+.circles .circle {
+  width: 50px;
+  height: 50px;
+  border-radius: 50%;
+  border: solid 1px black;
+}
+.circles .circle h2 {
+  position: absolute;
+  left: 50%;
+  top: 50%;
+  transform: translate(-50%, -110%);
+}
+.circles .line {
+  width: 50px;
+  border: solid 5px black;
+}
+
+.title {
+  text-align: center;
+}
+
+.endMessage {
+  border: solid 1px black;
+  padding: 30px 50px;
+  border-radius: 50px;
+  margin-top: 50px;
+}
+
+h2 {
+  display: inline-block;
+  font-size: 25px;
+}
+
+.next {
+  height: 100px;
+}
+.next .previous {
+  position: absolute;
+  right: 35%;
+  top: 30%;
+}
+
+
+.bottom {
+  position: relative;
+  left: 50%;
+  transform: translate(-50%, 0);
+  font-weight: bold;
+}
+  
+  
   .next .previous:hover{
   text-decoration: none;
   }
@@ -25,14 +90,32 @@
 
 }
   
+  .my_area{
+
+   width: 100%;
+  height: 100%;
+  margin: 0;
+  padding: 0;
+  background-color: #eee8e1;
+
+  }
+  
+  .my_area *{
+   position: relative;
+  }
+  .move_forWatch{
+  margin-top: 57px;
+  }
+  
+  body .next .previous{
+  color: #eee;
+  }
   </style>
   
   
   
-</head>
-
-<body>
-  
+<div  class="my_area  content">
+  <div class="move_forWatch">
 <div class="circles">
   <div class="circle first">
     <h2>1</h2>
@@ -62,9 +145,7 @@
   <input type="hidden" name="start_act3.jsp" value="<%=request.getServletPath() %>">
   </form>
 </div>
-<script src='https://cdnjs.cloudflare.com/ajax/libs/jquery/3.1.1/jquery.min.js'></script>
-<script src="https://cdnjs.cloudflare.com/ajax/libs/twitter-bootstrap/3.3.7/js/bootstrap.min.js"></script>
-
+</div>
+</div>
   
-</body>
-</html>
+<jsp:include page="/FrontEnd/include/footer.jsp"/>

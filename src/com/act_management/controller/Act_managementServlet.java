@@ -305,8 +305,7 @@ if("confirm_mem_pay".equals(action)){
 			System.out.println("track4");
 			String[] mem_ac_array=req.getParameterValues("mem_ac");
 			System.out.println("track5");
-			System.out.println("mem_ac_array.length= "+mem_ac_array.length);
-			System.out.println("mem_ac_array "+mem_ac_array);
+			
 	Act_pairService act_pairSvc=new Act_pairService();
 	
 	System.out.println("track6");
@@ -364,7 +363,7 @@ if("confirm_mem_pay".equals(action)){
 			 RequestDispatcher dispatcher=req.getRequestDispatcher(url);
 			 dispatcher.forward(req, res);
 		}catch(Exception e){
-	
+	System.out.println("track error");
 		 String url=req.getParameter("my_act.jsp");
 		 RequestDispatcher dispatcher=req.getRequestDispatcher(url);
 		 dispatcher.forward(req, res);
@@ -731,6 +730,8 @@ if("confirm_mem_pay".equals(action)){
 			
 				
 				if(act_no!=null){
+					
+					System.out.println("開始修改活動");
 					ActService actSvc=new ActService();
 					
 					String re_cont="無";
@@ -738,7 +739,7 @@ if("confirm_mem_pay".equals(action)){
 					actSvc.updateAct(act_vo);	
 					
 				}else{
-				
+				System.out.println("開始新增活動");
 				ActService actSvc=new ActService();
 				actSvc.addAct(act_vo);
 				
@@ -974,10 +975,12 @@ if("confirm_mem_pay".equals(action)){
 			  req.setAttribute("errorMsgs", errorMsgs);
 			try{
 				String act_name= req.getParameter("act_name");
+				System.out.println("track1");
 				if(act_name.length()==0){
 					  errorMsgs.add("請輸入活動名稱");
 				}
 				String act_add=req.getParameter("act_add");
+				System.out.println("track2");
 				if(act_add.length()==0){
 					errorMsgs.add("請輸入活動地點");
 				}
@@ -985,34 +988,41 @@ if("confirm_mem_pay".equals(action)){
 				Integer act_fee=null;
 				try{
 				 act_fee=new Integer(req.getParameter("act_fee"));
+					System.out.println("track3");
 				}catch(NumberFormatException e){
-					act_fee=0;
+					
 					errorMsgs.add("價格請填數字");
 				}
 			String act_tag=req.getParameter("act_tag");
+			System.out.println("track4");
 			if(act_tag.length()==0){
 				errorMsgs.add("請輸入活動標籤");
 			}
 		Integer min_mem=null;
 		try{
 			min_mem=new Integer(req.getParameter("min_mem"));
+			System.out.println("track5");
 		}catch(NumberFormatException e){
 			min_mem=0;
 			errorMsgs.add("最低參加人數請填數字");
 		}
+		System.out.println("track6");
 			if(min_mem==0){
 				errorMsgs.add("請輸入最低參加人數");
 			}
 		Integer max_mem=null;
 		try{
 			max_mem=new Integer(req.getParameter("max_mem"));
+			System.out.println("track7");
 		}catch(NumberFormatException e){
 			max_mem=0;
 			errorMsgs.add("最高參加人數請填數字");
 		}	
+		System.out.println("track8");
 		if(max_mem==0){
 			errorMsgs.add("請輸入最高參加人數");
 		}
+		System.out.println("track9");
 		if(min_mem>max_mem || min_mem==max_mem){
 			errorMsgs.add("最高人數須大於最低人數");
 		}
@@ -1020,46 +1030,57 @@ if("confirm_mem_pay".equals(action)){
 		
 		
 		
-		
+		System.out.println("track10");
 		
 		java.sql.Timestamp timestamp_dl_date;
-		java.sql.Date dl_date;
+		java.sql.Date dl_date=null;
 		try{		
 			timestamp_dl_date=java.sql.Timestamp.valueOf(req.getParameter("dl_date"));
+			System.out.println("track11");
 			dl_date=timestampToDate(timestamp_dl_date);
 		}catch(IllegalArgumentException e){
-			timestamp_dl_date=new java.sql.Timestamp(System.currentTimeMillis());
-			dl_date=timestampToDate(timestamp_dl_date);
+			
 			errorMsgs.add("請輸入截止日期!");
 		}
 		
 		String pay_way=req.getParameter("pay_way");
+		System.out.println("pay_way= "+(pay_way));
+		System.out.println("pay_way==null ? "+(pay_way==null));
+		System.out.println("track12");
+		String act_atm_info="";
 		if(pay_way==null){
 			errorMsgs.add("請選擇繳費方式");
-		}
-		String act_atm_info="";
+			System.out.println("track13");
+		}else{
+		
+		
 		if(pay_way.equals("ATM")){
 			act_atm_info=req.getParameter("act_atm_info");
 			if(act_atm_info.trim().equals("")){
-				errorMsgs.add("請輸入繳費方式");
+				errorMsgs.add("請輸入繳費資訊");
 			}
 			
 		}
-		
-		
+		}
+		System.out.println("track14");
 		String act_add_lat=req.getParameter("act_add_lat");
+		System.out.println("track15");
 		if(act_add_lat.equals("")){
 			errorMsgs.add("請輸入有效的地址");
 		}
 		
-		
+		System.out.println("act_add_lat長度= "+act_add_lat.length());
 		String act_add_lon=req.getParameter("act_add_lon");
+		System.out.println("act_add_lon長度= "+act_add_lon.length());
 		String mem_ac= req.getParameter("mem_ac");
+		System.out.println("track16");
 		HttpSession session=req.getSession();
 		ActVO act_vo=(ActVO) session.getAttribute("act_vo");
+		System.out.println("track17");
 		if(act_vo==null){
 			act_vo=new ActVO();
 		}
+		System.out.println("track18");
 		act_vo.setAct_name(act_name);
 		act_vo.setAct_add(act_add);
 		act_vo.setAct_fee(act_fee);
@@ -1072,23 +1093,27 @@ if("confirm_mem_pay".equals(action)){
 		act_vo.setAct_add_lon(act_add_lon);
 		act_vo.setMem_ac(mem_ac);
 		act_vo.setAct_atm_info(act_atm_info);
-	
+		System.out.println("track19");
+		if(dl_date!=null){
 		session.setAttribute("dl_date",dateToTimestamp(dl_date));
+		}
 		session.setAttribute("act_vo",act_vo);
+		System.out.println("track20");
 		if (!errorMsgs.isEmpty()) {
-		
+			System.out.println("track not empty");
 			String url=req.getParameter("start_act.jsp");
 			RequestDispatcher failureView = req
 					.getRequestDispatcher(url);
 			failureView.forward(req, res);
 			return;
 		}
-		
+		System.out.println("track21");
 		String url="/FrontEnd/act/start_act2.jsp";
 		RequestDispatcher successView=req.getRequestDispatcher(url);
 		successView.forward(req, res);
 		
 			}catch(Exception e){
+				System.out.println("track error");
 				String url=req.getParameter("start_act.jsp");
 				errorMsgs.add(e.getMessage());
 				errorMsgs.add("系統錯誤");

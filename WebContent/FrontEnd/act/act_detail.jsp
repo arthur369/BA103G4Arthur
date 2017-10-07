@@ -1,20 +1,247 @@
-<!DOCTYPE html>
+
 <%@ page contentType="text/html; charset=UTF-8" pageEncoding="UTF-8"%>
 <%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core"%>
 <%@ page import="java.util.*"%>
 <%@ page import="com.act.model.*"%>
 <%@ page import="com.act_comm.model.*"%>
-<html >
-<head>
-  <meta charset="UTF-8">
-  <title>活動詳細頁面</title>
+
   
   
-  <link rel='stylesheet prefetch' href='https://cdnjs.cloudflare.com/ajax/libs/twitter-bootstrap/3.3.7/css/bootstrap.min.css'>
+  <%
+  
+  session.setAttribute("mem_ac","mamabeak");
+  
+ActVO act_vo= (ActVO) session.getAttribute("act_vo");
+Date date_act_op_date=act_vo.getAct_op_date();
+java.sql.Timestamp act_op_date = new java.sql.Timestamp(date_act_op_date.getTime());
+pageContext.setAttribute("act_op_date",act_op_date);
+Date date_act_ed_date=act_vo.getAct_ed_date();
+java.sql.Timestamp act_ed_date = new java.sql.Timestamp(date_act_ed_date.getTime());
+pageContext.setAttribute("act_ed_date",act_ed_date);
+String act_no=act_vo.getAct_no();
+ActService actSvc=new ActService();
+Set<Act_commVO> act_comm_set= actSvc.getAct_commByAct_no(act_no);
+pageContext.setAttribute("act_comm_set",act_comm_set);
+pageContext.setAttribute("act_vo",act_vo);
+	
+	%>
+  
+  <jsp:include page="/FrontEnd/include/head.jsp"/>
 <link rel='stylesheet prefetch' href='https://maxcdn.bootstrapcdn.com/font-awesome/4.7.0/css/font-awesome.min.css'>
 
-       <link rel="stylesheet" href="<%=request.getContextPath()%>/FrontEnd/res/css/act_detail.css">
+
 <style>
+
+.btn-default {
+  font-size: 16px;
+  padding: 10px 20px;
+  border-radius: 10px;
+}
+
+h1 {
+  font-size: 30px;
+}
+
+h2 {
+  font-size: 20px;
+}
+
+h3 {
+  font-size: 14px;
+}
+
+.section_header .beforeTitle {
+  text-align: center;
+}
+
+.section_header .backgroundImg .row {
+  height: 300px;
+}
+.section_header .backgroundImg .row .picAndDetail {
+  border: solid 1px #222;
+  width: 100%;
+  height: 100%;
+  padding-left: 0;
+  background-color: #6F5C60;
+}
+.section_header .backgroundImg .row .picAndDetail .img {
+  opactiy: 1;
+  height: 100%;
+  padding-left: 0;
+  padding-right: 0;
+}
+.section_header .backgroundImg .row .picAndDetail .img img {
+  height: 100%;
+  width: 100%;
+}
+.section_header .backgroundImg .row .picAndDetail .titleInfo {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  height: 100%;
+}
+.section_header .backgroundImg .row .picAndDetail .titleInfo .titleText {
+  margin-top: 50px;
+  margin-bottom: 0;
+}
+.section_header .backgroundImg .row .picAndDetail .titleInfo .minJoin {
+  margin-top: 10px;
+  text-align: center;
+  margin-bottom: 5px;
+}
+
+
+.section_header .backgroundImg .row .picAndDetail .titleInfo .date {
+  padding: 0;
+}
+.section_header .backgroundImg .row .picAndDetail .titleInfo .date .time {
+  margin-top: 10px;
+}
+.section_header .backgroundImg .row .picAndDetail .titleInfo .price {
+  text-align: center;
+  transform: translate(0, -10px);
+}
+.section_header .backgroundImg .row .picAndDetail .titleInfo .price .button {
+  display: inline-block;
+  margin-top: 10px;
+  padding: 10px 25px;
+  text-decoration: none;
+  color: #6F5C60;
+  font-weight: 900;
+  background-color: #C2DCCE;
+  bottom: 2%;
+  transition: 0.5s;
+  cursor: pointer;
+}
+.section_header .backgroundImg .row .picAndDetail .titleInfo .price .button:hover {
+  color: #111;
+  background-color: #80BD01;
+}
+
+.section_info {
+  padding: 30px;
+}
+.section_info .information {
+  padding: 10px 0px;
+  border-bottom: solid 1px #eee;
+}
+.section_info hr {
+  border: solid 1px black;
+  width: 300px;
+}
+.section_info .introduction {
+  padding: 30px 0px;
+}
+.section_info .introduction hr {
+  width: 100%;
+  border: solid 1px #eee;
+}
+.section_info .introduction p {
+  margin-top: 20px;
+  font-size: 20px;
+}
+.section_info .actionMap hr {
+  border: solid 1px #eee;
+  width: 100%;
+}
+
+.section_info .message hr {
+  border: solid 1px #eee;
+  width: 100%;
+}
+.section_info .message .guestAsk {
+  margin-top: 30px;
+  display: flex;
+}
+.section_info .message .guestAsk .iconSpace {
+  flex: 1;
+}
+
+.section_info .message .guestAsk .askDetail {
+  flex: 9;
+}
+.section_info .message .guestAsk .askDetail textarea {
+  width: 100%;
+  height: 100px;
+  padding: 10px;
+}
+.section_info .message .guestAsk .askDetail button {
+  float: right;
+}
+.section_info .message .showAnswer {
+  display: flex;
+  margin-top: 50px;
+}
+.section_info .message .showAnswer .iconSpace {
+  flex: 1;
+}
+.section_info .message .showAnswer .iconSpace .icon {
+  width: 50px;
+  height: 50px;
+  border: solid 1px blue;
+  border-radius: 50%;
+  left: 50%;
+  transform: translate(-50%, 0);
+}
+.section_info .message .showAnswer .askDetail {
+  flex: 9;
+}
+.section_info .message .showAnswer .askDetail .answerTitle {
+  display: flex;
+}
+.section_info .message .showAnswer .askDetail .answerTitle .name {
+  margin-right: 10px;
+}
+.section_info .message .showAnswer .askDetail .answerTitle button {
+  position: absolute;
+  right: 0%;
+}
+.section_info .message .showAnswer .askDetail .answerArea {
+  width: 100%;
+  height: 100px;
+  padding: 10px;
+  border: solid 1px green;
+}
+.section_info .message .showAnswer .askDetail .replay {
+  float: right;
+}
+
+
+.col-md-4 .host {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: space-evenly;
+  height: 100%;
+}
+
+
+.bookMarks {
+  text-align: center;
+  font-size: 40px;
+  padding: 30px;
+  position: fixed;
+  width: 100px;
+  height: 100px;
+  border-radius: 50%;
+  background-color: #80BD01;
+  right: 0%;
+  bottom: 10%;
+  cursor: pointer;
+  transition: 0.5s;
+}
+.bookMarks:hover {
+  box-shadow: 0px 0px 35px rgba(0, 0, 0, 0.3);
+  color: #ddd;
+  background-color: #7A3D0B;
+}
+
+
+
+
+
+
 .picAndDetail{
 	overflow: hidden;
 	
@@ -112,33 +339,35 @@ margin-top: 5px;
   border: solid 1px black;
   overflow: hidden;
 }
+
+.section_header .backgroundImg {
+  background: linear-gradient(black, #6F5C60);
+  color: white;
+  padding: 50px 300px;
+  height: 450px;
+  background-size: cover;
+}
+
+.my_area{
+ margin: 0;
+  padding: 0;
+  height: 100%;
+  width: 100%;
+  background-color: #eee8e1;
+}
+
+
 </style>
 
 
-<%
-ActVO act_vo= (ActVO) session.getAttribute("act_vo");
-Date date_act_op_date=act_vo.getAct_op_date();
-java.sql.Timestamp act_op_date = new java.sql.Timestamp(date_act_op_date.getTime());
-pageContext.setAttribute("act_op_date",act_op_date);
-Date date_act_ed_date=act_vo.getAct_ed_date();
-java.sql.Timestamp act_ed_date = new java.sql.Timestamp(date_act_ed_date.getTime());
-pageContext.setAttribute("act_ed_date",act_ed_date);
-String act_no=act_vo.getAct_no();
-ActService actSvc=new ActService();
-Set<Act_commVO> act_comm_set= actSvc.getAct_commByAct_no(act_no);
-pageContext.setAttribute("act_comm_set",act_comm_set);
-pageContext.setAttribute("act_vo",act_vo);
-	
-	%>
 
 
 
 
 
-  
-</head>
 
-<body>
+  <div  class="my_area">
+
   
 <div class="container_fluid section_header">
   <div class="backgroundImg">
@@ -272,7 +501,7 @@ pageContext.setAttribute("act_vo",act_vo);
             <div class="return_message" >${act_comm_vo.comm_cont }</div>
             <br>
             <input type="hidden"  class="get_comm_no" value="${act_comm_vo.comm_no }">
-            <a href='#modal-id' data-toggle="modal"  class="btn-default  message_button">主辦單位回覆</a>
+            <a href='#modal-hostReply' data-toggle="modal"  class="btn-default  message_button">主辦單位回覆</a>
           </div>
           
           <div class="col-md-1 host_icon">
@@ -320,7 +549,7 @@ pageContext.setAttribute("act_vo",act_vo);
 </form>
 
 <%--主辦單位回復modal --%>
-<div class="modal fade" id="modal-id">
+<div class="modal fade" id="modal-hostReply">
 			<div class="modal-dialog">
 				<div class="modal-content">
 					<div class="modal-header">
@@ -363,8 +592,7 @@ pageContext.setAttribute("act_vo",act_vo);
 			</div>
 		</div>
 
-  <script src='https://cdnjs.cloudflare.com/ajax/libs/jquery/3.2.1/jquery.min.js'></script>
-<script src="https://cdnjs.cloudflare.com/ajax/libs/twitter-bootstrap/3.3.7/js/bootstrap.min.js"></script>
+ </div>
  <%--google map 地圖 --%>
  <script async defer
     src="https://maps.googleapis.com/maps/api/js?key=AIzaSyDZqbxURS33Q5XimlMq6it_KanwhInsh0Q&callback=initMap">
@@ -512,5 +740,4 @@ function getLatLngByAddr($address) {
 --%>
 
  </script>
-</body>
-</html>
+<jsp:include page="/FrontEnd/include/footer.jsp"/>

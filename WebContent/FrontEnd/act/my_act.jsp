@@ -1,25 +1,44 @@
-<!DOCTYPE html>
-<html lang="">
 <%@ page contentType="text/html; charset=UTF-8" pageEncoding="UTF-8"%>
 <%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core"%>
 <%@ page import="java.util.*"%>
 <%@ page import="com.act.model.*"%>
 <%@ page import="com.fo_act.model.*"%>
 <%@ page import="com.act_pair.model.*"%>
-	<head>
-		<meta charset="utf-8">
-		<meta http-equiv="X-UA-Compatible" content="IE=edge">
-		<meta name="viewport" content="width=device-width, initial-scale=1.0, shrink-to-fit=no">
-		<title>Title Page</title>
-		<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/twitter-bootstrap/3.3.7/css/bootstrap.min.css">
-		<!--[if lt IE 9]>
-			<script src="https://cdnjs.cloudflare.com/ajax/libs/html5shiv/3.7.3/html5shiv.min.js"></script>
-			<script src="https://cdnjs.cloudflare.com/ajax/libs/respond.js/1.4.2/respond.min.js"></script>
-		<![endif]-->
+
+
+
+<%--
+String mem_ac=(String) session.getAttribute("mem_ac");
+if(mem_ac==null){
+	mem_ac="mamabeak";
+}
+pageContext.setAttribute("mem_ac",mem_ac);
+
+--%>
+
+
+<%
+session.setAttribute("mem_ac","mamabeak");
+
+
+ActService actSvc=new ActService();
+List<ActVO> act_list= actSvc.getAll();
+pageContext.setAttribute("act_list",act_list);
+
+Fo_actService fo_actSvc=new Fo_actService();
+List<Fo_actVO> fo_act_list=fo_actSvc.getAll();
+pageContext.setAttribute("fo_act_list",fo_act_list);
+
+Act_pairService act_pairSvc=new Act_pairService();
+List<Act_pairVO> act_pair_list=act_pairSvc.getAll();
+pageContext.setAttribute("act_pair_list",act_pair_list);
+
+
+%>
+
+<jsp:include page="/FrontEnd/include/head.jsp"/>
+
 <style type="text/css">
-*{
-	font-family: 微軟正黑體;
-}	
 
 .myAction{
 	font-weight: bold;
@@ -68,7 +87,7 @@ width: 10%;
 cursor: pointer;
 }
 
-.modify_act{
+.confirm_modify_act .modify_act{
 display: none;
 }
 .my_act_all{
@@ -76,39 +95,15 @@ width: 110%;
 
 }
 
-
+.my_area{
+margin-top: 57px;
+}
 
 
 
 </style>
-<%
-String mem_ac=(String) session.getAttribute("mem_ac");
-if(mem_ac==null){
-	mem_ac="mamabeak";
-}
-pageContext.setAttribute("mem_ac",mem_ac);
 
-ActService actSvc=new ActService();
-List<ActVO> act_list= actSvc.getAll();
-pageContext.setAttribute("act_list",act_list);
-
-Fo_actService fo_actSvc=new Fo_actService();
-List<Fo_actVO> fo_act_list=fo_actSvc.getAll();
-pageContext.setAttribute("fo_act_list",fo_act_list);
-
-Act_pairService act_pairSvc=new Act_pairService();
-List<Act_pairVO> act_pair_list=act_pairSvc.getAll();
-pageContext.setAttribute("act_pair_list",act_pair_list);
-
-
-%>
-
-	</head>
-	<body>
-
- 
-		 <%@ include file="/FrontEnd/include/head.jsp" %> 
-		<div class="container">
+		<div class="container  content  my_area">
 			<div class="row">
 				<div class="col-md-12  my_act_all">
 					<h1 class="myAction">個人活動
@@ -280,7 +275,7 @@ pageContext.setAttribute("act_pair_list",act_pair_list);
 					     		</c:if>
 					     		</c:forEach>
 					     		</form>
-					     		<form  method="post"  action="<%=request.getContextPath() %>/act_management/act_managementServlet" >
+					     		<form  class="confirm_modify_act" method="post"  action="<%=request.getContextPath() %>/act_management/act_managementServlet" >
 					     		<button class="btn btn-success modify_act">修正活動</button>
 					     		<input type="hidden"  name="action" value="modify_act">
 					     		<input type="hidden"  name="my_act.jsp" value="<%=request.getServletPath() %>">
@@ -370,7 +365,7 @@ pageContext.setAttribute("act_pair_list",act_pair_list);
 			</div>
 		</div>
 		
-		<div class="modal fade" id="modal-id">
+		<div class="modal fade" id="modal-act">
 			<div class="modal-dialog">
 				<div class="modal-content">
 					<div class="modal-header">
@@ -415,8 +410,11 @@ pageContext.setAttribute("act_pair_list",act_pair_list);
 				</div>
 			</div>
 		</div>
-		<script src="https://code.jquery.com/jquery.js"></script>
-		<script src="https://cdnjs.cloudflare.com/ajax/libs/twitter-bootstrap/3.3.7/js/bootstrap.min.js"></script>
+		
+		
+		
+<!-- 		<script src="https://code.jquery.com/jquery.js"></script> -->
+<!-- 		<script src="https://cdnjs.cloudflare.com/ajax/libs/twitter-bootstrap/3.3.7/js/bootstrap.min.js"></script> -->
 		<script>
 		<%--開啟第二個tab--%>
 		if(${not empty openTab2}){
@@ -427,7 +425,7 @@ pageContext.setAttribute("act_pair_list",act_pair_list);
 			$('.nav-tabs a[href="#tab3"]').tab('show');
 			}
 		if(${not empty openModal}){
-			 $("#modal-id").modal({show: true});
+			 $("#modal-act").modal({show: true});
 			}
 		
 		$(".display_act_pair").click(function(){
@@ -462,5 +460,5 @@ pageContext.setAttribute("act_pair_list",act_pair_list);
 		
 		
 		</script>
-	</body>
-</html>
+		
+<jsp:include page="/FrontEnd/include/footer.jsp"/>

@@ -13,7 +13,7 @@
 <jsp:useBean id="storeSvc" scope="page" class="com.store.model.StoreService" />
 <jsp:useBean id="cart_listSvc" scope="page" class="com.cart_list.model.Cart_listService" />
 
-<%--   <c:set var="mem_ac" value="${sessionScope.mem_ac}" scope="page"/>  --%>
+   <c:set var="mem_ac" value="${sessionScope.mem_ac}" scope="page"/>  
 
 <c:set var="cart_listSet" value="${cart_listSvc.getVOsByMem(mem_ac)}" scope="page"/>
 
@@ -106,10 +106,11 @@
                     <li><a href="#">訂單查詢</a></li>
                     <li><a href="#">我的收藏</a></li>
                     <li><a href="#">個人文章</a></li>
-                    <li><a href="#">個人活動</a></li>
-                    <li><a href="#">積分兌換</a></li>
+                    <li><a href="<%=request.getContextPath()%>/FrontEnd/act/my_act.jsp">個人活動</a></li>
+                    <li><a href="<%=request.getContextPath()%>/FrontEnd/gift/gift_data_frontEnd.jsp">積分兌換</a></li>
                   </ul>
                     </div>
+             
                 </div>
         </div>
 
@@ -122,7 +123,7 @@
           <ul class="nav navbar-nav">
             <li><a class="padt20 padb17" href="<%=request.getContextPath()%>/FrontEnd/shop/shop.jsp">找豆</a></li>
             <li><a class="padt20 padb17" href="<%=request.getContextPath()%>/FrontEnd/forum/forum.jsp">討論板</a></li>
-            <li><a class="padt20 padb17" href="<%=request.getContextPath()%>/FrontEnd/activity/activity.jsp">辦活動</a></li>
+            <li><a class="padt20 padb17" href="<%=request.getContextPath()%>/FrontEnd/act/act.jsp">辦活動</a></li>
             <li><a class="padt20 padb17" href="#">地圖</a></li>
           </ul>
         </div>
