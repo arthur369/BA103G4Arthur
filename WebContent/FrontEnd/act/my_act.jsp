@@ -37,7 +37,7 @@ pageContext.setAttribute("act_pair_list",act_pair_list);
 %>
 
 <jsp:include page="/FrontEnd/include/head.jsp"/>
-
+<link rel='stylesheet prefetch' href='https://maxcdn.bootstrapcdn.com/font-awesome/4.7.0/css/font-awesome.min.css'>
 <style type="text/css">
 
 .myAction{
@@ -87,6 +87,11 @@ width: 10%;
 cursor: pointer;
 }
 
+.goto_detail{
+color: #4da6ff;
+font-weight: 900;
+}
+
 .confirm_modify_act .modify_act{
 display: none;
 }
@@ -99,27 +104,38 @@ width: 110%;
 margin-top: 57px;
 }
 
+.host_mem_count{
+color: #4da6ff;
+font-weight: 900;
+}
 
+.fa{
+margin-right: 10px;
+}
+.small_title{
+font-size: 18px;
+font-weight: 800;
 
+}
 </style>
 
 		<div class="container  content  my_area">
 			<div class="row">
 				<div class="col-md-12  my_act_all">
-					<h1 class="myAction">個人活動
+					<h1 class="myAction"><span class="fa fa-futbol-o"></span>個人活動
 					<input type="hidden" value=${mem_ac }>
 					</h1>
 					<div role="tabpanel">
 					    <!-- 標籤面板：標籤區 -->
 					    <ul class="nav nav-tabs" role="tablist">
 					        <li role="presentation" class="active">
-					            <a href="#tab1" aria-controls="tab1" role="tab" data-toggle="tab">我參加的活動</a>
+					            <a href="#tab1"  class="small_title"  aria-controls="tab1" role="tab" data-toggle="tab"><span class="fa fa-credit-card-alt"></span>我參加的活動</a>
 					        </li>
 					        <li role="presentation">
-					            <a href="#tab2" aria-controls="tab2" role="tab" data-toggle="tab">我舉辦的活動</a>
+					            <a href="#tab2"   class="small_title"  aria-controls="tab2" role="tab" data-toggle="tab"><span class="fa fa-address-book"></span>我舉辦的活動</a>
 					        </li>
 					        <li role="presentation">
-					            <a href="#tab3" aria-controls="tab3" role="tab" data-toggle="tab">我收藏的活動</a>
+					            <a href="#tab3"  class="small_title"  aria-controls="tab3" role="tab" data-toggle="tab"><span class="fa fa-list"></span>我收藏的活動</a>
 					        </li>
 					    </ul>
 					
@@ -152,7 +168,7 @@ margin-top: 57px;
 					     	<tr>
 					     		<td>
 					     		<form  method="post" action="<%=request.getContextPath() %>/act_management/act_managementServlet">
-					     		<a class="goto_detail">${act_vo.act_no }</a>
+					     		<a class="goto_detail"  title="查看活動詳情">${act_vo.act_no }</a>
 					     		 <input type="hidden" name=action  value="goto_act_detail" >
      							 <input type="hidden"  name="act_no"  value="${act_vo.act_no }">
       							<input type="hidden"  name="act.jsp" value="<%=request.getServletPath() %>"><%--為了重複使用Act_management的goto_act_detail區塊，沿用act.jsp名稱 --%>
@@ -174,7 +190,7 @@ margin-top: 57px;
 					     		<td>
 					     		<div class="full_notice"></div>
 					     		<form  method="post" action="<%=request.getContextPath() %>/act_management/act_managementServlet">
-					     		<button class="btn btn-danger  cancel_join_thisAction">取消報名</button>
+					     		<button class="btn btn-danger  cancel_join_thisAction"><span class="fa fa-frown-o"></span>取消報名</button>
 					     		 <input type="hidden" name=action  value="cancel_join" >
      							 <input type="hidden"  name="act_no"  value="${act_vo.act_no }">
       							<input type="hidden"  name="my_act.jsp" value="<%=request.getServletPath() %>">
@@ -183,7 +199,7 @@ margin-top: 57px;
 					     		</td>
 					     		<td>
 					     		<form  method="post" action="<%=request.getContextPath() %>/act_management/act_managementServlet">
-					     		<button class="btn btn-success">通知已繳費</button>
+					     		<button class="btn btn-success"><span class="fa fa-envelope"></span>通知已繳費</button>
 					     		<input type="hidden" name=action  value="notice_pay" >
 					     		 <input type="hidden"  name="act_no"  value="${act_vo.act_no }">
       							<input type="hidden"  name="my_act.jsp" value="<%=request.getServletPath() %>">
@@ -226,7 +242,7 @@ margin-top: 57px;
 					     	<tr>
 					     		<td>
 					     		<form  method="post" action="<%=request.getContextPath() %>/act_management/act_managementServlet">
-					     		<a class="goto_detail">${act_vo.act_no }</a>
+					     		<a class="goto_detail"  title="查看活動詳情">${act_vo.act_no }</a>
 					     		 <input type="hidden" name=action  value="goto_act_detail" >
      							 <input type="hidden"  name="act_no"  value="${act_vo.act_no }">
       							<input type="hidden"  name="act.jsp" value="<%=request.getServletPath() %>"><%--為了重複使用Act_management的goto_act_detail區塊，沿用act.jsp名稱 --%>
@@ -239,7 +255,7 @@ margin-top: 57px;
 					     		<td>${act_vo.max_mem }</td>
 					     		<td>
 					     		<form  method="post"  action="<%=request.getContextPath() %>/act_management/act_managementServlet" >
-					     		<a class="display_act_pair host_mem_count">${act_vo.mem_count }</a>
+					     		<a class="display_act_pair host_mem_count"  title="查看已參加會員">${act_vo.mem_count }</a>
 					     		<c:forEach var="act_pair_vo" items="${act_pair_list}"  >
 					     		<c:if test="${act_vo.act_no==act_pair_vo.act_no}">
 					     		<input type="hidden"  name="act_no" value="${act_pair_vo.act_no}">
@@ -261,7 +277,7 @@ margin-top: 57px;
 					     		<td >
 					     		<div class="cancel_action"></div>
 					     		<form  method="post"  action="<%=request.getContextPath() %>/act_management/act_managementServlet" >
-					     		<button class="btn btn-danger  dismiss_act">取消活動</button>
+					     		<button class="btn btn-danger  dismiss_act"><span class="fa fa-frown-o"></span>取消活動</button>
 					     		<input type="hidden"  name="action" value="delete_act">
 					     		<input type="hidden"  name="my_act.jsp" value="<%=request.getServletPath() %>">
 					     		<input type="hidden"  name="act_no" value="${act_vo.act_no}">
@@ -276,7 +292,7 @@ margin-top: 57px;
 					     		</c:forEach>
 					     		</form>
 					     		<form  class="confirm_modify_act" method="post"  action="<%=request.getContextPath() %>/act_management/act_managementServlet" >
-					     		<button class="btn btn-success modify_act">修正活動</button>
+					     		<button class="btn btn-success modify_act"><span class="fa fa-repeat"></span>修正活動</button>
 					     		<input type="hidden"  name="action" value="modify_act">
 					     		<input type="hidden"  name="my_act.jsp" value="<%=request.getServletPath() %>">
 					     		<input type="hidden"  name="act_no" value="${act_vo.act_no}">
@@ -319,7 +335,7 @@ margin-top: 57px;
 					     		
 					     		
 					     		<form  method="post" action="<%=request.getContextPath() %>/act_management/act_managementServlet">
-					     		<a class="goto_detail">${act_vo.act_no }</a>
+					     		<a class="goto_detail"  title="查看活動詳情">${act_vo.act_no }</a>
 					     		 <input type="hidden" name=action  value="goto_act_detail" >
      							 <input type="hidden"  name="act_no"  value="${act_vo.act_no }">
       							<input type="hidden"  name="act.jsp" value="<%=request.getServletPath() %>"><%--為了重複使用Act_management的goto_act_detail區塊，沿用act.jsp名稱 --%>
@@ -342,7 +358,7 @@ margin-top: 57px;
 					     		<td>${fo_act_vo.fo_act_date }</td>
 					     		<td>
 					     		<form  method="post"  action="<%=request.getContextPath() %>/act_management/act_managementServlet" >
-					     		<button class="btn btn-danger">取消收藏</button>
+					     		<button class="btn btn-danger"><span class="fa fa-frown-o"></span>取消收藏</button>
 					     		 <input type="hidden" name=action  value="delete_fo_act" >
      							 <input type="hidden"  name="act_no"  value="${act_vo.act_no }">
      							 <input type="hidden"  name="mem_ac"  value="${mem_ac }">
@@ -390,7 +406,7 @@ margin-top: 57px;
 								<td>${act_pair_vo.chk_state }</td>
 								<td>
 								<form  method="post" action="<%=request.getContextPath() %>/act_management/act_managementServlet">
-					     		<button class="btn btn-success" >確認會員已繳費</button>
+					     		<button class="btn btn-success" ><span class="fa fa-check-square-o"></span>確認會員已繳費</button>
 					     		<input type="hidden" name=action  value="confirm_mem_pay" >
 					     		 <input type="hidden"  name="act_no"  value="${act_pair_vo.act_no }">
       							<input type="hidden"  name="my_act.jsp" value="<%=request.getServletPath() %>">
@@ -405,7 +421,7 @@ margin-top: 57px;
 					</div>
 					<div class="modal-footer">
 						<button type="button" class="btn btn-default" data-dismiss="modal">關閉</button>
-						<button type="button" class="btn btn-primary">開啟群組私訊</button>
+						<button type="button" class="btn btn-primary"><span class="fa fa-volume-control-phone"></span>開啟群組私訊</button>
 					</div>
 				</div>
 			</div>

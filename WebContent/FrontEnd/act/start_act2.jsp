@@ -9,7 +9,7 @@
   <jsp:include page="/FrontEnd/include/head.jsp"/>
 
      
-
+<link rel='stylesheet prefetch' href='https://maxcdn.bootstrapcdn.com/font-awesome/4.7.0/css/font-awesome.min.css'>
   <%--date picker專用css --%>
     <link rel="stylesheet" href="<%=request.getContextPath()%>/BackEnd/res/css/bootstrap-datetimepicker.min.css" />
 
@@ -62,10 +62,11 @@ h2 {
   position: absolute;
   right: 35%;
   top: 30%;
+  
 }
 .next .end {
   position: absolute;
-  right: 30%;
+  right: 25%;
   top: 30%;
 }
 
@@ -196,6 +197,11 @@ margin-top: 57px;
  body .next .previous{
   color: #eee;
   }
+  
+  .fa{
+margin-right: 10px;
+}
+  
 </style>
 
 
@@ -221,7 +227,7 @@ margin-top: 57px;
 <input type="hidden"  name="action" value="start_act_to_pg3">
 
 
-<h1 class="title">填寫活動資訊</h1>
+<h1 class="title"><span class="fa fa-pencil-square-o"></span>填寫活動資訊</h1>
 <c:if test="${not empty errorMsgs}">
 	<font color='red'  class="myerror" >請修正以下錯誤:
 	<ul>
@@ -339,7 +345,7 @@ margin-top: 57px;
 
 <div class="next">
   <a class="btn-success btn-lg previous"  href="<%=request.getContextPath() %>/FrontEnd/act/start_act.jsp" >上一步</a>
-  <button type="submit"  class="btn-success btn-lg end">完成</button>
+  <button type="submit"  class="btn-success btn-lg end"><span class="fa fa-smile-o"></span>完成</button>
 </div>
 </form>
  </div>

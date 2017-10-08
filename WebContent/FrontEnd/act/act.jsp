@@ -211,7 +211,7 @@ display: flex;
   justify-content: space-evenly;
   align-items: center;
 }
-.actionbar .label {
+ .actionbar .label {
   height: 30px;
   font-size: 20px;
   font-weight: 100;
@@ -280,8 +280,9 @@ display: flex;
 }
 
 .card .detail .info:hover {
-  color: #111;
+  color: #eee;
   background-color: #80BD01;
+ font-weight: 900;
 }
 
 .fa-search {
@@ -306,10 +307,23 @@ position: relative;
  background-color: #C8B6A1;
  margin-top: 57px;
 }
+
+.for_act_page1,.for_act_page2{
+display: flex;
+justify-content: center;
+
+
+}
+.for_act_page1 *,.for_act_page2 *{
+font-size: 20px;
+font-weight: 600;
+
+}
+
 </style>
 
 
-  <div class="my_area">
+  <div class="my_area  content">
 
   
 <div class="container_fluid titlebar">
@@ -366,17 +380,24 @@ position: relative;
     </div>
     <a  href="<%=request.getContextPath() %>/FrontEnd/act/start_act.jsp" class="btn-success  set_action">發起活動</a>
     <div class="button">
-      <button class="btn-primary">達人教學</button>
-      <button class="btn-primary">咖啡課程</button>
-      <button class="btn-primary">咖啡店活動</button>
-      <button class="btn-primary">新手教學</button>
+    
+      <button class="btn-primary  act_tag"  type="button">達人教學</button>
+      <button class="btn-primary  act_tag"  type="button">咖啡課程</button>
+      <button class="btn-primary  act_tag"  type="button">咖啡店活動</button>
+      <button class="btn-primary   act_tag"  type="button">新手教學</button>
     </div>
   </form>
+  <form  class="action_tag_button"  method="post"  action="<%=request.getContextPath() %>/act_management/act_managementServlet">
+  <input type="hidden"  name="action"  value="search_for_actTag">
+ <input type="hidden" name="act.jsp" value="<%=request.getServletPath() %>"> 
+  </form>
 </div>
+<%-- 
 <div class="container titleImg"><img src="https://macicafedenver.com/wp-content/uploads/2014/10/coffee_slide.jpg" alt=""/></div>
+--%>
 <div class="actionbar">
-  <h3 class="label">達人教學</h3>
-  <h3 class="time"><span class="add_display">${act_add}</span><span  class="op_display">${ act_op_date} </span><span class="into">${(empty act_op_date)?"":"~" }</span></span><span   class="ed_display">${ act_ed_date}</span></h3>
+  <h3 class="label">${(act_tag==null)? "搜尋結果":act_tag }</h3>
+  <h3 class="time"><span class="add_display">${act_add}</span><span  class="op_display"></span><span class="into">${(empty act_op_date)?"":"~" }</span></span><span   class="ed_display"></span></h3>
    <form  class="sort_form"   method="post"  action="<%=request.getContextPath() %>/act_management/act_managementServlet">
   <select class="quene" name="sort">
     <option  value="">排序方式</option>
@@ -389,8 +410,9 @@ position: relative;
   
 </div>
 
-
+<div class="for_act_page1">
   <%@ include file="act_page1.file" %> 
+  </div>
  <c:forEach var="act_vo"  items="${list}" begin="<%=pageIndex %>" end="<%=pageIndex+rowsPerPage-1%>">
 
 <div class="container card  ">
@@ -457,8 +479,9 @@ position: relative;
   </div>
 </div>
   </c:forEach>
-
+<div class="for_act_page2">
   <%@ include file="act_page2.file" %> 
+  </div>
 </div>
 
 
@@ -466,6 +489,84 @@ position: relative;
      <script type="text/javascript"  src="<%=request.getContextPath()%>/BackEnd/res/js/bootstrap-datetimepicker.js"></script> 
  <script type="text/javascript"  src="<%=request.getContextPath()%>/BackEnd/res/js/bootstrap-datetimepicker.fr.js"></script>
 <script>
+
+$(".act_tag").click(function(){
+$(".action_tag_button").append("<input type='hidden' name=act_tag value="+$(this).text()+">");
+	
+$(".action_tag_button").submit();
+	
+	
+	
+})
+
+
+
+
+
+function changeTimeFormate(time){
+	
+	　
+	 var new_time=new Date(time.substring(0,4),time.substring(5,7),time.substring(8,10),time.substring(11,13),time.substring(14,16),time.substring(17,19))
+    var year=new_time.getFullYear();
+	 var month=new_time.getMonth();
+	 var day=new_time.getDate();
+	 var hour=new_time.getHours();
+	 if(hour<10){
+		 hour="0"+hour;
+	 }
+	 
+	 var minute=new_time.getMinutes();
+	 console.log("minute串接前="+minute);
+	 if(minute<10){
+		 minute="0"+minute;
+	 }
+	 console.log("minute串接後="+minute);
+	 
+	 var number_week=new_time.getDay();
+	 var week;
+	 switch(number_week){
+	 case 0:
+		 week="日";
+		 break;
+	 case 1:
+		 week="一";
+		 break;
+	 case 2:
+		 week="二";
+		 break;
+	 case 3:
+		 week="三";
+		 break;
+	 case 4:
+		 week="四";
+		 break;
+	 case 5:
+		 week="五";
+		 break;
+	 case 6:
+		 week="六";
+		 break;
+	 }
+	 
+	 
+	 var show_time=year+"-"+month+"-"+day+"("+week+")  "+ hour+":"+minute;
+	 
+	 console.log("得到的show_time= "+show_time);
+	 return show_time;
+	 
+}
+console.log("act_op_date=${act_op_date}");
+
+
+if(${(!empty act_op_date)}){
+	$(".op_display").text(changeTimeFormate("${act_op_date}"));
+	
+}
+
+if(${(!empty act_ed_date)}){
+	$(".ed_display").text(changeTimeFormate("${act_ed_date}"));
+	
+}
 
 
 

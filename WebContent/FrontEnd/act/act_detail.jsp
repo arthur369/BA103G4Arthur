@@ -115,7 +115,7 @@ h3 {
   cursor: pointer;
 }
 .section_header .backgroundImg .row .picAndDetail .titleInfo .price .button:hover {
-  color: #111;
+  color: #eee;
   background-color: #80BD01;
 }
 
@@ -127,22 +127,22 @@ h3 {
   border-bottom: solid 1px #eee;
 }
 .section_info hr {
-  border: solid 1px black;
-  width: 300px;
+   border: solid 1px #C2DCCE;
+  width: 100%;
 }
 .section_info .introduction {
   padding: 30px 0px;
 }
 .section_info .introduction hr {
   width: 100%;
-  border: solid 1px #eee;
+  border: solid 1px #C2DCCE;
 }
 .section_info .introduction p {
   margin-top: 20px;
   font-size: 20px;
 }
 .section_info .actionMap hr {
-  border: solid 1px #eee;
+  border: solid 1px #C2DCCE;
   width: 100%;
 }
 
@@ -300,6 +300,8 @@ height: 300px;
 .askDetail .leave_message{
 width: 100%;
 height: 200px;
+font-size: 20px;
+padding: 10px;
 
 }
 .message_button,.response_button{
@@ -311,6 +313,10 @@ width: 100%;
 height: 200px;
 border: solid 1px #7A3D0B;
 padding: 10px;
+font-size: 20px;
+}
+.return_message{
+font-size: 20px;
 }
 .message_button,.response_button{
 cursor: pointer;
@@ -329,15 +335,17 @@ height: 300px;
 
  background-color: #b8fe26;
  
-  border: solid 1px black;
+  
 }
 .section_header .backgroundImg .row .picAndDetail .titleInfo .minJoin .bar {
 margin-top: 5px;
   height: 20px;
   width: 300px;
   border-radius: 10px;
-  border: solid 1px black;
+  border: solid 1px #C2DCCE;
   overflow: hidden;
+  background-color:#C2DCCE;
+  padding: 1px;
 }
 
 .section_header .backgroundImg {
@@ -354,6 +362,23 @@ margin-top: 5px;
   height: 100%;
   width: 100%;
   background-color: #eee8e1;
+}
+.small_title{
+font-weight: 900;
+
+}
+
+.small_title  p{
+font-weight: 300;
+
+}
+
+.fa{
+margin-right: 10px;
+}
+
+body .modal_footer .close_window{
+color: #eee;
 }
 
 
@@ -453,20 +478,21 @@ margin-top: 5px;
 <div class="section_info container">
   <div class="row">
     <div class="col-md-8">
-      <h1 class="information">活動資訊
-        <h2>活動時間:<span  class="act_op_date">${act_op_date }</span><span>~</span><span class="act_ed_date">${act_ed_date }</span></h2>
+      <h1 class="information  small_title"><span  class=" fa fa-info"></span>活動資訊
+        <h2>活動時間:<span  class="act_op_date"></span><span>~</span><span class="act_ed_date"></span></h2>
         <h2>活動地點: ${act_vo.act_add }</h2>
       </h1>
-      <h1 class="introduction">活動介紹
+      <hr  class="upper_introduce">
+      <h1 class="introduction  small_title"><span class="fa fa-calendar"></span> 活動介紹
         <img src="C:/Users/Java/Desktop/專題照片/mule_coffee.jpg" alt="">
         <hr/>
         <p>${act_vo.act_cont }</p>
       </h1>
-      <h1  class="actionMap">活動地圖
+      <h1  class="actionMap  small_title"><span class="fa fa-map-marker"></span> 活動地圖
         <hr/>
         <div  id="map" ></div>
       </h1>
-      <h1 class="message">留言發問</h1>
+      <h1 class="message   small_title"><span class="fa fa-commenting-o"></span>留言發問</h1>
         <div class="guestAsk">
           
           <div class="col-md-1">
@@ -501,7 +527,7 @@ margin-top: 5px;
             <div class="return_message" >${act_comm_vo.comm_cont }</div>
             <br>
             <input type="hidden"  class="get_comm_no" value="${act_comm_vo.comm_no }">
-            <a href='#modal-hostReply' data-toggle="modal"  class="btn-default  message_button">主辦單位回覆</a>
+            <a href='#modal-hostReply' data-toggle="modal"  class="btn-default  message_button"><span class="fa fa-user-md"></span>主辦單位回覆</a>
           </div>
           
           <div class="col-md-1 host_icon">
@@ -529,7 +555,7 @@ margin-top: 5px;
     </div>
     <div class="col-md-4">
       <div class="host">
-        <h1 class="about">關於主辦單位</h1>
+        <h1 class="about"><span class="fa fa-user-md"></span>關於主辦單位</h1>
         <div class="hostIcon">
       <%--	<img src="<%=request.getContextPath()%>/MemImg.do?mem_ac=${mem_vo.mem_ac}">  --%>  
         </div>
@@ -554,7 +580,7 @@ margin-top: 5px;
 				<div class="modal-content">
 					<div class="modal-header">
 						<button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button>
-						<h4 class="modal-title">回覆內容</h4>
+						<h4 class="modal-title"><span class="fa fa-commenting-o"></span>回覆內容</h4>
 					</div>
 					    <form  method="post"  action="<%=request.getContextPath() %>/act_management/act_managementServlet" >
 					<div class="modal-body">
@@ -579,13 +605,13 @@ margin-top: 5px;
 				<div class="modal-content">
 					<div class="modal-header">
 						<button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button>
-						<h4 class="modal-title">活動追蹤成功</h4>
+						<h4 class="modal-title"><span class="fa fa-smile-o"></span>活動追蹤成功</h4>
 					</div>
 					<div class="modal-body">
 						您可以在活動追蹤頁面查看您所追蹤的活動
 					</div>
 					<div class="modal-footer">
-						<button type="button" class="btn btn-default" data-dismiss="modal">關閉</button>
+						<button type="button" class="btn btn-info  close_window" data-dismiss="modal">關閉</button>
 						
 					</div>
 				</div>
@@ -600,6 +626,64 @@ margin-top: 5px;
  
  
  <script>
+ 
+ function changeTimeFormate(time){
+	 var new_time=new Date(time.substring(0,4),time.substring(5,7),time.substring(8,10),time.substring(11,13),time.substring(14,16),time.substring(17,19))
+     var year=new_time.getFullYear();
+	 var month=new_time.getMonth();
+	 var day=new_time.getDate();
+	 var hour=new_time.getHours();
+	 if(hour<10){
+		 hour="0"+hour;
+	 }
+	 
+	 var minute=new_time.getMinutes();
+	 console.log("minute串接前="+minute);
+	 if(minute<10){
+		 minute="0"+minute;
+	 }
+	 console.log("minute串接後="+minute);
+	 
+	 var number_week=new_time.getDay();
+	 var week;
+	 switch(number_week){
+	 case 0:
+		 week="日";
+		 break;
+	 case 1:
+		 week="一";
+		 break;
+	 case 2:
+		 week="二";
+		 break;
+	 case 3:
+		 week="三";
+		 break;
+	 case 4:
+		 week="四";
+		 break;
+	 case 5:
+		 week="五";
+		 break;
+	 case 6:
+		 week="六";
+		 break;
+	 }
+	 
+	 
+	 var show_time=year+"-"+month+"-"+day+"("+week+")  "+ hour+":"+minute;
+	 
+	 console.log("得到的show_time= "+show_time);
+	 return show_time;
+	 
+ }
+ 
+console.log("act_op_date= "+changeTimeFormate("${act_op_date }")+" ");
+console.log("act_ed_date= "+changeTimeFormate("${act_ed_date }")+" ");
+ $(".act_op_date").text(changeTimeFormate("${act_op_date }"));
+ $(".act_ed_date").text(changeTimeFormate("${act_ed_date }"));
+ 
+ 
  if(${act_vo.mem_count>=act_vo.max_mem}){
 		$(".doit_instance").attr("disabled", true);
 		$(".doit_instance").css("display","none");
@@ -647,10 +731,7 @@ $(this).parent().submit();
  
  
  
- var op_date= $(".act_op_date").text().substring(0,19);
- $(".act_op_date").text(op_date);
- var ed_date= $(".act_ed_date").text().substring(0,19);
- $(".act_ed_date").text(ed_date);
+ 
  
 	for(var i=0;i<$(".host_message").length;i++){
 		if($(".host_message").eq(i).text().length==0){

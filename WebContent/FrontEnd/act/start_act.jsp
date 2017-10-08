@@ -7,7 +7,7 @@
  <jsp:include page="/FrontEnd/include/head.jsp"/> 
   
 
-
+<link rel='stylesheet prefetch' href='https://maxcdn.bootstrapcdn.com/font-awesome/4.7.0/css/font-awesome.min.css'>
  
       
       <%--date picker專用css --%>
@@ -157,6 +157,16 @@ position: relative;
  background-color: #eee8e1;
  margin-top: 57px;
 }
+
+.fa{
+margin-right: 10px;
+}
+
+
+.left .actionLabel .act_tag{
+width: 10px;
+}
+
 </style>
   
 
@@ -176,7 +186,7 @@ position: relative;
     <h2>3</h2>
   </div>
 </div>
-<h1 class="title">填寫活動資訊</h1>
+<h1 class="title"><span class="fa fa-pencil-square-o"></span>填寫活動資訊</h1>
 <c:if test="${not empty errorMsgs}">
 	<font color='red'  class="myerror" >請修正以下錯誤:
 	<ul>
@@ -216,10 +226,21 @@ position: relative;
         <div class="time">
           
         </div>
+     <%-- 
         <div class="actionLabel">
           <h2>活動標籤:</h2>
           <input type="text"  name="act_tag" value="${(act_vo==null)?"":act_vo.act_tag }"/>
         </div>
+        --%>   
+        <div class="actionLabel">
+          <h2>活動標籤:</h2>
+          <input type="radio"   class="act_tag" name="act_tag"   value="達人教學"/><span>達人教學</span>
+          <input type="radio"  class="act_tag" name="act_tag"  value="咖啡課程"/><span>咖啡課程</span>
+          <input type="radio"  class="act_tag"  name="act_tag"  value="咖啡店活動"/><span>咖啡店活動</span>
+          <input type="radio"  class="act_tag"  name="act_tag"  value="新手教學"/><span>新手教學</span>
+          
+        </div>
+        
         
       </div>
       <div class="col-md-6 right">
@@ -349,7 +370,13 @@ $(".test").val(new_time);
 		 
 		 
 	 }
-	 
+	 for(var i=0;i<=$(".act_tag").length;i++){
+		 if($(".act_tag").eq(i).val()==("${act_vo.act_tag}")){
+			 $(".act_tag").eq(i).attr("checked",true);
+		 }
+		 
+		 
+	 }
 	 
  }
 	

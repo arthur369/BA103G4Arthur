@@ -48,8 +48,9 @@
     <input class="account" type="text"     name="mgr_no"    /><br/>
     <h4 class="inputdata"   >密碼:</h4>
     <input class="password" type="password"  name="mgr_pwd"   /><br/><br/>
-    <button class="btn btn-primary"  type="submit">登入</button>
+    
     <button class="btn btn-danger  cancel_all"  type="button">取消 </button>
+    <button class="btn btn-primary"  type="submit">登入</button>
     <input type="hidden"  name="action" value="mgr_login" >
     <input type="hidden"  name="index.jsp" value="<%=request.getServletPath() %>" >
     </Form>

@@ -57,6 +57,47 @@ public class Act_managementServlet extends HttpServlet{
 		String action = req.getParameter("action");
 	
 		
+if("search_for_actTag".equals(action)){
+	try{
+	String act_tag=req.getParameter("act_tag");
+	System.out.println("act_tag= "+act_tag);
+	ActService actSvc=new ActService();
+	List<ActVO> act_vo_list= actSvc.getAll();
+	List<ActVO> add_date_query=new ArrayList<ActVO>();
+	for(int i=0;i<act_vo_list.size();i++){
+		System.out.println("act_vo_list.get(i).getAct_tag().equals(act_tag) = "+act_vo_list.get(i).getAct_tag().equals(act_tag));
+		System.out.println("act_vo_list.get(i).getAct_tag() = "+act_vo_list.get(i).getAct_tag());
+		if(act_vo_list.get(i).getAct_tag().equals(act_tag)){
+			add_date_query.add(act_vo_list.get(i));
+		}
+		
+		
+	}
+	
+	for(int i=0;i<add_date_query.size();i++){
+		System.out.println("add_date_query.get("+i+").getAct_tag() = "+add_date_query.get(i).getAct_tag());
+	}
+	req.setAttribute("act_tag", act_tag);
+	HttpSession session=req.getSession();
+	session.setAttribute("add_date_query",add_date_query);
+	
+	
+	String url=req.getParameter("act.jsp");
+	
+	RequestDispatcher dispatcher=req.getRequestDispatcher(url);
+	dispatcher.forward(req,res);
+	
+	}catch(Exception e){
+		String url=req.getParameter("act.jsp");
+		RequestDispatcher dispatcher=req.getRequestDispatcher(url);
+		dispatcher.forward(req,res);
+	}
+	
+	
+	
+}
+		
+		
 if("confirm_mem_pay".equals(action)){
 	
 	 List<String> openTab2=new LinkedList<String>();
@@ -993,11 +1034,17 @@ if("confirm_mem_pay".equals(action)){
 					
 					errorMsgs.add("價格請填數字");
 				}
-			String act_tag=req.getParameter("act_tag");
-			System.out.println("track4");
-			if(act_tag.length()==0){
-				errorMsgs.add("請輸入活動標籤");
-			}
+				
+//			String act_tag=req.getParameter("act_tag");
+//			if(act_tag.length()==0){
+//				errorMsgs.add("請輸入活動標籤");
+//			}
+				String act_tag=req.getParameter("act_tag");
+				if(act_tag==null){
+					errorMsgs.add("請選擇活動標籤");
+				
+				}
+				
 		Integer min_mem=null;
 		try{
 			min_mem=new Integer(req.getParameter("min_mem"));
@@ -1044,13 +1091,10 @@ if("confirm_mem_pay".equals(action)){
 		}
 		
 		String pay_way=req.getParameter("pay_way");
-		System.out.println("pay_way= "+(pay_way));
-		System.out.println("pay_way==null ? "+(pay_way==null));
-		System.out.println("track12");
 		String act_atm_info="";
 		if(pay_way==null){
 			errorMsgs.add("請選擇繳費方式");
-			System.out.println("track13");
+		
 		}else{
 		
 		

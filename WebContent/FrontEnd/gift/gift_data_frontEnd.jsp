@@ -113,7 +113,7 @@ width:120%;
 left: 40%;
 
 }
-.fa{
+.fa-check,.fa-exclamation-triangle{
 color: red;
 font-size: 50px;
 margin-right: 30px;
@@ -122,6 +122,7 @@ margin-right: 30px;
 }
 .my_pt_title{
 margin-bottom: 30px;
+font-weight: 900;
 
 }
 .gift{
@@ -156,6 +157,27 @@ font-weight: 900;
 .my_area *{
 position: relative;
 }
+.fa{
+margin-right: 10px;
+}
+
+.small_title{
+font-size: 20px;
+font-weight: 800;
+
+}
+
+.pt_title{
+font-weight: 900;
+}
+
+.member_mem_pt{
+color: #80BD01;
+}
+.get_gift_back{
+font-size: 20px;
+font-weight: 700;
+}
       </style>
       
       
@@ -168,18 +190,18 @@ position: relative;
 
   <div class="container">
 	    <div class="row">
-  <h1 class="my_pt_title">積分兌換</h1>
+  <h1 class="my_pt_title"><span class="fa fa-gift"></span>積分兌換</h1>
   <div role="tabpanel">
 		    <!-- 標籤面板：標籤區 -->
 		    <ul class="nav nav-tabs" role="tablist">
 		        <li role="presentation" class="active">
-		            <a href="#tab1" aria-controls="tab1" role="tab" data-toggle="tab">積分兌換專區</a>
+		            <a href="#tab1" aria-controls="tab1" role="tab" data-toggle="tab"   class="small_title"><span class="fa fa-exchange"></span>積分兌換專區</a>
 		        </li>
 		        <li role="presentation">
-		            <a href="#tab2" aria-controls="tab2" role="tab" data-toggle="tab">兌換訂單查詢</a>
+		            <a href="#tab2" aria-controls="tab2" role="tab" data-toggle="tab"   class="small_title"><span class="fa fa-list-alt"></span>兌換訂單查詢</a>
 		        </li>
 		        <li role="presentation">
-		            <a href="#tab3" aria-controls="tab3" role="tab" data-toggle="tab">積分取得規則</a>
+		            <a href="#tab3" aria-controls="tab3" role="tab" data-toggle="tab"    class="small_title"><span class="fa fa-balance-scale"></span>積分取得規則</a>
 		        </li>
 		    </ul>
 		
@@ -187,8 +209,8 @@ position: relative;
 		    <div class="tab-content">
 		        <div role="tabpanel" class="tab-pane active" id="tab1">
 		        <div class="title"> 
-  <h1>積分兌換專區</h1>
-  <h1>您目前持有${mem_vo.mem_pt }積分</h1>
+  <h1  class="pt_title"><span class="fa fa-exchange"></span>積分兌換專區</h1>
+  <h1  class="pt_title">您目前持有<span class="member_mem_pt">${mem_vo.mem_pt }</span>積分</h1>
 </div>
  <%@ include file="page1.file" %> 
 <div class="container gift">
@@ -205,7 +227,7 @@ position: relative;
             <div class="getitem">
             <FORM METHOD="post" ACTION="<%=request.getContextPath() %>/gift_management/gift_managementServlet" name="form1" >
             <div>
-              <button class="btn-success">兌換</button>
+              <button class="btn-success  get_gift_back"><span class="fa fa-smile-o"></span>兌換</button>
               <input type="number" name="gift_amount"  class="gift_amount" ><span class="h4">個</span>
               </div>
               <h3  class="remain">剩下<span class="gift_remain">${gift_data_vo.gift_remain}</span>個</h3>

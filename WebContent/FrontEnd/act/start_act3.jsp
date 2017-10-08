@@ -8,7 +8,7 @@
    <jsp:include page="/FrontEnd/include/head.jsp"/>
   
 
-      
+      <link rel='stylesheet prefetch' href='https://maxcdn.bootstrapcdn.com/font-awesome/4.7.0/css/font-awesome.min.css'>
 
   <style>
   
@@ -110,6 +110,20 @@ h2 {
   body .next .previous{
   color: #eee;
   }
+  
+  .fa-check-square{
+  left: 50%;
+  transform: translate(-50%,0%);
+  font-size: 50px;
+  padding-left: 10px;
+  }
+  .write_ok{
+  margin-left: 10px;
+  }
+  
+  .fa-paper-plane{
+  margin-right: 10px;
+  }
   </style>
   
   
@@ -129,8 +143,10 @@ h2 {
     <h2>3</h2>
   </div>
 </div>
+<h1 class="fa fa-check-square"><span class="write_ok">填寫完成</span></h1>
 <div class="container">
   <div class="col-md-12 endMessage">
+  
     <h3>感謝您的填寫，您的活動已送往審核，如審核通過將在您的信箱通知您，如果資料確定無誤請按確認送出，如需修改請點擊上一步修改。
     
     </h3>
@@ -140,7 +156,7 @@ h2 {
 <div class="next">
   <a class="btn-success btn-lg previous"  href="<%=request.getContextPath() %>/FrontEnd/act/start_act2.jsp">上一步</a>
   <form  method="post"  action="<%=request.getContextPath() %>/act_management/act_managementServlet">
-  <button class="btn-success btn-lg end">確認送出</button>
+  <button class="btn-success btn-lg end"><span  class="fa fa-paper-plane"></span>確認送出</button>
   <input type="hidden" name="action"  value="start_act_complete">
   <input type="hidden" name="start_act3.jsp" value="<%=request.getServletPath() %>">
   </form>
