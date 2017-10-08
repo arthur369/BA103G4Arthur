@@ -628,9 +628,9 @@ color: #eee;
  <script>
  
  function changeTimeFormate(time){
-	 var new_time=new Date(time.substring(0,4),time.substring(5,7),time.substring(8,10),time.substring(11,13),time.substring(14,16),time.substring(17,19))
+	 var new_time=new Date(time.substring(0,4),time.substring(5,7)-1,time.substring(8,10),time.substring(11,13),time.substring(14,16),time.substring(17,19))
      var year=new_time.getFullYear();
-	 var month=new_time.getMonth();
+	 var month=new_time.getMonth()+1;
 	 var day=new_time.getDate();
 	 var hour=new_time.getHours();
 	 if(hour<10){

@@ -18,10 +18,24 @@ if(session.getAttribute("add_date_query")!=null){
 }else{
 ActService actSvc=new ActService();
 my_act_list=  actSvc.getAll();
+
+
 }
 List<ActVO> list=new ArrayList();
 for(int i=0;i<my_act_list.size();i++){
-	String act_stat=my_act_list.get(i).getAct_stat();
+	String act_stat=my_act_list.get(i).getAct_stat();  //1008未整合程式碼，26~35行超過時限未成團狀態改為已流團
+	
+	ActService actSvc=new ActService();   
+	
+	long today=new Date().getTime();  
+	long dl_date=my_act_list.get(i).getDl_date().getTime();  
+	if((!act_stat.equals("已成團")) && (today>dl_date) ){   
+		my_act_list.get(i).setAct_stat("已流團");  
+		actSvc.updateAct(my_act_list.get(i));  
+	}                                                                                                   //1008未整合程式碼，26~35行超過時限未成團狀態改為已流團
+	
+	
+	
 	if(act_stat.equals("可報名")|| act_stat.equals("已成團")){
 		list.add(my_act_list.get(i));
 	}
@@ -505,10 +519,11 @@ $(".action_tag_button").submit();
 
 function changeTimeFormate(time){
 	
-	　
-	 var new_time=new Date(time.substring(0,4),time.substring(5,7),time.substring(8,10),time.substring(11,13),time.substring(14,16),time.substring(17,19))
+	
+	 var new_time=new Date(time.substring(0,4),time.substring(5,7)-1,time.substring(8,10),time.substring(11,13),time.substring(14,16),time.substring(17,19))
+	 console.log(new_time);
     var year=new_time.getFullYear();
-	 var month=new_time.getMonth();
+	 var month=new_time.getMonth()+1;
 	 var day=new_time.getDate();
 	 var hour=new_time.getHours();
 	 if(hour<10){
@@ -523,6 +538,7 @@ function changeTimeFormate(time){
 	 console.log("minute串接後="+minute);
 	 
 	 var number_week=new_time.getDay();
+	 console.log("number_week= "+number_week);
 	 var week;
 	 switch(number_week){
 	 case 0:
